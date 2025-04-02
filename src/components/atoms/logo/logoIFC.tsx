@@ -5,8 +5,9 @@ export default function LogoIFC(){
     return (
         <Image 
         source={require('../../../assets/images/logo-ifc.png')} 
-        className="w-41 h-41 mb-10"
+        className="w-30 h-30 mb-10"
         resizeMode="contain"
       />
     )
 }
+

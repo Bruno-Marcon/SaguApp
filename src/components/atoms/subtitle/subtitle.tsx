@@ -17,4 +17,8 @@ function OrSubTitle() {
     )
 }
 
-export {PassordSubTitle, OrSubTitle}
+function GoogleSubtitle() {
+    return <Text className="text-gray-600 font-bold">Entrar com Google</Text>
+}
+
+export {PassordSubTitle, OrSubTitle, GoogleSubtitle}
