@@ -1,6 +1,12 @@
 import { View, Text, Image, ScrollView, Pressable } from 'react-native';
-import { Bell } from 'lucide-react-native';
 import { Link } from 'expo-router';
+import DefaultNavBar from '../components/organisms/navbar/defaultNav';
+import PrimaryTitle from '../components/atoms/title/primaryTitle';
+import { SubTitle } from '../components/atoms/subtitle/subtitle';
+import TitleSection from '../components/molecules/titleSection/titleSection';
+import SubTitleSemiBold from '../components/atoms/subtitle/subtitleSemiBold';
+import CounterCard from '../components/molecules/counterCard/counterCard';
+import CountCard from '../components/organisms/card/card';
 
 const MENU_ITEMS = [
     {
@@ -43,63 +49,25 @@ const MENU_ITEMS = [
 
 export default function HomeScreen() {
     return (
-      <ScrollView className="flex-1 bg-white">
+      <ScrollView className="flex-1 bg-gray-100">
         <View className="flex-1 px-4 pt-12">
           {/* Header */}
-          <View className="flex-row items-center justify-between mb-8">
-            <Image
-              source={require('../assets/images/logo-ifc.png')}
-              className="w-16 h-16"
-              resizeMode="contain"
-            />
-            <View className="flex-row items-center gap-4">
-              <Bell className="text-gray-600" />
-              <View className="w-10 h-10 rounded-full bg-gray-200">
-                <Image
-                  source={{ uri: 'https://github.com/diego3g.png' }}
-                  className="w-10 h-10 rounded-full"
-                />
-              </View>
-            </View>
-          </View>
-  
+          <DefaultNavBar/>
           {/* Welcome */}
-          <View className="mb-8">
-            <Text className="text-2xl font-bold">
-              Bem-vindo, <Text className="text-primary">Bruno</Text>
-            </Text>
-            <Text className="text-gray-600 mt-1">Confira suas informações acadêmicas</Text>
-          </View>
-  
+          <TitleSection title='Bem vindo, Bruno' subtitle='Confira suas informações academicas'/>
           {/* Attendance Card */}
-          <View className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 mb-8">
-            <Text className="text-lg font-semibold mb-4">Frequência</Text>
-            
-            <View className="flex-row justify-between items-center">
-              <View className="items-center">
-                <Text className="text-2xl font-bold text-primary">0</Text>
-                <Text className="text-gray-600">presenças</Text>
-              </View>
-              
-              <View className="items-center">
-                <Text className="text-2xl font-bold text-red-500">0</Text>
-                <Text className="text-gray-600">ausências</Text>
-              </View>
-              
-              <View className="items-center">
-                <Text className="text-2xl font-bold text-blue-500">0</Text>
-                <Text className="text-gray-600">aulas</Text>
-              </View>
+          <CountCard
+            title="Resumo de Presenças"
+            info="Informações até 03/04"
+            number='100%'
+            counts={[
+              { count: "20", label: "Presenças", colorClass: "text-blue-600" },
+              { count: "3", label: "Faltas", colorClass: "text-red-600" },
+              { count: "8", label: "Envios", colorClass: "text-green-600" },
+            ]}
+          />
   
-              <View className="items-center justify-center w-12 h-12 rounded-full bg-green-100">
-                <Text className="text-primary font-bold">100%</Text>
-              </View>
-            </View>
-  
-            <Text className="text-gray-500 text-sm mt-4">informações até 00/00</Text>
-          </View>
-  
-          {/* Menu Grid
+          Menu Grid
           <View className="flex-row flex-wrap justify-between gap-y-4">
             {MENU_ITEMS.map((item) => (
               <Link
@@ -113,7 +81,7 @@ export default function HomeScreen() {
                 </Pressable>
               </Link>
             ))}
-          </View> */}
+          </View>
         </View>
       </ScrollView>
     );

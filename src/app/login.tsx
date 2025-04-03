@@ -3,7 +3,7 @@ import GoogleButton from '../components/atoms/button/google';
 import EnterButton from '../components/atoms/button/EnterButton';
 import LogoIFC from '../components/atoms/logo/logoIFC';
 import { PasswordInput,UserInput } from '../components/atoms/input/userInput';
-import { PassordSubTitle, OrSubTitle } from '../components/atoms/subtitle/subtitle';
+import { SubTitle, SubTitleOr } from '../components/atoms/subtitle/subtitle';
 
 export default function LoginScreen() {
   return (
@@ -11,9 +11,9 @@ export default function LoginScreen() {
       <LogoIFC/>
       <UserInput/>
       <PasswordInput/>
-      <PassordSubTitle/>
+      <SubTitle text='Esqueceu sua senha?'/>
       <EnterButton/>
-      <OrSubTitle/>
+      <SubTitleOr text='ou'/>
       <GoogleButton/>
     </View>
   );

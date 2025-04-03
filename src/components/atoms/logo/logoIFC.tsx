@@ -1,13 +1,11 @@
-import {Image} from "react-native";
+import { Image } from "react-native";
 
-
-export default function LogoIFC(){
-    return (
-        <Image 
-        source={require('../../../assets/images/logo-ifc.png')} 
-        className="w-30 h-30 mb-10"
-        resizeMode="contain"
-      />
-    )
+export default function LogoIFC({ className = "w-20 h-20" }) {
+  return (
+    <Image
+      source={require("../../../assets/images/logo-ifc.png")}
+      className={`${className}`}
+      resizeMode="contain"
+    />
+  );
 }
-

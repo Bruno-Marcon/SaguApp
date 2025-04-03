@@ -1,24 +1,22 @@
-import {Text, View} from "react-native";
+import { View, Text } from "react-native";
 
+type SubTitleProps = {
+  text: string
+  className?: string
+};
 
-function PassordSubTitle(){
-    return (
-        <Text className="text-gray-600 mb-6">Esqueceu sua senha?</Text>
-    )
-}
+const SubTitle: React.FC<SubTitleProps> = ({ text, className = "text-gray-600 mb-6" }) => {
+  return <Text className={className}>{text}</Text>;
+};
 
-function OrSubTitle() {
-    return(
-        <View className="flex-row items-center my-6 w-full">
-            <View className="flex-1 h-px bg-gray-300" />
-                <Text className="text-gray-500 mx-4">ou</Text>
-            <View className="flex-1 h-px bg-gray-300" />
-        </View>
-    )
-}
+const SubTitleOr: React.FC<SubTitleProps> = ({ text, className = "flex-row items-center my-6 w-full" }) => {
+  return (
+    <View className={className}>
+      <View className="flex-1 h-px bg-gray-300" />
+      <Text className="text-gray-500 mx-4">{text}</Text>
+      <View className="flex-1 h-px bg-gray-300" />
+    </View>
+  );
+};
 
-function GoogleSubtitle() {
-    return <Text className="text-gray-600 font-bold">Entrar com Google</Text>
-}
-
-export {PassordSubTitle, OrSubTitle, GoogleSubtitle}
+export { SubTitle, SubTitleOr };
