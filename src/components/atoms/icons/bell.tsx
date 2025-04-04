@@ -1,5 +1,23 @@
-import { Bell } from "lucide-react-native";
+import * as LucideIcons from "lucide-react-native";
+import { ComponentType } from "react";
+import { ViewStyle } from "react-native";
 
-export default function IconBell({className = 'text-gray-600'}) {
-    return <Bell className={className} />
+type IconName = keyof typeof LucideIcons;
+
+type DynamicIconProps = {
+  name: IconName;
+  color?: string;
+  size?: number;
+  style?: ViewStyle;
+};
+
+export default function DynamicIcon({
+  name,
+  color = "#4B5563",
+  size = 24,
+  style,
+}: DynamicIconProps) {
+  const IconComponent = LucideIcons[name] as ComponentType<any>;
+
+  return IconComponent ? <IconComponent color={color} size={size} style={style} /> : null;
 }

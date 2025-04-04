@@ -5,7 +5,7 @@ type SubTitleProps = {
   className?: string
 };
 
-const SubTitle: React.FC<SubTitleProps> = ({ text, className = "text-gray-600 mb-6" }) => {
+const SubTitle: React.FC<SubTitleProps> = ({ text, className = "text-gray-600" }) => {
   return <Text className={className}>{text}</Text>;
 };
 

@@ -4,7 +4,7 @@ function Avatar() {
     return(
         <View className="w-10 h-10 rounded-full bg-gray-200">
             <Image
-                source={{ uri: 'https://github.com/diego3g.png' }}
+                source={{ uri: 'https://github.com/bruno-marcon.png' }}
                 className="w-10 h-10 rounded-full"
             />
         </View>

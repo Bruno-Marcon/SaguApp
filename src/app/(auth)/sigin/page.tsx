@@ -2,6 +2,6 @@ import LoginScreen from '@//components/templates/Login/login';
 
 export default function LoginPage() {
   return (
-    <LoginScreen text={'Esqueceu sua senha?'} subSubTitle={'ou'}/>
+    <LoginScreen text={'Esqueceu sua senha?'} subSubTitle={'ou'} viewClassName={''}/>
   );
 }

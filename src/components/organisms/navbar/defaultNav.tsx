@@ -1,7 +1,7 @@
 import { View, Image } from "react-native";
 import { Avatar } from "../../atoms/avatar/avatar";
 import LogoIFC from "../../atoms/logo/logoIFC";
-import IconBell from "../../atoms/icons/bell";
+import DynamicIcon from "../../atoms/icons/bell";
 
 type DefaultNavBarProps = {
   logo?: JSX.Element;
@@ -11,7 +11,7 @@ type DefaultNavBarProps = {
 
 const DefaultNavBar: React.FC<DefaultNavBarProps> = ({
   logo = <LogoIFC className="w-16 h-16" />,
-  icons = [<IconBell key="bell" />],
+  icons = [<DynamicIcon name="Bell"/>],
   avatar = <Avatar />,
 }) => {
   return (
