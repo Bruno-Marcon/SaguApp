@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { View, TextInput, TextInputProps, Pressable } from "react-native";
 import { FontAwesome } from '@expo/vector-icons';
 
+
 type IconInputProps = {
   leftIcon: keyof typeof FontAwesome.glyphMap;
   placeholder: string;
@@ -14,6 +15,7 @@ export default function IconInput({
   secureTextEntry = false,
   ...rest
 }: IconInputProps) {
+
   const [isPasswordVisible, setIsPasswordVisible] = useState(!secureTextEntry);
 
   const toggleVisibility = () => setIsPasswordVisible(prev => !prev);

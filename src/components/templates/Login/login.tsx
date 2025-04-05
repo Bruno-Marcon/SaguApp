@@ -6,6 +6,7 @@ import React from 'react';
 import LoginForm from '../../organisms/form/loginForm';
 import { SubTitleOr } from '../../atoms/subtitle/subtitle';
 
+
 type LoginScreenProps = {
     text: string
     subSubTitle:string
@@ -20,7 +21,6 @@ const LoginScreen:React.FC<LoginScreenProps> = ({
     <View className={viewClassName}>
       <LogoIFC source={require("../../../assets/images/logo-ifc.png")} className="w-30 h-30 mb-20"  />
       <LoginForm text={text}/>
-      <EnterButton/>
       <SubTitleOr text={subSubTitle}/>
       <GoogleButton/>
     </View>
