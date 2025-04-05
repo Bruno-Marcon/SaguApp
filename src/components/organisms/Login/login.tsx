@@ -2,7 +2,7 @@ import { View} from 'react-native';
 import LogoIFC from '../../atoms/logo/logoIFC';
 import GoogleButton from '../../atoms/button/google';
 import React from 'react';
-import LoginForm from '../../organisms/form/loginForm';
+import LoginForm from '../../molecules/form/loginForm';
 import { SubTitleOr } from '../../atoms/subtitle/subtitle';
 
 

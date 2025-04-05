@@ -1,10 +1,14 @@
 import { setToken } from '../../storage/mmkv';
+import SHA256 from 'crypto-js/sha256'
 
 export const login = async (user: string, password: string) => {
-  const response = await fetch('https://hsds.app.n8n.cloud/webhook-test/63980f5d-9f97-4d9b-be87-fea2225cdff1', {
+
+  const encryptedPassword = SHA256(password).toString()
+
+  const response = await fetch('https://hsds.app.n8n.cloud/webhook/63980f5d-9f97-4d9b-be87-fea2225cdff1', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ user, password }),
+    body: JSON.stringify({ user, encryptedPassword }),
   });
 
   if (!response.ok) {
