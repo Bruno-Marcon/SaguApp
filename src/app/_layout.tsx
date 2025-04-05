@@ -9,7 +9,7 @@ export default function RootLayout() {
         options={{headerShown:false}}
       />
       <Stack.Screen
-        name="(auth)/sigin/page"
+        name="(auth)/signin/page"
         options={{headerShown:false}}
       />
       <Stack.Screen
