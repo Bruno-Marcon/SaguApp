@@ -2,6 +2,7 @@ import { View, Image } from "react-native";
 import { Avatar } from "../../atoms/avatar/avatar";
 import LogoIFC from "../../atoms/logo/logoIFC";
 import DynamicIcon from "../../atoms/icons/bell";
+import ProfileAvatar from "../avatar/profileAvatar";
 
 type DefaultNavBarProps = {
   logo?: JSX.Element;
@@ -10,12 +11,12 @@ type DefaultNavBarProps = {
 };
 
 const DefaultNavBar: React.FC<DefaultNavBarProps> = ({
-  logo = <LogoIFC className="w-16 h-16" />,
+  logo = <LogoIFC className="w-14 h-16" />,
   icons = [<DynamicIcon name="Bell"/>],
-  avatar = <Avatar />,
+  avatar = <ProfileAvatar />,
 }) => {
   return (
-    <View className="flex-row items-center justify-between mb-8">
+    <View className="flex-row items-center justify-between px-5 mb-8">
       {logo}
 
       <View className="flex-row items-center gap-4">

@@ -5,6 +5,7 @@ import EnterButton from "../../atoms/button/EnterButton";
 import { useController, useForm, Control } from "react-hook-form";
 import { router } from "expo-router";
 import { login } from "../../../services/auth/authService";
+import Toast from 'react-native-toast-message';
 
 type formData = {
   user: string;
@@ -44,15 +45,30 @@ const LoginForm: React.FC<LoginFormProps> = ({ text }) => {
   const onsubmit = async (data: formData) => {
     try {
       const result = await login(data.user, data.password);
-      console.log(data)
       console.log('Login bem-sucedido:', result);
+
+      Toast.show({
+        type: 'success',
+        text1: 'Login realizado com sucesso!',
+        text2: 'Bem-vindo 👋',
+      });
+
       router.replace('/(panel)/home/page');
     } catch (err) {
+      let message = 'Erro ao fazer login. Tente novamente.';
+
       if (err instanceof Error) {
         console.error('Erro:', err.message);
+        message = err.message;
       } else {
         console.error('Erro inesperado:', err);
       }
+
+      Toast.show({
+        type: 'error',
+        text1: 'Erro no login',
+        text2: message,
+      });
     }
   };
 

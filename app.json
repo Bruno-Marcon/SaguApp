@@ -9,13 +9,20 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundlerIdentifier": "com.saguifc.ios",
+      "bundleIdentifier": "com.brunomarcon.SaguIFC",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./src/assets/images/logo-ifc.png",
-        "backgroundColor": "#ffffff"
-      }
+        "backgroundColor": "#ffffff",
+        "package": "com.saguifc.android"
+      },
+      "package": "com.brunomarcon.SaguIFC"
     },
     "web": {
       "bundler": "metro",
@@ -32,10 +39,26 @@
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
         }
-      ]
+      ],
+      [
+        "@react-native-google-signin/google-signin",
+        {
+          "iosUrlScheme": "com.googleusercontent.apps.646655451709-2nn598licuungg35iu7acb8a0upkitvm"
+        }
+      ],
+      "expo-secure-store"
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "API_URL": "https://cdbw.app.n8n.cloud/webhook/f2a7200d-7e23-4809-a594-ff91c0ae1960",
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "53c55cb2-e186-456a-9291-8cfb1177e419"
+      }
     }
   }
 }
