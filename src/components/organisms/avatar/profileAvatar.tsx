@@ -3,13 +3,13 @@ import { View } from 'react-native';
 import { router } from 'expo-router';
 import { Avatar } from '../../atoms/avatar/avatar';
 import LogoutModal from '../../molecules/modal/logout';
-import { HandleLogout } from '@//services/auth/authService';
+import { Logout } from '@//services/auth/authService';
 
 const ProfileAvatar: React.FC = () => {
   const [modalVisible, setModalVisible] = useState(false);
 
   const handleLogout = async () => {
-    await HandleLogout();
+    await Logout();
     setModalVisible(false);
     router.replace('/(auth)/signin/page');
   };

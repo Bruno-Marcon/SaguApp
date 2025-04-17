@@ -46,7 +46,7 @@ export const HandleLogin = async (username: string, password: string): Promise<L
   }
 };
 
-export const HandleLogout = async () => {
+export const Logout = async () => {
   try {
     await deleteToken();
     console.info("Logout bem-sucedido. Token removido.");
