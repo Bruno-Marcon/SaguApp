@@ -1,13 +1,26 @@
 import React from "react";
-import { Text } from "react-native";
+import {Text } from "react-native";
 
-type PrimaryTitleProps = {
-  text: string;
-  className?: string;
+type TitleSectionProps = {
+  title: string;
+  subtitle: string;
+  selectedStudent?: string;
 };
 
-const PrimaryTitle: React.FC<PrimaryTitleProps> = ({ text, className = "text-primary" }) => {
-  return <Text className={`text-2xl font-bold ${className}`}>{text}</Text>;
+const TitleSection: React.FC<TitleSectionProps> = ({
+  title,
+  subtitle,
+  selectedStudent
+}) => {
+  return (
+      <Text className="text-2xl font-semibold text-white mb-2">
+        {title} {selectedStudent && `${selectedStudent}!`}
+        {"\n"}
+        <Text className="text-base font-normal text-gray-200">
+          {subtitle}
+        </Text>
+      </Text>
+  );
 };
 
-export default PrimaryTitle;
+export default TitleSection

@@ -4,7 +4,7 @@ import Links from "../../atoms/link/link";
 import EnterButton from "../../atoms/button/EnterButton";
 import { useController, useForm, Control } from "react-hook-form";
 import { router } from "expo-router";
-import { login } from "../../../services/auth/authService";
+import { HandleLogin} from "../../../services/auth/authService";
 import Toast from 'react-native-toast-message';
 
 type formData = {
@@ -44,7 +44,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ text }) => {
 
   const onsubmit = async (data: formData) => {
     try {
-      const result = await login(data.user, data.password);
+      const result = await HandleLogin(data.user, data.password);
       console.log('Login bem-sucedido:', result);
 
       Toast.show({

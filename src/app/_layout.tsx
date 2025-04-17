@@ -1,6 +1,6 @@
-import "../styles/global.css";
-import { Stack } from "expo-router";
-import Toast from "react-native-toast-message"; // <- Importa o Toast
+import "../styles/global.css"
+import { Stack } from "expo-router"
+import Toast from "react-native-toast-message"
 
 export default function RootLayout() {
   return (
@@ -21,5 +21,5 @@ export default function RootLayout() {
       </Stack>
       <Toast />
     </>
-  );
+  )
 }

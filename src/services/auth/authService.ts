@@ -11,7 +11,7 @@ type LoginResponse = {
 };
 
 
-export const login = async (username: string, password: string): Promise<LoginResponse> => {
+export const HandleLogin = async (username: string, password: string): Promise<LoginResponse> => {
   
   try {
 
@@ -46,7 +46,7 @@ export const login = async (username: string, password: string): Promise<LoginRe
   }
 };
 
-export const logout = async () => {
+export const HandleLogout = async () => {
   try {
     await deleteToken();
     console.info("Logout bem-sucedido. Token removido.");
