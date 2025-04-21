@@ -12,9 +12,8 @@ export async function getToken(): Promise<string | null> {
 
 export async function deleteToken(): Promise<void> {
   try {
-    await SecureStore.deleteItemAsync('auth_token');
+    await SecureStore.deleteItemAsync(TOKEN_KEY);
   } catch (error) {
     console.error('Erro ao remover o token:', error);
   }
 }
-

@@ -1,5 +1,4 @@
-import { View, Image } from "react-native";
-import { Avatar } from "../../atoms/avatar/avatar";
+import { View} from "react-native";
 import LogoIFC from "../../atoms/logo/logoIFC";
 import DynamicIcon from "../../atoms/icons/bell";
 import ProfileAvatar from "../avatar/profileAvatar";

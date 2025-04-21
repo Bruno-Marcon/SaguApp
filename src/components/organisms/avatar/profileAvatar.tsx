@@ -9,7 +9,7 @@ const ProfileAvatar: React.FC = () => {
   const [modalVisible, setModalVisible] = useState(false);
 
   const handleLogout = async () => {
-    await Logout();
+    Logout();
     setModalVisible(false);
     router.replace('/(auth)/signin/page');
   };

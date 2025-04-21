@@ -4,11 +4,11 @@ import Links from "../../atoms/link/link";
 import EnterButton from "../../atoms/button/EnterButton";
 import { useController, useForm, Control } from "react-hook-form";
 import { router } from "expo-router";
-import { HandleLogin} from "../../../services/auth/authService";
+import { HandleLogin } from "../../../services/auth/authService";
 import Toast from 'react-native-toast-message';
 
 type formData = {
-  user: string;
+  email: string;
   password: string;
 };
 
@@ -32,8 +32,8 @@ const Input: React.FC<InputProps> = ({ name, control }) => {
     <IconInput
       value={field.value}
       onChangeText={field.onChange}
-      leftIcon={name === "user" ? "user" : "lock"}
-      placeholder={`Digite sua ${name === "user" ? "usuário" : "senha"}`}
+      leftIcon={name === "email" ? "at" : "lock"}
+      placeholder={`Digite seu ${name === "email" ? "email" : "senha"}`}
       secureTextEntry={name === "password"}
     />
   );
@@ -44,9 +44,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ text }) => {
 
   const onsubmit = async (data: formData) => {
     try {
-      const result = await HandleLogin(data.user, data.password);
-      console.log('Login bem-sucedido:', result);
-
+      HandleLogin(data.email, data.password);
       Toast.show({
         type: 'success',
         text1: 'Login realizado com sucesso!',
@@ -74,7 +72,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ text }) => {
 
   return (
     <View className="w-full">
-      <Input name="user" control={control} />
+      <Input name="email" control={control} />
       <Input name="password" control={control} />
       <Links text={text} className="text-green-600" />
       <EnterButton onPress={handleSubmit(onsubmit)} />
