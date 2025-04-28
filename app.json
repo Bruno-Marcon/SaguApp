@@ -52,8 +52,8 @@
       "typedRoutes": true
     },
     "extra": {
-      "apiUrl": "https://sagu-api-production.up.railway.app",
-      "apiKey": "c2c783dda516ddaf2d9f2326e05c63946561382a8ce4e22d838",
+      "apiUrl": "http://api.sagu.app.br",
+      "apiKey": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI4ZWM1YWRiZC1hYTcyLTQ0MjAtOTgzNS05MDQ1NTg1ZmEyNGEiLCJzY3AiOiJ1c2VyIiwiYXVkIjpudWxsLCJpYXQiOjE3NDUyNjU3MzksImV4cCI6MTc0NTI3MjkzOSwianRpIjoiMGQ5ZmU1NGEtNTJiNy00ZmI3LWJiMDQtOTNhNjY1MDYzY2MxIn0.1y7RWqiiRys55ys8LTGTHYvZUrpVfoh65VmTXhr3YyM",
       "router": {
         "origin": false
       },

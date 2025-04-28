@@ -44,14 +44,19 @@ const LoginForm: React.FC<LoginFormProps> = ({ text }) => {
 
   const onsubmit = async (data: formData) => {
     try {
-      HandleLogin(data.email, data.password);
-      Toast.show({
-        type: 'success',
-        text1: 'Login realizado com sucesso!',
-        text2: 'Bem-vindo 👋',
-      });
+      const loginResponse = await HandleLogin(data.email, data.password);
 
-      router.replace('/(panel)/home/page');
+      if (loginResponse?.token) {
+        Toast.show({
+          type: 'success',
+          text1: 'Login realizado com sucesso!',
+          text2: 'Bem-vindo 👋',
+        });
+
+        router.replace('/(panel)/home/page');
+      } else {
+        throw new Error("Token não encontrado.");
+      }
     } catch (err) {
       let message = 'Erro ao fazer login. Tente novamente.';
 

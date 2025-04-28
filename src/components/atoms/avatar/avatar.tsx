@@ -1,28 +1,51 @@
-import { Image, TouchableOpacity, View } from "react-native";
-import React from "react";
+import { getUserInfo } from "@//storage/SecureUser";
+import React, { useEffect, useState } from "react";
+import { Avatar } from "react-native-elements";
 
-type AvatarProps = {
-  onPress?: () => void;
-  imageUrl?: string;
-  size?: number;
+const getRandomColor = () => {
+  const letters = "0123456789ABCDEF";
+  let color = "#";
+  for (let i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
 };
 
-function Avatar({ onPress}: AvatarProps) {
-  
-  const avatar = (
-    <View className="w-10 h-10 rounded-full bg-gray-200">
-      <Image
-        source={{ uri: 'https://github.com/bruno-marcon.png' }}
-        className="w-10 h-10 rounded-full"
-      />
-    </View>
+type Props = {
+  size?: number;
+  onPress?: () => void;
+};
+
+const InitialsAvatar = ({ size = 40, onPress }: Props) => {
+  const [name, setName] = useState<string | null>(null);
+  const [bgColor, setBgColor] = useState<string>(getRandomColor());
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      const userInfo = await getUserInfo()
+      if (userInfo) {
+        setName(userInfo.name)
+      }
+    };
+    fetchUserInfo();
+  }, []);
+
+  const getInitials = (name: string): string => {
+    const names = name.trim().split(" ");
+    const initials = names.length >= 2
+      ? names[0][0] + names[names.length - 1][0]
+      : names[0][0];
+    return initials.toUpperCase();
+  };
+
+  return (
+    <Avatar
+      rounded
+      size={size}
+      title={name ? getInitials(name) : ""}
+      containerStyle={{ backgroundColor: bgColor }}
+      onPress={onPress}
+    />
   );
+};
 
-  if (onPress) {
-    return <TouchableOpacity onPress={onPress}>{avatar}</TouchableOpacity>;
-  }
-
-  return avatar;
-}
-
-export { Avatar };
+export default InitialsAvatar;
