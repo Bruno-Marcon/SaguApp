@@ -2,6 +2,7 @@ import { View} from "react-native";
 import LogoIFC from "../../atoms/logo/logoIFC";
 import DynamicIcon from "../../atoms/icons/bell";
 import ProfileAvatar from "../avatar/profileAvatar";
+import { JSX } from "react";
 
 type DefaultNavBarProps = {
   logo?: JSX.Element;

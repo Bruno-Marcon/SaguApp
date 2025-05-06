@@ -1,6 +1,7 @@
 import { getUserInfo } from "@//storage/SecureUser";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Avatar } from "react-native-elements";
+import { Ionicons } from '@expo/vector-icons';
 
 const getRandomColor = () => {
   const letters = "0123456789ABCDEF";
@@ -21,9 +22,9 @@ const InitialsAvatar = ({ size = 40, onPress }: Props) => {
   const [bgColor, setBgColor] = useState<string>(getRandomColor());
   useEffect(() => {
     const fetchUserInfo = async () => {
-      const userInfo = await getUserInfo()
+      const userInfo = await getUserInfo();
       if (userInfo) {
-        setName(userInfo.name)
+        setName(userInfo.name);
       }
     };
     fetchUserInfo();
@@ -44,6 +45,7 @@ const InitialsAvatar = ({ size = 40, onPress }: Props) => {
       title={name ? getInitials(name) : ""}
       containerStyle={{ backgroundColor: bgColor }}
       onPress={onPress}
+      icon={{ name: 'person', type: 'ionicon', color: 'white' }} 
     />
   );
 };
