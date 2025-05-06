@@ -1,18 +1,19 @@
-import React from "react";
+import React, { JSX } from "react";
 import { View, Text, TouchableOpacity } from "react-native";
-import { ChevronRight } from "lucide-react-native";
+import { Feather } from "@expo/vector-icons";
 
 interface CommunicationItem {
-  icon: JSX.Element
-  title: string
-  subtitle: string
+  icon: JSX.Element;
+  title: string;
+  subtitle: string;
 }
+
 interface CommunicationSectionProps {
-  sectionTitle: string
-  showLink?: boolean
-  linkText?: string
-  onPressLink?: () => void
-  items: CommunicationItem[]
+  sectionTitle: string;
+  showLink?: boolean;
+  linkText?: string;
+  onPressLink?: () => void;
+  items: CommunicationItem[];
 }
 
 const CommunicationSection: React.FC<CommunicationSectionProps> = ({
@@ -27,12 +28,9 @@ const CommunicationSection: React.FC<CommunicationSectionProps> = ({
       <View className="flex-row justify-between items-center mb-4">
         <Text className="text-xl font-semibold text-gray-800">{sectionTitle}</Text>
         {showLink && onPressLink && (
-          <TouchableOpacity
-            className="flex-row items-center"
-            onPress={onPressLink}
-          >
+          <TouchableOpacity className="flex-row items-center" onPress={onPressLink}>
             <Text className="text-sm text-blue-900 mr-1">{linkText}</Text>
-            <ChevronRight size={20} color="#1E40AF" />
+            <Feather name="chevron-right" size={20} color="#1E40AF" />
           </TouchableOpacity>
         )}
       </View>

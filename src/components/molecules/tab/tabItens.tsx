@@ -2,10 +2,10 @@ import React from "react";
 import { TouchableOpacity } from "react-native";
 import { useRouter } from "expo-router";
 import { IconLabel } from "../../atoms/icons/labels";
-import { LucideIcon } from "lucide-react-native";
+import { Feather } from "@expo/vector-icons";
 
 type Props = {
-  icon: LucideIcon;
+  icon: keyof typeof Feather.glyphMap; // Garantir que o icon seja um nome válido de ícone
   label: string;
   route: string;
   active: boolean;
@@ -15,7 +15,7 @@ export const TabItem = ({ icon, label, route, active }: Props) => {
   const router = useRouter();
 
   return (
-    <TouchableOpacity>
+    <TouchableOpacity onPress={() => router.push(route)}>
       <IconLabel icon={icon} label={label} active={active} />
     </TouchableOpacity>
   );

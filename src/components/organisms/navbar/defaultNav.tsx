@@ -1,4 +1,4 @@
-import { View} from "react-native";
+import { View } from "react-native";
 import LogoIFC from "../../atoms/logo/logoIFC";
 import DynamicIcon from "../../atoms/icons/bell";
 import ProfileAvatar from "../avatar/profileAvatar";
@@ -12,14 +12,14 @@ type DefaultNavBarProps = {
 
 const DefaultNavBar: React.FC<DefaultNavBarProps> = ({
   logo = <LogoIFC className="w-14 h-16" />,
-  icons = [<DynamicIcon name="Bell"/>],
+  icons = [<DynamicIcon name="bell" size={24} color="#4B5563" />],
   avatar = <ProfileAvatar />,
 }) => {
   return (
-    <View className="flex-row items-center justify-between px-5 mb-8">
+    <View className="flex-row items-center justify-between px-5 py-4">
       {logo}
 
-      <View className="flex-row items-center gap-4">
+      <View className="flex-row items-center space-x-4">
         {icons.map((icon, index) => (
           <View key={index}>{icon}</View>
         ))}

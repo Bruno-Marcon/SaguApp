@@ -1,9 +1,9 @@
-import { View, ScrollView} from 'react-native';
-import { CircleCheck as CheckCircle2, CircleAlert as AlertCircle, BookOpen, Users, Clock } from 'lucide-react-native';
+import { View, ScrollView } from 'react-native';
+import { Feather } from '@expo/vector-icons';  // Usando Feather do @expo/vector-icons
 import TemplateScreen from '@//components/templates/scrollView/templateScreen';
 import SectionTableList from '@//components/molecules/section/table/sectionTableList';
 import ApresentationSectionWithStatus from '@//components/molecules/section/apresentation/apresentationSectionWithStatus';
-import GradesList from '@//components/molecules/grades/gradesList'
+import GradesList from '@//components/molecules/grades/gradesList';
 import CommunicationSection from '@//components/molecules/section/comunications/sectionComunication';
 import AttendanceSection from '@//components/molecules/section/attendance/sectionAttendance';
 import SectionOccurrences from '../../organisms/section/SectionOccurrences';
@@ -21,12 +21,12 @@ const ocorrencias = [
 
 const comunicados = [
   {
-    icon: <AlertCircle size={20} color="#DC2626" />,
+    icon: <Feather name="alert-circle" size={20} color="#DC2626" />,
     title: "Reunião de Pais",
     subtitle: "Quinta-feira, 15 de Março às 19h",
   },
   {
-    icon: <Clock size={20} color="#1E40AF" />,
+    icon: <Feather name="clock" size={20} color="#1E40AF" />,
     title: "Alteração no Horário",
     subtitle: "Aulas de Educação Física alteradas para terça-feira",
   },
@@ -36,27 +36,28 @@ export default function HomePage() {
   const handleLinkPress = () => {
     console.log("Ver detalhes da frequência");
   };
+
   return (
     <TemplateScreen>
       <ScrollView className="flex-1">
-      <ApresentationSectionWithStatus
+        <ApresentationSectionWithStatus
           apresentationProps={{
             title: "Olá Bruno Marcon",
             subtitle: "Seja muito bem-vindo ao App Sagu",
           }}
           statusCards={[
             {
-              icon: <BookOpen size={24} color="#1E40AF" />,
+              iconName: "book-open",
               title: "Próxima Aula",
               subtitle: "Matemática - 10:00",
             },
             {
-              icon: <CheckCircle2 size={24} color="#059669" />,
+              iconName: "check-circle",
               title: "Presença Hoje",
               subtitle: "Presente",
             },
             {
-              icon: <Users size={24} color="#1E40AF" />,
+              iconName: "users",
               title: "Reunião",
               subtitle: "15:00 - Coordenação",
             },
@@ -68,7 +69,7 @@ export default function HomePage() {
             linkText="Ver boletim"
             href="/"
           />
-        <GradesList grades={grades} />
+          <GradesList grades={grades} />
         </View>
         <View className="p-3">
           <SectionOccurrences
@@ -92,5 +93,3 @@ export default function HomePage() {
     </TemplateScreen>
   );
 }
-
-

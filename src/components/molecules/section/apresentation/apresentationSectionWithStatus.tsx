@@ -1,6 +1,6 @@
 import React from "react";
 import { View } from "react-native";
-import { LucideIcon } from "lucide-react-native";
+import { Feather } from "@expo/vector-icons";  // Usando Feather do @expo/vector-icons
 import StatusCard from "../../../organisms/card/card";
 import TitleSection from "../../../atoms/title/primaryTitle";
 
@@ -10,7 +10,7 @@ interface ApresentationSectionProps {
 }
 
 interface StatusCardItem {
-  icon: React.ReactElement<LucideIcon>;
+  iconName: keyof typeof Feather.glyphMap; // Nome do ícone como chave
   title: string;
   subtitle: string;
 }
@@ -37,7 +37,7 @@ const ApresentationSectionWithStatus: React.FC<ApresentationSectionWithStatusPro
         {statusCards.map((card, index) => (
           <StatusCard
             key={index}
-            icon={card.icon}
+            icon={<Feather name={card.iconName} size={24} color="#16A34A" />} // Renderizando o ícone com o nome
             title={card.title}
             subtitle={card.subtitle}
           />

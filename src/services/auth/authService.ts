@@ -38,7 +38,7 @@ export const HandleLogin = async (email: string, password: string): Promise<Logi
       }), 
     });
 
-    console.log(`HTTP Response Status: ${response.status}`); // Log do código de status da resposta
+    console.log(`HTTP Response Status: ${response.status}`);
 
     if (!response.ok) { 
       const errorText = await response.text(); 
@@ -82,7 +82,7 @@ export const Logout = async () => {
         headers: headers,
       });
 
-      console.log(`HTTP Response Status: ${response.status}`); // Log do código de status da resposta
+      console.log(`HTTP Response Status: ${response.status}`);
 
       if (!response.ok) {
         const errorText = await response.text(); 

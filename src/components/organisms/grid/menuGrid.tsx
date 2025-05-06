@@ -2,9 +2,9 @@ import { View, Text, Pressable } from "react-native";
 import { Link } from "expo-router";
 import DynamicIcon from "../../atoms/icons/bell";
 import { LinkProps } from "expo-router";
+import { Feather } from "@expo/vector-icons";
 
-
-type IconName = keyof typeof import("lucide-react-native");
+type IconName = keyof typeof Feather.glyphMap;
 
 type MenuItem = {
   id: number;

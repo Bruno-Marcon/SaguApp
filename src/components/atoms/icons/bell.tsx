@@ -1,8 +1,7 @@
-import * as LucideIcons from "lucide-react-native";
-import { ComponentType } from "react";
+import { Feather } from "@expo/vector-icons";
 import { ViewStyle } from "react-native";
 
-type IconName = keyof typeof LucideIcons;
+type IconName = keyof typeof Feather.glyphMap;
 
 type DynamicIconProps = {
   name: IconName;
@@ -17,7 +16,5 @@ export default function DynamicIcon({
   size = 24,
   style,
 }: DynamicIconProps) {
-  const IconComponent = LucideIcons[name] as ComponentType<any>;
-
-  return IconComponent ? <IconComponent color={color} size={size} style={style} /> : null;
+  return <Feather name={name} color={color} size={size} style={style} />;
 }
