@@ -1,13 +1,10 @@
-// components/atoms/icons/iconx.tsx
 import { Feather, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { View } from 'react-native';
 
-// Tipos internos (não precisam ser exportados)
 type FeatherIconName = React.ComponentProps<typeof Feather>['name'];
 type IoniconName = React.ComponentProps<typeof Ionicons>['name'];
 type MaterialIconName = React.ComponentProps<typeof MaterialIcons>['name'];
 
-// Tipo público simplificado
 export type IconName = string;
 export type IconFamily = 'feather' | 'ionicons' | 'material';
 
@@ -26,7 +23,6 @@ export const Icon = ({
   family = 'feather', 
   className = '' 
 }: IconProps) => {
-  // A validação acontece internamente
   const renderIcon = () => {
     try {
       switch (family) {
