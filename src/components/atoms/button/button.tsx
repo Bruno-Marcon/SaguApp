@@ -2,8 +2,8 @@ import { TouchableOpacity } from 'react-native';
 import { CustomText } from '../text/text';
 
 const variantClasses = {
-  primary: 'bg-blue-500',
-  secondary: 'bg-gray-200',
+  primary: 'bg-green-500',
+  secondary: 'bg-gray-100',
 };
 
 const sizeClasses = {
@@ -15,19 +15,25 @@ type ButtonProps = React.ComponentProps<typeof TouchableOpacity> & {
   variant?: 'primary' | 'secondary';
   size?: 'lg' | 'md';
   title: string;
+  onLogout: () => void;
 };
 
-export const Button = ({ 
-  variant = 'primary', 
-  size = 'md', 
-  title, 
-  className = '', 
-  ...props 
+export const Button = ({
+  variant = 'primary',
+  size = 'md',
+  title,
+  onLogout,
+  className = '',
+  ...props
 }: ButtonProps) => {
   const classes = `rounded-lg ${variantClasses[variant]} ${sizeClasses[size]} ${className}`;
-  
+
   return (
-    <TouchableOpacity className={classes} {...props}>
+    <TouchableOpacity
+      className={classes}
+      {...props}
+      onPress={onLogout}
+    >
       <CustomText variant="button" size={size === 'lg' ? 'lg' : 'base'}>
         {title}
       </CustomText>
