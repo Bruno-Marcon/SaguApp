@@ -1,5 +1,5 @@
 import { View, ScrollView } from 'react-native';
-import { Feather } from '@expo/vector-icons';  // Usando Feather do @expo/vector-icons
+import { Feather } from '@expo/vector-icons';
 import TemplateScreen from '@//components/templates/scrollView/templateScreen';
 import SectionTableList from '@//components/molecules/section/table/sectionTableList';
 import ApresentationSectionWithStatus from '@//components/molecules/section/apresentation/apresentationSectionWithStatus';

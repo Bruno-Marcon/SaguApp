@@ -5,7 +5,7 @@ import { IconLabel } from "../../atoms/icons/labels";
 import { Feather } from "@expo/vector-icons";
 
 type Props = {
-  icon: keyof typeof Feather.glyphMap; // Garantir que o icon seja um nome válido de ícone
+  icon: keyof typeof Feather.glyphMap;
   label: string;
   route: string;
   active: boolean;
