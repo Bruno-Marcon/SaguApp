@@ -1,7 +1,6 @@
 import { getUserInfo } from "@//storage/SecureUser";
 import { useEffect, useState } from "react";
 import { Avatar } from "react-native-elements";
-import { Ionicons } from '@expo/vector-icons';
 
 const getRandomColor = () => {
   const letters = "0123456789ABCDEF";
