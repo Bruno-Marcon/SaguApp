@@ -14,14 +14,14 @@ type LoginScreenProps = {
 const LoginScreen:React.FC<LoginScreenProps> = ({
     text,
     subSubTitle,
-    viewClassName = "flex-1 justify-center items-center bg-gray-100 p-8"
+    viewClassName = "flex-1 justify-center items-center bg-gray-100 p-9"
 }) => {
   return (
     <View className={viewClassName}>
       <LogoIFC source={require("../../../assets/images/logo-ifc.png")} className="w-30 h-30 mb-20"  />
       <LoginForm text={text}/>
-      <SubTitleOr text={subSubTitle}/>
-      <GoogleButton/>
+      {/* <SubTitleOr text={subSubTitle}/> */}
+      {/* <GoogleButton/> */}
     </View>
   );
 }

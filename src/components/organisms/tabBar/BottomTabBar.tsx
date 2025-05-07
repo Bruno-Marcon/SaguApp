@@ -12,7 +12,7 @@ export default function BottomTabBar() {
   const [newOccurrence, setNewOccurrence] = useState("");
 
   const tabs = [
-    { label: "Home", icon: "home" as keyof typeof Feather.glyphMap, route: "/home" },
+    { label: "Home", icon: "home" as keyof typeof Feather.glyphMap, route: "/homeScreen" },
     { label: "Search", icon: "search" as keyof typeof Feather.glyphMap, route: "/search" },
     { label: "History", icon: "clock" as keyof typeof Feather.glyphMap, route: "/history" },
     { label: "Profile", icon: "user" as keyof typeof Feather.glyphMap, route: "/profile" },
