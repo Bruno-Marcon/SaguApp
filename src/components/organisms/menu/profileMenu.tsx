@@ -5,27 +5,17 @@ const menuItems = [
   { 
     iconName: 'settings-outline' as const,
     iconFamily: 'ionicons' as const,
-    title: 'Account Settings' 
-  },
-  { 
-    iconName: 'star-outline' as const,
-    iconFamily: 'ionicons' as const,
-    title: 'My Reviews' 
+    title: 'Configurações da conta' 
   },
   { 
     iconName: 'user' as const,
     iconFamily: 'feather' as const,
-    title: 'Personal Information' 
+    title: 'Informações de perfil' 
   },
   { 
     iconName: 'notifications-outline' as const,
     iconFamily: 'ionicons' as const,
-    title: 'Notification' 
-  },
-  { 
-    iconName: 'fingerprint' as const,
-    iconFamily: 'material' as const,
-    title: 'Fingerprint Settings' 
+    title: 'Notificações' 
   },
 ] satisfies Array<{
   iconName: string;
@@ -35,7 +25,7 @@ const menuItems = [
 
 export const ProfileMenu = () => {
   return (
-    <View className="space-y-4">
+    <View className="space-y-5">
       {menuItems.map((item, index) => (
         <MenuItem
           key={index}

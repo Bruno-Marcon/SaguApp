@@ -1,9 +1,14 @@
 import { View } from 'react-native';
-import { Link } from 'expo-router';
+import { Link, router } from 'expo-router';
 import { ProfileHeader } from '../../molecules/header/profileHeader';
 import { ProfileMenu } from '../../organisms/menu/profileMenu';
 import { Button } from '../../atoms/button/button';
+import { Logout } from '@//services/auth/authService';
 
+const handleLogout = async () => {
+    await Logout();
+    router.replace('/(auth)/signin/page');
+  };
 
 type ProfileTemplateProps = {
   name: string;
@@ -18,7 +23,8 @@ export const ProfileTemplate = ({ name, email }: ProfileTemplateProps) => {
       
       <Link href="/" asChild>
         <Button 
-          title="Back to Main Page" 
+          title="Sair"
+          onLogout={handleLogout}
           variant="primary" 
           size="lg" 
           className="mt-8 justify-center" 

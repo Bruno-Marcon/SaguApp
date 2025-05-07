@@ -4,7 +4,7 @@ import { CustomText } from '../../atoms/text/text';
 import { Icon, IconName, IconFamily } from '../../atoms/icons/iconx';
 
 type MenuItemProps = {
-  iconName: IconName; // Tipo genérico
+  iconName: IconName;
   iconFamily?: IconFamily;
   title: string;
   onPress?: () => void;
