@@ -20,8 +20,8 @@ const LoginScreen:React.FC<LoginScreenProps> = ({
     <View className={viewClassName}>
       <LogoIFC source={require("../../../assets/images/logo-ifc.png")} className="w-30 h-30 mb-20"  />
       <LoginForm text={text}/>
-      <SubTitleOr text={subSubTitle}/>
-      <GoogleButton/>
+      {/* <SubTitleOr text={subSubTitle}/> */}
+      {/* <GoogleButton/> */}
     </View>
   );
 }
