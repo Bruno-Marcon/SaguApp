@@ -5,7 +5,17 @@ import InitialsAvatar from '../../atoms/avatar/avatar';
 import LogoutModal from '../../molecules/modal/logout';
 import { Logout } from '@//services/auth/authService';
 
-const ProfileAvatar: React.FC = () => {
+
+type ProfileAvatarProps = {
+  size: number
+  modal: boolean
+}; 
+
+
+export const ProfileAvatar = ({ 
+  size = 40,
+  modal = true
+}: ProfileAvatarProps) => {
   const [modalVisible, setModalVisible] = useState(false);
 
   const handleLogout = async () => {
@@ -16,7 +26,7 @@ const ProfileAvatar: React.FC = () => {
 
   return (
     <View>
-      <InitialsAvatar size={40} onPress={() => setModalVisible(true)} />
+      <InitialsAvatar size={size} onPress={() => setModalVisible(modal)} />
       <LogoutModal
         visible={modalVisible}
         onClose={() => setModalVisible(false)}
