@@ -33,7 +33,6 @@ export const getOccurrences = async (): Promise<Occurrence[]> => {
       throw new Error("Nenhuma ocorrência encontrada.");
     }
 
-    // Pega as 3 últimas com base em `created_at`
     const lastThree = allOccurrences
       .sort((a: any, b: any) => new Date(b.attributes.created_at).getTime() - new Date(a.attributes.created_at).getTime())
       .slice(0, 3)

@@ -25,7 +25,7 @@ const menuItems = [
 
 export const ProfileMenu = () => {
   return (
-    <View className="space-y-5">
+    <View className="gap-y-5">
       {menuItems.map((item, index) => (
         <MenuItem
           key={index}

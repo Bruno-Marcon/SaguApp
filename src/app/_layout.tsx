@@ -51,6 +51,8 @@ export default function RootLayout() {
         <Stack.Screen name="index" options={{ headerShown: false }} />
         <Stack.Screen name="(auth)/signin/page" options={{ headerShown: false }} />
         <Stack.Screen name="(panel)/home/page" options={{ headerShown: false }} />
+        <Stack.Screen name="(panel)/profile/profile" options={{ headerShown: false }} />
+        <Stack.Screen name="(panel)/occurences/occurences" options={{ headerShown: false }} />
       </Stack>
       <Toast />
     </View>

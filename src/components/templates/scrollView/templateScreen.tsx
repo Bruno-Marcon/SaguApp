@@ -3,7 +3,19 @@ import { View, ScrollView, SafeAreaView, RefreshControl } from 'react-native';
 import BottomTabBar from '../../organisms/tabBar/BottomTabBar';
 import DefaultNavBar from '../../organisms/navbar/defaultNav';
 
-export default function TemplateScreen({ children }: { children: React.ReactNode }) {
+type TemplateScreenProps = {
+  children: React.ReactNode;
+  withSafeArea?: boolean;
+  withHeader?: boolean;
+  withBottomBar?: boolean;
+};
+
+export default function TemplateScreen({ 
+  children,
+  withSafeArea = true,
+  withHeader = true,
+  withBottomBar = true
+}: TemplateScreenProps) {
   const [refreshing, setRefreshing] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
 
@@ -17,13 +29,19 @@ export default function TemplateScreen({ children }: { children: React.ReactNode
 
   return (
     <View className="flex-1 bg-gray-100">
-      <SafeAreaView className="bg-gray-100">
-        <DefaultNavBar />
-      </SafeAreaView>
+      {withSafeArea && withHeader && (
+        <SafeAreaView className="bg-gray-100">
+          <DefaultNavBar />
+        </SafeAreaView>
+      )}
+      
       <ScrollView
         key={refreshKey}
         className="flex-1"
-        contentContainerStyle={{ paddingBottom: 150 }}
+        contentContainerStyle={{ 
+          paddingBottom: withBottomBar ? 150 : 20,
+          flexGrow: 1 
+        }}
         showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
@@ -31,7 +49,8 @@ export default function TemplateScreen({ children }: { children: React.ReactNode
       >
         {children}
       </ScrollView>
-      <BottomTabBar />
+      
+      {withBottomBar && <BottomTabBar />}
     </View>
   );
 }
