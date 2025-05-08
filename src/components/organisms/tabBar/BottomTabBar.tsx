@@ -55,14 +55,14 @@ export default function BottomTabBar() {
         {isOptionsVisible && (
           <View className="absolute bottom-full left-1/2 transform -translate-x-1/2 flex-row items-center mb-8 gap-x-3">
             <TouchableOpacity 
-              className="bg-green-500 p-5 rounded-full shadow-md shadow-green-300"
+              className="bg-green-500 p-5 rounded-full shadow-md shadow-green-100"
               onPress={() => handleOptionPress("checkin")}
             >
               <Feather name="check-circle" size={20} color="white" />
             </TouchableOpacity>
             
             <TouchableOpacity 
-              className="bg-green-500 p-5 rounded-full shadow-md shadow-green-300"
+              className="bg-green-500 p-5 rounded-full shadow-md shadow-green-200"
               onPress={() => handleOptionPress("review")}
             >
               <Feather name="edit-2" size={20} color="white" />
