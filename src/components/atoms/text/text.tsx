@@ -9,6 +9,7 @@ const variantClasses = {
   primary: 'text-gray-800',
   secondary: 'text-gray-500',
   button: 'text-white font-medium',
+  error: ''
 };
 
 const sizeClasses = {

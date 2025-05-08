@@ -11,7 +11,7 @@ export default function BottomTabBar() {
   const [isOptionsVisible, setIsOptionsVisible] = useState(false);
 
   const tabs = [
-    { label: "Home", icon: "home" as keyof typeof Feather.glyphMap, route: "/home/page" },
+    { label: "Home", icon: "home" as keyof typeof Feather.glyphMap, route: "/home" },
     { label: "Search", icon: "search" as keyof typeof Feather.glyphMap, route: "/search" },
     { label: "History", icon: "clock" as keyof typeof Feather.glyphMap, route: "/occurences/occurences" },
     { label: "Profile", icon: "user" as keyof typeof Feather.glyphMap, route: "/profile/profile" },
