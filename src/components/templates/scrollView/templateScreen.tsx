@@ -10,7 +10,7 @@ export default function TemplateScreen({ children }: { children: React.ReactNode
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     setTimeout(() => {
-      setRefreshKey(prev => prev + 1); // muda a key -> força recriação dos filhos
+      setRefreshKey(prev => prev + 1);
       setRefreshing(false);
     }, 1500);
   }, []);
@@ -21,7 +21,7 @@ export default function TemplateScreen({ children }: { children: React.ReactNode
         <DefaultNavBar />
       </SafeAreaView>
       <ScrollView
-        key={refreshKey} // <- força o re-render
+        key={refreshKey}
         className="flex-1"
         contentContainerStyle={{ paddingBottom: 150 }}
         showsVerticalScrollIndicator={false}
