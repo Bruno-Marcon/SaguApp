@@ -7,10 +7,11 @@ interface OccurrenceItem {
 }
 
 interface OccurrenceListMoleculeProps {
-  items: ReadonlyArray<OccurrenceItem>; // Aceita arrays readonly
+  items: ReadonlyArray<OccurrenceItem>;
+  onItemPress?: (item: OccurrenceItem) => void;
 }
 
-export default function OccurrenceListMolecule({ items }: OccurrenceListMoleculeProps) {
+export default function OccurrenceListMolecule({ items, onItemPress }: OccurrenceListMoleculeProps) {
   return (
     <View>
       {items.map((item, index) => (
@@ -18,6 +19,7 @@ export default function OccurrenceListMolecule({ items }: OccurrenceListMolecule
           key={index}
           title={item.title}
           description={item.description}
+          onPress={() => onItemPress?.(item)}
         />
       ))}
     </View>

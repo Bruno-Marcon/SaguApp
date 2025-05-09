@@ -10,16 +10,18 @@ interface OccurrenceCardProps {
   description: string;
   createdAt?: Date | string;
   className?: string;
+  onPress?: () => void;
 }
 
 export default function OccurrenceCardAtom({
   title,
   description,
   createdAt,
-  className = "p-2 rounded-xl shadow-lg mb-3 bg-white"
+  className = "p-2 rounded-xl shadow-lg mb-3 bg-white",
+  onPress
 }: OccurrenceCardProps) {
   return (
-    <TouchableOpacity className={className}>
+    <TouchableOpacity onPress={onPress} className={className}>
       <View className="ml-2 flex-row items-center gap-x-4">
         <Feather name="alert-circle" size={28} color="#DC2626" />
         <View className="flex-1">

@@ -8,6 +8,7 @@ import SectionOccurrences from '../../organisms/section/SectionOccurrences';
 import { LoadingIndicator } from '../../atoms/indicators/loadingIndicator';
 import { ErrorMessage } from '../../atoms/indicators/errorMessage';
 import TemplateScreen from '../scrollView/templateScreen';
+import { useRouter } from 'expo-router';
 
 
 const MOCK_DATA = {
@@ -43,9 +44,14 @@ const MOCK_DATA = {
 
 export const HomeScreen = () => {
   const { userData, loading, error, refresh } = useUserProfile();
-
+  const router = useRouter();
+  
   const handleRefresh = async () => {
     await refresh();
+  };
+
+  const handleOccurrencesPress = () => {
+    router.push('/(panel)/occurences/occurences')
   };
 
   if (loading) return <LoadingIndicator />;
@@ -73,6 +79,7 @@ export const HomeScreen = () => {
           <SectionOccurrences
             sectionTitle="Ocorrências Recentes"
             items={MOCK_DATA.occurrences}
+            onPress={handleOccurrencesPress}
           />
         </View>
 
