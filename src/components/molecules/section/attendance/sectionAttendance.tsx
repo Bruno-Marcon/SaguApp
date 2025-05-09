@@ -1,3 +1,4 @@
+// components/molecules/section/attendance/sectionAttendance.tsx
 import React from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import { Feather } from "@expo/vector-icons";
@@ -7,6 +8,7 @@ interface AttendanceSectionProps {
   percentage: number;
   linkText?: string;
   onPressLink?: () => void;
+  onPressDetails?: () => void; // Adicionado
 }
 
 const AttendanceSection: React.FC<AttendanceSectionProps> = ({
@@ -14,13 +16,17 @@ const AttendanceSection: React.FC<AttendanceSectionProps> = ({
   percentage,
   linkText = "Ver detalhes",
   onPressLink,
+  onPressDetails,
 }) => {
   return (
     <View className="p-5">
       <View className="flex-row justify-between items-center mb-4">
         <Text className="text-xl font-semibold text-gray-800">{title}</Text>
-        {onPressLink && (
-          <TouchableOpacity className="flex-row items-center" onPress={onPressLink}>
+        {(onPressLink || onPressDetails) && (
+          <TouchableOpacity 
+            className="flex-row items-center" 
+            onPress={onPressLink || onPressDetails}
+          >
             <Text className="text-sm text-blue-900 mr-1">{linkText}</Text>
             <Feather name="chevron-right" size={20} color="#1E40AF" />
           </TouchableOpacity>

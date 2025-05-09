@@ -1,43 +1,45 @@
-import React from "react";
-import { View } from "react-native";
-import { Feather } from "@expo/vector-icons";  // Usando Feather do @expo/vector-icons
-import StatusCard from "../../../organisms/card/card";
-import TitleSection from "../../../atoms/title/primaryTitle";
+import { View } from 'react-native';
+import React from 'react';
+import { Feather } from '@expo/vector-icons';
+import { PrimaryTitle } from '@//components/atoms/title/primaryTitle';
+import StatusCard from '@//components/organisms/card/card';
 
-interface ApresentationSectionProps {
+type FeatherIconName = React.ComponentProps<typeof Feather>['name'];
+
+type StatusCardItem = {
+  iconName: FeatherIconName;
   title: string;
   subtitle: string;
-}
+  iconColor?: string;
+};
 
-interface StatusCardItem {
-  iconName: keyof typeof Feather.glyphMap; // Nome do ícone como chave
-  title: string;
+type ApresentationSectionProps = {
+  name: string;
   subtitle: string;
-}
-
-interface ApresentationSectionWithStatusProps {
-  apresentationProps: ApresentationSectionProps;
-  statusCards: StatusCardItem[];
+  statusCards: ReadonlyArray<StatusCardItem>; // Aceita arrays readonly
   containerClassName?: string;
-}
+  backgroundClassName?: string;
+};
 
-const ApresentationSectionWithStatus: React.FC<ApresentationSectionWithStatusProps> = ({
-  apresentationProps,
+export const ApresentationSection = ({
+  name,
+  subtitle,
   statusCards,
-  containerClassName = "p-5 bg-green-600",
-}) => {
+  containerClassName = 'p-5',
+  backgroundClassName = 'bg-green-600'
+}: ApresentationSectionProps) => {
   return (
-    <View className={containerClassName}>
-      <TitleSection
-        title={apresentationProps.title}
-        subtitle={apresentationProps.subtitle}
+    <View className={`${containerClassName} ${backgroundClassName}`}>
+      <PrimaryTitle
+        name={name}
+        subtitle={subtitle}
       />
 
       <View className="flex-row justify-between mt-5">
         {statusCards.map((card, index) => (
           <StatusCard
-            key={index}
-            icon={<Feather name={card.iconName} size={24} color="#16A34A" />} // Renderizando o ícone com o nome
+            key={`status-card-${index}`}
+            icon={<Feather name={card.iconName} size={24} color={card.iconColor || '#16A34A'} />}
             title={card.title}
             subtitle={card.subtitle}
           />
@@ -46,5 +48,3 @@ const ApresentationSectionWithStatus: React.FC<ApresentationSectionWithStatusPro
     </View>
   );
 };
-
-export default ApresentationSectionWithStatus;

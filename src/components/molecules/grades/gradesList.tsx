@@ -1,3 +1,4 @@
+// components/molecules/grades/GradesList.tsx
 import React from "react";
 import { View, Text } from "react-native";
 
@@ -7,7 +8,7 @@ interface GradeItem {
 }
 
 interface GradesListProps {
-  grades: GradeItem[];
+  grades: ReadonlyArray<GradeItem>
 }
 
 const GradesList: React.FC<GradesListProps> = ({ grades }) => {
@@ -15,7 +16,7 @@ const GradesList: React.FC<GradesListProps> = ({ grades }) => {
     <View className="bg-white rounded-xl p-4">
       {grades.map((item, index) => (
         <View
-          key={index}
+          key={`grade-${index}`}
           className="flex-row justify-between items-center py-2 border-b border-gray-200"
         >
           <Text className="text-base text-gray-800">{item.subject}</Text>

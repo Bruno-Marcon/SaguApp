@@ -1,13 +1,23 @@
 import { View, Text } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import DropdownFilter from '../../atoms/filter/dropDownFilter';
+import { ArrowBack } from '../../atoms/button/arrowBack';
 
-export default function OccurrencesHeader() {
+type OccurrencesHeaderProps = {
+  showBackButton?: boolean;
+  onBackPress?: () => void;
+};
+
+export const OccurrencesHeader = ({ 
+  showBackButton = true,
+  onBackPress
+}: OccurrencesHeaderProps) => {
   return (
-    <View className="mb-6">
+    <View className=" mt-8 mb-2">
+      {showBackButton && <ArrowBack onPress={onBackPress} className="mb-2" />}
       <Text className="text-2xl font-bold text-gray-800">Ocorrências</Text>
       
-      <View className="flex-row justify-between mt-4 mb-2">
+      <View className="flex-row justify-between mt-5 mb-2">
         <DropdownFilter label="Turma" value="Todos" />
         <DropdownFilter label="Ano" value="2024" />
         <DropdownFilter label="Período" value="20/10/2024" />

@@ -15,14 +15,14 @@ type ButtonProps = React.ComponentProps<typeof TouchableOpacity> & {
   variant?: 'primary' | 'secondary';
   size?: 'lg' | 'md';
   title: string;
-  onLogout: () => void;
+  onPress: () => void;
 };
 
 export const Button = ({
   variant = 'primary',
   size = 'md',
   title,
-  onLogout,
+  onPress,
   className = '',
   ...props
 }: ButtonProps) => {
@@ -32,7 +32,7 @@ export const Button = ({
     <TouchableOpacity
       className={classes}
       {...props}
-      onPress={onLogout}
+      onPress={onPress}
     >
       <CustomText variant="button" size={size === 'lg' ? 'lg' : 'base'}>
         {title}

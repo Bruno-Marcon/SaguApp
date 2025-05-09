@@ -1,95 +1,87 @@
 import { View, ScrollView } from 'react-native';
-import { Feather } from '@expo/vector-icons';
-import TemplateScreen from '@//components/templates/scrollView/templateScreen';
-import SectionTableList from '@//components/molecules/section/table/sectionTableList';
-import ApresentationSectionWithStatus from '@//components/molecules/section/apresentation/apresentationSectionWithStatus';
-import GradesList from '@//components/molecules/grades/gradesList';
-import CommunicationSection from '@//components/molecules/section/comunications/sectionComunication';
-import AttendanceSection from '@//components/molecules/section/attendance/sectionAttendance';
+import { useUserProfile } from '@//hook/useUserProfile';
+import { ApresentationSection } from '../../molecules/section/apresentation/apresentationSectionWithStatus';
+import SectionTableList from '../../molecules/section/table/sectionTableList';
+import GradesList from '../../molecules/grades/gradesList';
+import AttendanceSection from '../../molecules/section/attendance/sectionAttendance';
 import SectionOccurrences from '../../organisms/section/SectionOccurrences';
+import { LoadingIndicator } from '../../atoms/indicators/loadingIndicator';
+import { ErrorMessage } from '../../atoms/indicators/errorMessage';
+import TemplateScreen from '../scrollView/templateScreen';
 
-const grades = [
-  { subject: "Matemática", grade: "8.5" },
-  { subject: "Português", grade: "9.0" },
-  { subject: "História", grade: "8.0" },
-];
 
-const ocorrencias = [
-  { title: "Falta sem Justificativa", description: "Aluno ausente na aula de Matemática em 20/04" },
-  { title: "Indisciplina", description: "Comportamento inadequado durante a aula de História" },
-];
+const MOCK_DATA = {
+  grades: [
+    { subject: "Matemática", grade: "8.5" },
+    { subject: "Português", grade: "9.0" },
+    { subject: "História", grade: "8.0" },
+  ],
+  occurrences: [
+    { title: "Falta sem Justificativa", description: "Aluno ausente na aula de Matemática" },
+  ],
+  statusCards: [
+    {
+      iconName: "book-open" as const,
+      title: "Próxima Aula",
+      subtitle: "Matemática - 10:00",
+      iconColor: "#3B82F6"
+    },
+    {
+      iconName: "check-circle" as const,
+      title: "Presença Hoje",
+      subtitle: "Presente",
+      iconColor: "#10B981"
+    },
+    {
+      iconName: "check-circle" as const,
+      title: "Presença Hoje",
+      subtitle: "Presente",
+      iconColor: "#10B981"
+    },
+  ]
+} as const;
 
-const comunicados = [
-  {
-    icon: <Feather name="alert-circle" size={20} color="#DC2626" />,
-    title: "Reunião de Pais",
-    subtitle: "Quinta-feira, 15 de Março às 19h",
-  },
-  {
-    icon: <Feather name="clock" size={20} color="#1E40AF" />,
-    title: "Alteração no Horário",
-    subtitle: "Aulas de Educação Física alteradas para terça-feira",
-  },
-];
+export const HomeScreen = () => {
+  const { userData, loading, error, refresh } = useUserProfile();
 
-export default function HomePage() {
-  const handleLinkPress = () => {
-    console.log("Ver detalhes da frequência");
+  const handleRefresh = async () => {
+    await refresh();
   };
 
+  if (loading) return <LoadingIndicator />;
+  if (error) return <ErrorMessage message={error} onRetry={handleRefresh} />;
+  if (!userData) return <ErrorMessage message="Dados do usuário não encontrados" onRetry={handleRefresh} />;
+
   return (
-    <TemplateScreen>
+    <TemplateScreen withHeader={true}>
       <ScrollView className="flex-1">
-        <ApresentationSectionWithStatus
-          apresentationProps={{
-            title: "Olá Bruno Marcon",
-            subtitle: "Seja muito bem-vindo ao App Sagu",
-          }}
-          statusCards={[
-            {
-              iconName: "book-open",
-              title: "Próxima Aula",
-              subtitle: "Matemática - 10:00",
-            },
-            {
-              iconName: "check-circle",
-              title: "Presença Hoje",
-              subtitle: "Presente",
-            },
-            {
-              iconName: "users",
-              title: "Reunião",
-              subtitle: "15:00 - Coordenação",
-            },
-          ]}
+        <ApresentationSection
+          name={`Olá, ${userData.name}`}
+          subtitle="Seja bem-vindo ao App Escola"
+          statusCards={MOCK_DATA.statusCards}
         />
-        <View className="p-3">
+        <View className="p-4">
           <SectionTableList
             title="Desempenho Acadêmico"
-            linkText="Ver boletim"
-            href="/"
+            linkText="Ver boletim completo"
+            onPressLink={() => console.log('Navigate to grades')}
           />
-          <GradesList grades={grades} />
+          <GradesList grades={MOCK_DATA.grades} />
         </View>
-        <View className="p-3">
+
+        <View className="p-4">
           <SectionOccurrences
             sectionTitle="Ocorrências Recentes"
-            items={ocorrencias}
+            items={MOCK_DATA.occurrences}
           />
         </View>
-        <View className="p-3">
-          <CommunicationSection
-            sectionTitle="Comunicados Recentes"
-            items={comunicados}
-          />
-        </View>
+
         <AttendanceSection 
-          title={'Presença'} 
-          percentage={80} 
-          linkText="Ver detalhes"
-          onPressLink={handleLinkPress}
+          title="Presença"
+          percentage={85} 
+          onPressLink={() => console.log('Navigate to attendance')}
         />
       </ScrollView>
     </TemplateScreen>
   );
-}
+};

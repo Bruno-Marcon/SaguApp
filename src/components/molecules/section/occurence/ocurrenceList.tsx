@@ -7,7 +7,7 @@ interface OccurrenceItem {
 }
 
 interface OccurrenceListMoleculeProps {
-  items: OccurrenceItem[];
+  items: ReadonlyArray<OccurrenceItem>; // Aceita arrays readonly
 }
 
 export default function OccurrenceListMolecule({ items }: OccurrenceListMoleculeProps) {
