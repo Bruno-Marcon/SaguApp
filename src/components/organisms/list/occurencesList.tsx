@@ -1,25 +1,28 @@
 import { View, Text } from "react-native"
 import { Feather } from "@expo/vector-icons"
 import OccurrenceCardAtom from "../../atoms/card/OccurrenceCard"
+import { OccurrenceItem } from "@//utils/adapters/occurrence/occurrenceAdapter"
 
-interface OccurrencesListProps {
-  occurrences: any[]
+type OccurrencesListProps = {
+  occurrences: OccurrenceItem[]
+  loading: boolean
 }
 
-export default function OccurrencesList({ occurrences }: OccurrencesListProps) {
+export default function OccurrencesList({ occurrences, loading }: OccurrencesListProps) {
+  if (loading) {
+    return <Text>Carregando...</Text>
+  }
+
   return (
     <View className="mb-8">
       {occurrences.length > 0 ? (
-        occurrences.map((item) => (
+        occurrences.map((occurrence) => (
           <OccurrenceCardAtom
-            key={item.id}
-            title={item.title}
-            description={item.description}
-            createdAt={item.date}
-            authorName={item.author}
-            status={item.status}
-            category={item.category}
-            onPress={() => console.log("Visualizar ocorrência", item.id)}
+            key={occurrence.id}
+            title={occurrence.title}
+            description={occurrence.description}
+            createdAt={occurrence.createdAt}
+            onPress={() => console.log('Visualizar ocorrência', occurrence.id)}
           />
         ))
       ) : (
@@ -28,11 +31,6 @@ export default function OccurrencesList({ occurrences }: OccurrencesListProps) {
           <Text className="text-gray-500 mt-2">Nenhuma ocorrência encontrada</Text>
         </View>
       )}
-
-      <View className="items-center mb-4">
-        <Text className="text-gray-500">---</Text>
-        <Text className="text-gray-500">20/10/2024</Text>
-      </View>
     </View>
   )
 }

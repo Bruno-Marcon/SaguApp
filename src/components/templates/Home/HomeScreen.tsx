@@ -7,9 +7,12 @@ import TemplateScreen from '../scrollView/templateScreen'
 import { ApresentationSection } from '../../molecules/section/apresentation/apresentationSectionWithStatus'
 import SectionTableList from '../../molecules/section/table/sectionTableList'
 import GradesList from '../../molecules/grades/gradesList'
-import SectionOccurrences from '../../organisms/section/SectionOccurrences'
 import AttendanceSection from '../../molecules/section/attendance/sectionAttendance'
 import { useOccurrence } from "../../../hook/occurrence/useOccurence"
+import { useStats } from '@//hook/stats/useStats'
+import { OccurrenceSectionWithCarousel } from '../../organisms/carousel/occurrenceSectionWithCarousel'
+import { PrimaryTitle } from '../../atoms/title/primaryTitle'
+
 
 const MOCK_DATA = {
   grades: [
@@ -59,18 +62,22 @@ const MOCK_DATA = {
 export const HomeScreen = () => {
   const { userData, loading, error, refresh } = useUserProfile()
   const { occurrences, loading: occurrencesLoading, error: occurrencesError } = useOccurrence()
+  
+  // Usando o hook useStats
+  const { stats, loading: statsLoading, error: statsError, refetch: refetchStats } = useStats()
 
   const router = useRouter()
-  
+
   const handleRefresh = async () => {
     await refresh()
+    refetchStats()
   }
 
   const handleOccurrencesPress = () => {
     router.push('/(panel)/occurences/occurences')
   }
 
-  if (loading) return <LoadingIndicator />
+  if (loading || statsLoading) return <LoadingIndicator />
   if (error) return <ErrorMessage message={error} onRetry={handleRefresh} />
   if (!userData) return <ErrorMessage message="Dados do usuário não encontrados" onRetry={handleRefresh} />
 
@@ -79,8 +86,27 @@ export const HomeScreen = () => {
       <ScrollView className="flex-1">
         <ApresentationSection
           name={`Olá, ${userData.name}`}
-          subtitle="Seja bem-vindo ao App Escola"
-          statusCards={MOCK_DATA.statusCards}
+          subtitle="Seja bem-vindo ao Sagu App"
+          statusCards={[
+            {
+              iconName: "calendar" as const,
+              title: "Compromissos Agendadas",
+              subtitle: stats ? stats.scheduled_appointments.toString() : 'Carregando...',
+              iconColor: "#F59E0B"
+            },
+            {
+              iconName: "alert-circle" as const,
+              title: "Ocorrências Pendentes",
+              subtitle: stats ? stats.pending_occurrencies.toString() : 'Carregando...',
+              iconColor: "#EF4444"
+            },
+            {
+              iconName: "edit" as const,
+              title: "Orientações Pendentes",
+              subtitle: stats ? stats.pending_orientations.toString() : 'Carregando...',
+              iconColor: "#10B981"
+            }
+          ]}
         />
         <View className="p-4">
           <SectionTableList
@@ -92,13 +118,14 @@ export const HomeScreen = () => {
         </View>
 
         <View className="p-4">
-          <SectionOccurrences
-            sectionTitle="Ocorrências Recentes"
-            items={occurrences}
-            onPress={handleOccurrencesPress}
-          />
-          {occurrencesLoading && <LoadingIndicator />}
-          {occurrencesError && <ErrorMessage message={occurrencesError} />}
+          <OccurrenceSectionWithCarousel
+          occurrences={occurrences}
+          occurrencesLoading={occurrencesLoading}
+          occurrencesError={occurrencesError}
+          title={'Ocorrências'}
+          linkText={'Ver todos'}
+          onPressLink={handleOccurrencesPress}
+        />
         </View>
 
         <AttendanceSection 

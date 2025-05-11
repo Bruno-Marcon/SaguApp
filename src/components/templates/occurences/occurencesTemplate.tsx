@@ -1,33 +1,52 @@
-import { useState } from "react"
-import { ScrollView } from "react-native"
-import OccurrencesList from '@//components/organisms/list/occurencesList'
-import { OccurrencesHeader } from '@//components/organisms/header/occurrencesHeader'
-import { useOccurrence } from "@//hook/occurrence/useOccurence"
+import { useState, useMemo } from 'react'
+import { ScrollView } from 'react-native'
+import TemplateScreen from '../../../components/templates/scrollView/templateScreen'
+import { OccurrencesHeader } from '../../organisms/header/occurrencesHeader'
+import OccurrencesList from '../../organisms/list/occurencesList'
+import { useOccurrence } from '@//hook/occurrence/useOccurence'
+import { useRouter } from 'expo-router'
 
 export default function OccurrencesTemplate() {
-  const [filters, setFilters] = useState({
-    turma: "Todos",
-    ano: "2024",
-    periodo: "20/10/2024",
-    ate: "27/10/2024"
-  })
+  const router = useRouter()
 
-  const { occurrences, loading, error } = useOccurrence()
+  // Filtros de classe, ano e status
+  const [classFilter, setClassFilter] = useState<string>('Todos')
+  const [yearFilter, setYearFilter] = useState<string>('2024')
+  const [statusFilter, setStatusFilter] = useState<string>('Todos')
 
-  const filteredOccurrences = occurrences.filter(o => {
-    return (
-      (filters.turma === "Todos" || o.class === filters.turma) &&
-      o.date <= filters.ate
-    )
-  })
+  // Garantir que os filtros são passados de forma controlada
+  const filters = useMemo(() => ({
+    classId: classFilter === 'Todos' ? undefined : classFilter,
+    year: yearFilter,
+    status: statusFilter === 'Todos' ? undefined : statusFilter,
+  }), [classFilter, yearFilter, statusFilter])
+
+  // Usando o hook com os filtros
+  const { occurrences, loading } = useOccurrence(filters)
+
+  const handleBackPress = () => {
+    if (router.canGoBack()) {
+      router.back()
+    } else {
+      router.replace('/')
+    }
+  }
 
   return (
-    <ScrollView className="flex-1 px-4 pt-4">
-      <OccurrencesHeader
-        filters={filters}
-        onChangeFilters={setFilters}
-      />
-      <OccurrencesList occurrences={filteredOccurrences} />
-    </ScrollView>
+    <TemplateScreen withHeader={false}>
+      <ScrollView className="flex-1 px-4 pt-4">
+        <OccurrencesHeader 
+          showBackButton={true}
+          onBackPress={handleBackPress}
+          classValue={classFilter}
+          yearValue={yearFilter}
+          statusValue={statusFilter}
+          onClassChange={setClassFilter}
+          onYearChange={setYearFilter}
+          onStatusChange={setStatusFilter}
+        />
+        <OccurrencesList occurrences={occurrences} loading={loading} />
+      </ScrollView>
+    </TemplateScreen>
   )
 }
