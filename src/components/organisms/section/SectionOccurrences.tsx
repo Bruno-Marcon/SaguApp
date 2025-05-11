@@ -3,10 +3,13 @@ import { View, Text, TouchableOpacity } from 'react-native';
 import OccurrenceCardAtom from '../../atoms/card/OccurrenceCard';
 import OccurrenceDetailModal from '../../molecules/modal/occurrenceDatailModal';
 
-
 interface OccurrenceItem {
   title: string;
   description: string;
+  isNew?: boolean;
+  authorName?: string;
+  category?: string;
+  createdAt?: Date | string;
 }
 
 interface SectionOccurrencesProps {
@@ -26,7 +29,7 @@ export default function SectionOccurrences({
     <View className="mt-3">
       <View className="flex-row justify-between items-center mb-3">
         <Text className="text-lg font-bold text-gray-800">{sectionTitle}</Text>
-        <TouchableOpacity onPress={onPress}>
+        <TouchableOpacity onPress={onPress} activeOpacity={0.7}>
           <Text className="text-sm text-blue-600">Ver todas</Text>
         </TouchableOpacity>
       </View>
@@ -36,6 +39,10 @@ export default function SectionOccurrences({
           key={index}
           title={item.title}
           description={item.description}
+          authorName={item.authorName}
+          isNew={item.isNew}
+          category={item.category}
+          createdAt={item.createdAt}
           onPress={() => setSelectedOccurrence(item)}
         />
       ))}

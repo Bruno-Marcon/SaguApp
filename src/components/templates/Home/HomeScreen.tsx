@@ -1,15 +1,14 @@
 import { View, ScrollView } from 'react-native';
+import { useRouter } from 'expo-router';
 import { useUserProfile } from '@//hook/useUserProfile';
-import { ApresentationSection } from '../../molecules/section/apresentation/apresentationSectionWithStatus';
-import SectionTableList from '../../molecules/section/table/sectionTableList';
-import GradesList from '../../molecules/grades/gradesList';
-import AttendanceSection from '../../molecules/section/attendance/sectionAttendance';
-import SectionOccurrences from '../../organisms/section/SectionOccurrences';
 import { LoadingIndicator } from '../../atoms/indicators/loadingIndicator';
 import { ErrorMessage } from '../../atoms/indicators/errorMessage';
 import TemplateScreen from '../scrollView/templateScreen';
-import { useRouter } from 'expo-router';
-
+import { ApresentationSection } from '../../molecules/section/apresentation/apresentationSectionWithStatus';
+import SectionTableList from '../../molecules/section/table/sectionTableList';
+import GradesList from '../../molecules/grades/gradesList';
+import SectionOccurrences from '../../organisms/section/SectionOccurrences';
+import AttendanceSection from '../../molecules/section/attendance/sectionAttendance';
 
 const MOCK_DATA = {
   grades: [
@@ -18,7 +17,21 @@ const MOCK_DATA = {
     { subject: "História", grade: "8.0" },
   ],
   occurrences: [
-    { title: "Falta sem Justificativa", description: "Aluno ausente na aula de Matemática" },
+    { 
+      title: "Disruptive Behavior", 
+      description: "Student was talking excessively during class and disrupting others",
+      isNew: true,
+      authorName: "Emma Johnson",
+      category: "Behavioral",
+      createdAt: new Date()
+    },
+    { 
+      title: "Late Arrival", 
+      description: "Student arrived 15 minutes late to morning class",
+      authorName: "Mark Williams",
+      category: "Attendance",
+      createdAt: new Date(Date.now() - 86400000) // yesterday
+    },
   ],
   statusCards: [
     {
@@ -51,7 +64,7 @@ export const HomeScreen = () => {
   };
 
   const handleOccurrencesPress = () => {
-    router.push('/(panel)/occurences/occurences')
+    router.push('/(panel)/occurences/occurences');
   };
 
   if (loading) return <LoadingIndicator />;
