@@ -1,5 +1,5 @@
+import { getOccurrences, Occurrence } from "@//services/occurrence/occurrenceService";
 import { useEffect, useState } from "react";
-import { getOccurrences, Occurrence } from "../services/occurrence/occurrenceService";
 
 export const useOccurrence = () => {
   const [occurrences, setOccurrences] = useState<Occurrence[]>([]);
