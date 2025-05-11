@@ -3,8 +3,8 @@ import { ScrollView } from 'react-native'
 import TemplateScreen from '../../../components/templates/scrollView/templateScreen'
 import { OccurrencesHeader } from '../../organisms/header/occurrencesHeader'
 import OccurrencesList from '../../organisms/list/occurencesList'
-import { useOccurrence } from '@//hook/occurrence/useOccurence'
 import { useRouter } from 'expo-router'
+import { useOccurrenciesByRelator } from '@//hook/occurrence/useOccurenciesByRelator'
 
 export default function OccurrencesTemplate() {
   const router = useRouter()
@@ -19,7 +19,7 @@ export default function OccurrencesTemplate() {
     status: statusFilter === 'Todos' ? undefined : statusFilter,
   }), [classFilter, yearFilter, statusFilter])
 
-  const { occurrences, loading } = useOccurrence(filters)
+  const { occurrences, loading } = useOccurrenciesByRelator()
 
   const handleBackPress = () => {
     if (router.canGoBack()) {

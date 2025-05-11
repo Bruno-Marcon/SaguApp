@@ -6,20 +6,21 @@ import { ErrorMessage } from '../../atoms/indicators/errorMessage'
 import TemplateScreen from '../scrollView/templateScreen'
 import { ApresentationSection } from '../../molecules/section/apresentation/apresentationSectionWithStatus'
 import AttendanceSection from '../../molecules/section/attendance/sectionAttendance'
-import { useOccurrence } from "../../../hook/occurrence/useOccurence"
 import { useStats } from '@//hook/stats/useStats'
 import { SectionWithCarousel } from '../../organisms/carousel/sectionWithCarousel'
 import { useAuthorizationsWithNames } from '@//hook/authorizations/useAuthorizations'
-import { AuthorizationItem } from '../../../../types/authorizations'
+import { useOccurrenciesByRelator } from '@//hook/occurrence/useOccurenciesByRelator'
 import { useState, useEffect } from 'react'
+import { AuthorizationItem } from '../../../../types/authorizations'
+import { SectionWithCarouselOccurences } from '../../organisms/carousel/sectionWithCarouselOccurencies'
 
 export const HomeScreen = () => {
   const { userData, loading, error, refresh } = useUserProfile()
-  const { occurrences, loading: occurrencesLoading, error: occurrencesError } = useOccurrence()
   const { data } = useAuthorizationsWithNames()
   const { stats, loading: statsLoading, error: statsError, refetch: refetchStats } = useStats()
-  const router = useRouter()
+  const { occurrences, loading: occurrencesLoading, error: occurrencesError } = useOccurrenciesByRelator()
 
+  const router = useRouter()
   const [authorizationData, setAuthorizationData] = useState<AuthorizationItem[]>([])
 
   useEffect(() => {
@@ -37,8 +38,11 @@ export const HomeScreen = () => {
     router.push('/(panel)/occurences/occurences')
   }
 
-  if (loading || statsLoading) return <LoadingIndicator />
-  if (error) return <ErrorMessage message={error} onRetry={handleRefresh} />
+  if (loading || statsLoading || occurrencesLoading) return <LoadingIndicator />
+  if (error || statsError || occurrencesError) {
+    const message = error || statsError || occurrencesError || 'Erro desconhecido'
+    return <ErrorMessage message={message} onRetry={handleRefresh} />
+  }
   if (!userData) return <ErrorMessage message="Dados do usuário não encontrados" onRetry={handleRefresh} />
   if (authorizationData.length === 0) return <ErrorMessage message="Nenhuma autorização encontrada." onRetry={() => {}} />
 
@@ -70,18 +74,19 @@ export const HomeScreen = () => {
           ]}
         />
         <View className="m-2">
-          <SectionWithCarousel
+          <SectionWithCarouselOccurences
             data={occurrences}
             title={'Ocorrências'}
             linkText={'Ver Todos'}
-            onPressLink={handleOccurrencesPress} type={'occurrence'} />
+            onPressLink={handleOccurrencesPress}
+            type={'occurrence'} />
         </View>
         <View className="m-2">
           <SectionWithCarousel
             data={authorizationData}
             title={'Autorizações'}
             linkText={'Ver Todas'}
-            onPressLink={handleOccurrencesPress} 
+            onPressLink={handleOccurrencesPress}
             type="authorization"
           />
         </View>

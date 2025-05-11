@@ -1,5 +1,5 @@
 import { Authorization } from '@//services/authorizations/authorizationsService'
-import { AuthorizationItem } from '../../../../types/authorizations'
+import { AuthorizationItem } from '../../../../types/types'
 
 export const mapAuthorizationToItem = (authorization: Authorization): AuthorizationItem => {
   return {
