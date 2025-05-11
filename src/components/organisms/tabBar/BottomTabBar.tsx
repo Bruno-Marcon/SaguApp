@@ -12,9 +12,9 @@ export default function BottomTabBar() {
 
   const tabs = [
     { label: "Home", icon: "home" as keyof typeof Feather.glyphMap, route: "/home/page" },
-    { label: "Search", icon: "search" as keyof typeof Feather.glyphMap, route: "/(panel)/schedules/page" },
-    { label: "History", icon: "clock" as keyof typeof Feather.glyphMap, route: "/(panel)/occurences/occurences" },
-    { label: "Profile", icon: "user" as keyof typeof Feather.glyphMap, route: "/(panel)/profile/profile" },
+    { label: "Calendário", icon: "calendar" as keyof typeof Feather.glyphMap, route: "/(panel)/schedules/page" },
+    { label: "Ocorrências", icon: "clock" as keyof typeof Feather.glyphMap, route: "/(panel)/occurences/occurences" },
+    { label: "Perfil", icon: "user" as keyof typeof Feather.glyphMap, route: "/(panel)/profile/profile" },
   ]
 
   const handleOptionPress = (option: string) => {
@@ -33,7 +33,7 @@ export default function BottomTabBar() {
   }
 
   return (
-    <View className="flex-row justify-around items-center bg-white rounded-t-2xl p-4 shadow-md shadow-black/10 relative">
+    <View className="flex-row justify-around items-center bg-white rounded-t-2xl p-6 shadow-md shadow-black/10 relative">
       {tabs.slice(0, 2).map((tab) => (
         <TabItem
           key={tab.label}
