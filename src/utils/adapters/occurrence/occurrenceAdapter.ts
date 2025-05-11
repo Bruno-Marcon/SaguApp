@@ -1,8 +1,7 @@
 import { Occurrence } from "@//services/occurrence/occurrenceService"
 
 export interface OccurrenceItem {
-  class: string
-  date: string
+  id:string
   title: string
   description: string
   isNew?: boolean
@@ -14,14 +13,13 @@ export interface OccurrenceItem {
 
 export const mapOccurrenceToItem = (occurrence: Occurrence): OccurrenceItem => {
   return {
-  title: occurrence.attributes.title,
-  description: occurrence.attributes.description,
-  isNew: occurrence.attributes.status === "new",
-  authorName: "Desconhecido",
-  status: occurrence.attributes.status,
-  category: occurrence.attributes.kind,
-  createdAt: occurrence.attributes.created_at,
-  class:" C",
-  date: "D",
-}
+    id: occurrence.id ?? '',
+    title: occurrence.attributes.title ?? 'Sem título',
+    description: occurrence.attributes.description ?? 'Sem descrição',
+    isNew: occurrence.attributes.status === "new",
+    authorName: "Desconhecido",
+    status: occurrence.attributes.status ?? 'desconhecido',
+    category: occurrence.attributes.kind ?? 'Não especificado',
+    createdAt: occurrence.attributes.created_at ?? new Date().toISOString(),
+  }
 }
