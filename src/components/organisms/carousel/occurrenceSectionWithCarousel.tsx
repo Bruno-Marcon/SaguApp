@@ -9,7 +9,7 @@ type Props = {
   occurrencesError: string | null;
   title: string;
   linkText: string;
-  onPressLink: () => void;  // Adicionando onPressLink como prop
+  onPressLink: () => void;
 };
 
 export const OccurrenceSectionWithCarousel = ({

@@ -12,7 +12,7 @@ export default function BottomTabBar() {
 
   const tabs = [
     { label: "Home", icon: "home" as keyof typeof Feather.glyphMap, route: "/home/page" },
-    { label: "Search", icon: "search" as keyof typeof Feather.glyphMap, route: "/search" },
+    { label: "Search", icon: "search" as keyof typeof Feather.glyphMap, route: "/(panel)/schedules/page" },
     { label: "History", icon: "clock" as keyof typeof Feather.glyphMap, route: "/(panel)/occurences/occurences" },
     { label: "Profile", icon: "user" as keyof typeof Feather.glyphMap, route: "/(panel)/profile/profile" },
   ]

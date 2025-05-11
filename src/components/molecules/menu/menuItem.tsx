@@ -1,7 +1,7 @@
 // components/molecules/menu/menuItem.tsx
 import { TouchableOpacity, View } from 'react-native'
 import { CustomText } from '../../atoms/text/text'
-import { Icon, IconName, IconFamily } from '../../atoms/icons/iconx'
+import { Icon, IconName, IconFamily } from '../../atoms/icons/iconAtom'
 
 type MenuItemProps = {
   iconName: IconName
