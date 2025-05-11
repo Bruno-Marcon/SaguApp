@@ -19,7 +19,7 @@ const StatusCard: React.FC<StatusCardProps> = ({
   subtitleClassName,
 }) => {
   return (
-    <View className={`bg-white rounded-xl p-4 w-[30%] items-center ${containerClassName || ""}`}>
+    <View className={`bg-white rounded-xl p-2 w-[33%] items-center ${containerClassName || ""}`}>
       {icon}
       <Text className={`text-sm font-medium text-gray-800 mt-2 text-center ${titleClassName || ""}`}>
         {title}

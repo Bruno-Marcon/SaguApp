@@ -8,7 +8,7 @@ interface SectionWithTableProps {
   title: string
   linkText: string
   href?: LinkProps["href"]
-  onPressLink?: () => void // Adicionado
+  onPressLink?: () => void
   children?: React.ReactNode
 }
 

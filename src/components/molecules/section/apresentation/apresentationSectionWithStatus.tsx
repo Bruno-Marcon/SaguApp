@@ -16,7 +16,7 @@ type StatusCardItem = {
 type ApresentationSectionProps = {
   name: string
   subtitle: string
-  statusCards: ReadonlyArray<StatusCardItem> // Aceita arrays readonly
+  statusCards: ReadonlyArray<StatusCardItem>
   containerClassName?: string
   backgroundClassName?: string
 }
@@ -25,7 +25,7 @@ export const ApresentationSection = ({
   name,
   subtitle,
   statusCards,
-  containerClassName = 'p-5',
+  containerClassName = 'p-7',
   backgroundClassName = 'bg-green-600'
 }: ApresentationSectionProps) => {
   return (
@@ -35,7 +35,7 @@ export const ApresentationSection = ({
         subtitle={subtitle}
       />
 
-      <View className="flex-row justify-between mt-5">
+      <View className="flex-row gap-x-4 justify-center">
         {statusCards.map((card, index) => (
           <StatusCard
             key={`status-card-${index}`}
