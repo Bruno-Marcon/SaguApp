@@ -1,19 +1,19 @@
-import React, { JSX } from "react";
-import { View, Text, TouchableOpacity } from "react-native";
-import { Feather } from "@expo/vector-icons";
+import React, { JSX } from "react"
+import { View, Text, TouchableOpacity } from "react-native"
+import { Feather } from "@expo/vector-icons"
 
 interface CommunicationItem {
-  icon: JSX.Element;
-  title: string;
-  subtitle: string;
+  icon: JSX.Element
+  title: string
+  subtitle: string
 }
 
 interface CommunicationSectionProps {
-  sectionTitle: string;
-  showLink?: boolean;
-  linkText?: string;
-  onPressLink?: () => void;
-  items: CommunicationItem[];
+  sectionTitle: string
+  showLink?: boolean
+  linkText?: string
+  onPressLink?: () => void
+  items: CommunicationItem[]
 }
 
 const CommunicationSection: React.FC<CommunicationSectionProps> = ({
@@ -50,7 +50,7 @@ const CommunicationSection: React.FC<CommunicationSectionProps> = ({
         ))}
       </View>
     </View>
-  );
-};
+  )
+}
 
-export default CommunicationSection;
+export default CommunicationSection

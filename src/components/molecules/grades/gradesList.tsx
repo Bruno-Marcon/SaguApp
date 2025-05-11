@@ -1,10 +1,10 @@
 // components/molecules/grades/GradesList.tsx
-import React from "react";
-import { View, Text } from "react-native";
+import React from "react"
+import { View, Text } from "react-native"
 
 interface GradeItem {
-  subject: string;
-  grade: string;
+  subject: string
+  grade: string
 }
 
 interface GradesListProps {
@@ -24,7 +24,7 @@ const GradesList: React.FC<GradesListProps> = ({ grades }) => {
         </View>
       ))}
     </View>
-  );
-};
+  )
+}
 
-export default GradesList;
+export default GradesList

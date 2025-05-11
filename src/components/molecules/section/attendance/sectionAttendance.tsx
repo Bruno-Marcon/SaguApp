@@ -1,14 +1,14 @@
 // components/molecules/section/attendance/sectionAttendance.tsx
-import React from "react";
-import { View, Text, TouchableOpacity } from "react-native";
-import { Feather } from "@expo/vector-icons";
+import React from "react"
+import { View, Text, TouchableOpacity } from "react-native"
+import { Feather } from "@expo/vector-icons"
 
 interface AttendanceSectionProps {
-  title: string;
-  percentage: number;
-  linkText?: string;
-  onPressLink?: () => void;
-  onPressDetails?: () => void; // Adicionado
+  title: string
+  percentage: number
+  linkText?: string
+  onPressLink?: () => void
+  onPressDetails?: () => void // Adicionado
 }
 
 const AttendanceSection: React.FC<AttendanceSectionProps> = ({
@@ -46,7 +46,7 @@ const AttendanceSection: React.FC<AttendanceSectionProps> = ({
         </View>
       </View>
     </View>
-  );
-};
+  )
+}
 
-export default AttendanceSection;
+export default AttendanceSection

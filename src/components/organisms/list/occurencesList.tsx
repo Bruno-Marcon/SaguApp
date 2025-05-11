@@ -1,40 +1,25 @@
-import { View } from 'react-native';
-import { Feather } from '@expo/vector-icons';
-import { Text } from 'react-native';
-import OccurrenceCard from '../../molecules/section/occurence/occurrenceCard';
+import { View, Text } from "react-native"
+import { Feather } from "@expo/vector-icons"
+import OccurrenceCardAtom from "../../atoms/card/OccurrenceCard"
 
-export default function OccurrencesList() {
-  const occurrences = [
-    {
-      id: 1,
-      title: 'Ocorrência #1',
-      description: 'Descrição breve da ocorrência',
-      date: '20/10/2024',
-    },
-    {
-      id: 2,
-      title: 'Ocorrência #2',
-      description: 'Descrição breve da ocorrência',
-      date: '19/10/2024',
-    },
-    {
-      id: 3,
-      title: 'Ocorrência #3',
-      description: 'Descrição breve da ocorrência',
-      date: '18/10/2024',
-    },
-  ];
+interface OccurrencesListProps {
+  occurrences: any[]
+}
 
+export default function OccurrencesList({ occurrences }: OccurrencesListProps) {
   return (
     <View className="mb-8">
       {occurrences.length > 0 ? (
-        occurrences.map((occurrence) => (
-          <OccurrenceCard
-            key={occurrence.id}
-            title={occurrence.title}
-            description={occurrence.description}
-            date={occurrence.date}
-            onViewPress={() => console.log('Visualizar ocorrência', occurrence.id)}
+        occurrences.map((item) => (
+          <OccurrenceCardAtom
+            key={item.id}
+            title={item.title}
+            description={item.description}
+            createdAt={item.date}
+            authorName={item.author}
+            status={item.status}
+            category={item.category}
+            onPress={() => console.log("Visualizar ocorrência", item.id)}
           />
         ))
       ) : (
@@ -43,12 +28,11 @@ export default function OccurrencesList() {
           <Text className="text-gray-500 mt-2">Nenhuma ocorrência encontrada</Text>
         </View>
       )}
-      
-      {/* Data de referência */}
+
       <View className="items-center mb-4">
         <Text className="text-gray-500">---</Text>
         <Text className="text-gray-500">20/10/2024</Text>
       </View>
     </View>
-  );
+  )
 }

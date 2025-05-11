@@ -1,12 +1,12 @@
-import React from 'react';
-import { Button } from 'react-native';
+import React from 'react'
+import { Button } from 'react-native'
 
 interface LogoutButtonProps {
-  onPress: () => void;
+  onPress: () => void
 }
 
 const LogoutButton: React.FC<LogoutButtonProps> = ({ onPress }) => {
-  return <Button title="Sair" onPress={onPress} />;
-};
+  return <Button title="Sair" onPress={onPress} />
+}
 
-export default LogoutButton;
+export default LogoutButton

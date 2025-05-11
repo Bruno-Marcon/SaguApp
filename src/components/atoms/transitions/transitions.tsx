@@ -1,11 +1,11 @@
-import React from 'react';
-import { Text, Button } from 'react-native';
-import Animated, { withSpring } from 'react-native-reanimated';
+import React from 'react'
+import { Text, Button } from 'react-native'
+import Animated, { withSpring } from 'react-native-reanimated'
 
 interface AnimatedViewProps {
-  animation: any;
-  layoutClasses: string;
-  children: React.ReactNode;
+  animation: any
+  layoutClasses: string
+  children: React.ReactNode
 }
 
 const AnimatedView: React.FC<AnimatedViewProps> = ({ animation, layoutClasses, children }) => {
@@ -16,11 +16,11 @@ const AnimatedView: React.FC<AnimatedViewProps> = ({ animation, layoutClasses, c
     >
       {children}
     </Animated.View>
-  );
-};
+  )
+}
 
 const SlideScreen = () => {
-  const slideIn = withSpring(0, { damping: 2, stiffness: 100 });
+  const slideIn = withSpring(0, { damping: 2, stiffness: 100 })
 
   return (
     <AnimatedView 
@@ -29,7 +29,7 @@ const SlideScreen = () => {
     >
       <Text className="text-xl mb-4">Esta tela tem uma animação de slide!</Text>
     </AnimatedView>
-  );
-};
+  )
+}
 
-export default SlideScreen;
+export default SlideScreen

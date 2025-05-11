@@ -1,14 +1,14 @@
-import React from "react";
-import { View, Text } from "react-native";
+import React from "react"
+import { View, Text } from "react-native"
 
 type StatusCardProps = {
-  icon: React.ReactNode;
-  title: string;
-  subtitle: string;
-  containerClassName?: string;
-  titleClassName?: string;
-  subtitleClassName?: string;
-};
+  icon: React.ReactNode
+  title: string
+  subtitle: string
+  containerClassName?: string
+  titleClassName?: string
+  subtitleClassName?: string
+}
 
 const StatusCard: React.FC<StatusCardProps> = ({
   icon,
@@ -28,7 +28,7 @@ const StatusCard: React.FC<StatusCardProps> = ({
         {subtitle}
       </Text>
     </View>
-  );
-};
+  )
+}
 
-export default StatusCard;
+export default StatusCard

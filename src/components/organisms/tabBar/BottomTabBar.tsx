@@ -1,36 +1,36 @@
-import React, { useState } from "react";
-import { View, TouchableOpacity } from "react-native";
-import { useRouter, usePathname } from "expo-router";
-import { Feather } from "@expo/vector-icons";
-import { TabItem } from "../../molecules/tab/tabItens";
+import React, { useState } from "react"
+import { View, TouchableOpacity } from "react-native"
+import { useRouter, usePathname } from "expo-router"
+import { Feather } from "@expo/vector-icons"
+import { TabItem } from "../../molecules/tab/tabItens"
 
 export default function BottomTabBar() {
-  const router = useRouter();
-  const pathname = usePathname();
+  const router = useRouter()
+  const pathname = usePathname()
 
-  const [isOptionsVisible, setIsOptionsVisible] = useState(false);
+  const [isOptionsVisible, setIsOptionsVisible] = useState(false)
 
   const tabs = [
     { label: "Home", icon: "home" as keyof typeof Feather.glyphMap, route: "/home/page" },
     { label: "Search", icon: "search" as keyof typeof Feather.glyphMap, route: "/search" },
     { label: "History", icon: "clock" as keyof typeof Feather.glyphMap, route: "/(panel)/occurences/occurences" },
     { label: "Profile", icon: "user" as keyof typeof Feather.glyphMap, route: "/(panel)/profile/profile" },
-  ];
+  ]
 
   const handleOptionPress = (option: string) => {
-    setIsOptionsVisible(false);
+    setIsOptionsVisible(false)
     switch (option) {
       case "checkin":
-        console.log("Check In");
-        break;
+        console.log("Check In")
+        break
       case "review":
-        console.log("Review");
-        break;
+        console.log("Review")
+        break
       case "photo":
-        console.log("Add Photo");
-        break;
+        console.log("Add Photo")
+        break
     }
-  };
+  }
 
   return (
     <View className="flex-row justify-around items-center bg-white rounded-t-2xl p-4 shadow-md shadow-black/10 relative">
@@ -88,5 +88,5 @@ export default function BottomTabBar() {
         />
       ))}
     </View>
-  );
+  )
 }

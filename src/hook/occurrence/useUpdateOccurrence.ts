@@ -1,30 +1,30 @@
-import { updateOccurrence } from "@//services/occurrence/occurrenceService";
-import { useState } from "react";
+import { updateOccurrence } from "@//services/occurrence/occurrenceService"
+import { useState } from "react"
 
 interface UpdateOccurrencePayload {
-  responsible_id?: string;
-  status?: string;
-  kind?: string;
-  severity?: string;
+  responsible_id?: string
+  status?: string
+  kind?: string
+  severity?: string
 }
 
 export const useUpdateOccurrence = () => {
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   const mutate = async (id: string, payload: UpdateOccurrencePayload) => {
-    setLoading(true);
-    setError(null);
+    setLoading(true)
+    setError(null)
 
     try {
-      await updateOccurrence(id, payload);
+      await updateOccurrence(id, payload)
     } catch (err) {
-      console.error("Erro ao atualizar ocorrência:", err);
-      setError("Erro ao atualizar ocorrência");
+      console.error("Erro ao atualizar ocorrência:", err)
+      setError("Erro ao atualizar ocorrência")
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
-  return { mutate, loading, error };
-};
+  return { mutate, loading, error }
+}

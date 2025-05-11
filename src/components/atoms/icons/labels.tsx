@@ -1,12 +1,12 @@
-import React from "react";
-import { View, Text } from "react-native";
-import { Feather } from "@expo/vector-icons";
+import React from "react"
+import { View, Text } from "react-native"
+import { Feather } from "@expo/vector-icons"
 
 type Props = {
-  icon: keyof typeof Feather.glyphMap;
-  label: string;
-  active: boolean;
-};
+  icon: keyof typeof Feather.glyphMap
+  label: string
+  active: boolean
+}
 
 export const IconLabel = ({ icon, label, active }: Props) => {
   return (
@@ -16,5 +16,5 @@ export const IconLabel = ({ icon, label, active }: Props) => {
         {label}
       </Text>
     </View>
-  );
-};
+  )
+}

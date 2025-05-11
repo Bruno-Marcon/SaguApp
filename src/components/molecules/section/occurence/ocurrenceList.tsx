@@ -1,14 +1,14 @@
-import { View } from 'react-native';
-import OccurrenceCardAtom from '../../../atoms/card/OccurrenceCard';
+import { View } from 'react-native'
+import OccurrenceCardAtom from '../../../atoms/card/OccurrenceCard'
 
 interface OccurrenceItem {
-  title: string;
-  description: string;
+  title: string
+  description: string
 }
 
 interface OccurrenceListMoleculeProps {
-  items: ReadonlyArray<OccurrenceItem>;
-  onItemPress?: (item: OccurrenceItem) => void;
+  items: ReadonlyArray<OccurrenceItem>
+  onItemPress?: (item: OccurrenceItem) => void
 }
 
 export default function OccurrenceListMolecule({ items, onItemPress }: OccurrenceListMoleculeProps) {
@@ -23,5 +23,5 @@ export default function OccurrenceListMolecule({ items, onItemPress }: Occurrenc
         />
       ))}
     </View>
-  );
+  )
 }

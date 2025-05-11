@@ -1,9 +1,9 @@
-import { View, Text } from 'react-native';
-import { useState } from 'react';
-import FilterButton from '../../atoms/button/filterButton';
+import { View, Text } from 'react-native'
+import { useState } from 'react'
+import FilterButton from '../../atoms/button/filterButton'
 
 export default function OccurrencesFilter() {
-  const [selectedFilter, setSelectedFilter] = useState<'pending' | 'completed'>('pending');
+  const [selectedFilter, setSelectedFilter] = useState<'pending' | 'completed'>('pending')
 
   return (
     <View className="mb-6">
@@ -21,5 +21,5 @@ export default function OccurrencesFilter() {
         />
       </View>
     </View>
-  );
+  )
 }

@@ -1,25 +1,25 @@
-import { View } from 'react-native';
-import React from 'react';
-import { Feather } from '@expo/vector-icons';
-import { PrimaryTitle } from '@//components/atoms/title/primaryTitle';
-import StatusCard from '@//components/organisms/card/card';
+import { View } from 'react-native'
+import React from 'react'
+import { Feather } from '@expo/vector-icons'
+import { PrimaryTitle } from '@//components/atoms/title/primaryTitle'
+import StatusCard from '@//components/organisms/card/card'
 
-type FeatherIconName = React.ComponentProps<typeof Feather>['name'];
+type FeatherIconName = React.ComponentProps<typeof Feather>['name']
 
 type StatusCardItem = {
-  iconName: FeatherIconName;
-  title: string;
-  subtitle: string;
-  iconColor?: string;
-};
+  iconName: FeatherIconName
+  title: string
+  subtitle: string
+  iconColor?: string
+}
 
 type ApresentationSectionProps = {
-  name: string;
-  subtitle: string;
-  statusCards: ReadonlyArray<StatusCardItem>; // Aceita arrays readonly
-  containerClassName?: string;
-  backgroundClassName?: string;
-};
+  name: string
+  subtitle: string
+  statusCards: ReadonlyArray<StatusCardItem> // Aceita arrays readonly
+  containerClassName?: string
+  backgroundClassName?: string
+}
 
 export const ApresentationSection = ({
   name,
@@ -46,5 +46,5 @@ export const ApresentationSection = ({
         ))}
       </View>
     </View>
-  );
-};
+  )
+}

@@ -1,14 +1,14 @@
-import React, { useState, useCallback } from 'react';
-import { View, ScrollView, SafeAreaView, RefreshControl } from 'react-native';
-import BottomTabBar from '../../organisms/tabBar/BottomTabBar';
-import DefaultNavBar from '../../organisms/navbar/defaultNav';
+import React, { useState, useCallback } from 'react'
+import { View, ScrollView, SafeAreaView, RefreshControl } from 'react-native'
+import BottomTabBar from '../../organisms/tabBar/BottomTabBar'
+import DefaultNavBar from '../../organisms/navbar/defaultNav'
 
 type TemplateScreenProps = {
-  children: React.ReactNode;
-  withSafeArea?: boolean;
-  withHeader?: boolean;
-  withBottomBar?: boolean;
-};
+  children: React.ReactNode
+  withSafeArea?: boolean
+  withHeader?: boolean
+  withBottomBar?: boolean
+}
 
 export default function TemplateScreen({ 
   children,
@@ -16,16 +16,16 @@ export default function TemplateScreen({
   withHeader = true,
   withBottomBar = true
 }: TemplateScreenProps) {
-  const [refreshing, setRefreshing] = useState(false);
-  const [refreshKey, setRefreshKey] = useState(0);
+  const [refreshing, setRefreshing] = useState(false)
+  const [refreshKey, setRefreshKey] = useState(0)
 
   const onRefresh = useCallback(() => {
-    setRefreshing(true);
+    setRefreshing(true)
     setTimeout(() => {
-      setRefreshKey(prev => prev + 1);
-      setRefreshing(false);
-    }, 1500);
-  }, []);
+      setRefreshKey(prev => prev + 1)
+      setRefreshing(false)
+    }, 1500)
+  }, [])
 
   return (
     <View className="flex-1 bg-gray-100">
@@ -52,5 +52,5 @@ export default function TemplateScreen({
       
       {withBottomBar && <BottomTabBar />}
     </View>
-  );
+  )
 }

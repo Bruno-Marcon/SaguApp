@@ -1,5 +1,5 @@
-import { SubTitle } from "./subtitle";
-import React from "react";
+import { SubTitle } from "./subtitle"
+import React from "react"
 
 type SubTitleSemiBoldProps = {
     text: string

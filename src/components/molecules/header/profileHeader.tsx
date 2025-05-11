@@ -1,15 +1,15 @@
 // components/molecules/header/profileHeader.tsx
-import { View } from 'react-native';
-import { CustomText } from '../../atoms/text/text';
-import ProfileAvatar from '../../organisms/avatar/profileAvatar';
-import { ArrowBack } from '../../atoms/button/arrowBack';
+import { View } from 'react-native'
+import { CustomText } from '../../atoms/text/text'
+import ProfileAvatar from '../../organisms/avatar/profileAvatar'
+import { ArrowBack } from '../../atoms/button/arrowBack'
 
 type ProfileHeaderProps = {
-  name: string;
-  email: string;
-  showBackButton?: boolean;
-  onBackPress?: () => void;
-};
+  name: string
+  email: string
+  showBackButton?: boolean
+  onBackPress?: () => void
+}
 
 export const ProfileHeader = ({ 
   name, 
@@ -38,5 +38,5 @@ export const ProfileHeader = ({
         </CustomText>
       </View>
     </View>
-  );
-};
+  )
+}

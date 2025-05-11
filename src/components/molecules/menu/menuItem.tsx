@@ -1,14 +1,14 @@
 // components/molecules/menu/menuItem.tsx
-import { TouchableOpacity, View } from 'react-native';
-import { CustomText } from '../../atoms/text/text';
-import { Icon, IconName, IconFamily } from '../../atoms/icons/iconx';
+import { TouchableOpacity, View } from 'react-native'
+import { CustomText } from '../../atoms/text/text'
+import { Icon, IconName, IconFamily } from '../../atoms/icons/iconx'
 
 type MenuItemProps = {
-  iconName: IconName;
-  iconFamily?: IconFamily;
-  title: string;
-  onPress?: () => void;
-};
+  iconName: IconName
+  iconFamily?: IconFamily
+  title: string
+  onPress?: () => void
+}
 
 export const MenuItem = ({ 
   iconName, 
@@ -24,5 +24,5 @@ export const MenuItem = ({
         <Icon name="chevron-right" family="material" />
       </View>
     </TouchableOpacity>
-  );
-};
+  )
+}

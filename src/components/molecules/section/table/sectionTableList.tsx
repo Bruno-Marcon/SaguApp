@@ -1,15 +1,15 @@
 // components/molecules/section/table/sectionTableList.tsx
-import React from "react";
-import { View, Text, TouchableOpacity } from "react-native";
-import { Link, LinkProps } from "expo-router";
-import { Feather } from "@expo/vector-icons";
+import React from "react"
+import { View, Text, TouchableOpacity } from "react-native"
+import { Link, LinkProps } from "expo-router"
+import { Feather } from "@expo/vector-icons"
 
 interface SectionWithTableProps {
-  title: string;
-  linkText: string;
-  href?: LinkProps["href"];
-  onPressLink?: () => void; // Adicionado
-  children?: React.ReactNode;
+  title: string
+  linkText: string
+  href?: LinkProps["href"]
+  onPressLink?: () => void // Adicionado
+  children?: React.ReactNode
 }
 
 const SectionTableList: React.FC<SectionWithTableProps> = ({
@@ -42,7 +42,7 @@ const SectionTableList: React.FC<SectionWithTableProps> = ({
       </View>
       {children}
     </View>
-  );
-};
+  )
+}
 
-export default SectionTableList;
+export default SectionTableList

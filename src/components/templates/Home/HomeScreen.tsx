@@ -1,14 +1,15 @@
-import { View, ScrollView } from 'react-native';
-import { useRouter } from 'expo-router';
-import { useUserProfile } from '@//hook/useUserProfile';
-import { LoadingIndicator } from '../../atoms/indicators/loadingIndicator';
-import { ErrorMessage } from '../../atoms/indicators/errorMessage';
-import TemplateScreen from '../scrollView/templateScreen';
-import { ApresentationSection } from '../../molecules/section/apresentation/apresentationSectionWithStatus';
-import SectionTableList from '../../molecules/section/table/sectionTableList';
-import GradesList from '../../molecules/grades/gradesList';
-import SectionOccurrences from '../../organisms/section/SectionOccurrences';
-import AttendanceSection from '../../molecules/section/attendance/sectionAttendance';
+import { View, ScrollView } from 'react-native'
+import { useRouter } from 'expo-router'
+import { useUserProfile } from '@//hook/useUserProfile'
+import { LoadingIndicator } from '../../atoms/indicators/loadingIndicator'
+import { ErrorMessage } from '../../atoms/indicators/errorMessage'
+import TemplateScreen from '../scrollView/templateScreen'
+import { ApresentationSection } from '../../molecules/section/apresentation/apresentationSectionWithStatus'
+import SectionTableList from '../../molecules/section/table/sectionTableList'
+import GradesList from '../../molecules/grades/gradesList'
+import SectionOccurrences from '../../organisms/section/SectionOccurrences'
+import AttendanceSection from '../../molecules/section/attendance/sectionAttendance'
+import { useOccurrence } from "../../../hook/occurrence/useOccurence"
 
 const MOCK_DATA = {
   grades: [
@@ -53,23 +54,25 @@ const MOCK_DATA = {
       iconColor: "#10B981"
     },
   ]
-} as const;
+} as const
 
 export const HomeScreen = () => {
-  const { userData, loading, error, refresh } = useUserProfile();
-  const router = useRouter();
+  const { userData, loading, error, refresh } = useUserProfile()
+  const { occurrences, loading: occurrencesLoading, error: occurrencesError } = useOccurrence()
+
+  const router = useRouter()
   
   const handleRefresh = async () => {
-    await refresh();
-  };
+    await refresh()
+  }
 
   const handleOccurrencesPress = () => {
-    router.push('/(panel)/occurences/occurences');
-  };
+    router.push('/(panel)/occurences/occurences')
+  }
 
-  if (loading) return <LoadingIndicator />;
-  if (error) return <ErrorMessage message={error} onRetry={handleRefresh} />;
-  if (!userData) return <ErrorMessage message="Dados do usuário não encontrados" onRetry={handleRefresh} />;
+  if (loading) return <LoadingIndicator />
+  if (error) return <ErrorMessage message={error} onRetry={handleRefresh} />
+  if (!userData) return <ErrorMessage message="Dados do usuário não encontrados" onRetry={handleRefresh} />
 
   return (
     <TemplateScreen withHeader={true}>
@@ -91,9 +94,11 @@ export const HomeScreen = () => {
         <View className="p-4">
           <SectionOccurrences
             sectionTitle="Ocorrências Recentes"
-            items={MOCK_DATA.occurrences}
+            items={occurrences}
             onPress={handleOccurrencesPress}
           />
+          {occurrencesLoading && <LoadingIndicator />}
+          {occurrencesError && <ErrorMessage message={occurrencesError} />}
         </View>
 
         <AttendanceSection 
@@ -103,5 +108,5 @@ export const HomeScreen = () => {
         />
       </ScrollView>
     </TemplateScreen>
-  );
-};
+  )
+}

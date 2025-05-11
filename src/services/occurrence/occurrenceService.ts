@@ -1,45 +1,46 @@
-import { getToken } from "../../storage/secureToken";
-import Constants from "expo-constants";
-import { getStudentById } from "../studentes/studentsServices";
+import { getToken } from "../../storage/secureToken"
+import Constants from "expo-constants"
+import { getStudentById } from "../studentes/studentsServices"
 
-const apiUrl = Constants.expoConfig?.extra?.apiUrl;
-const apiKey = Constants.expoConfig?.extra?.apiKey;
+const apiUrl = Constants.expoConfig?.extra?.apiUrl
+const apiKey = Constants.expoConfig?.extra?.apiKey
 
 export interface Occurrence {
-  id: string;
-  type: string;
+  id: string
+  type: string
   attributes: {
-    title: string;
-    description: string;
-    status: string;
-    severity: string;
-    kind?: string;
-    created_at: string;
-  };
+    title: string
+    description: string
+    status: string
+    severity: string
+    kind?: string
+    created_at: string
+  }
   relationships: {
     student: {
       data: {
-        id: string;
-      };
-    };
-  };
+        id: string
+        type: string
+      }
+    }
+  }
 }
 
 export interface OccurrencePayload {
-  id: string;
-  title: string;
-  description: string;
-  kind: string;
-  severity: string;
-  status: string;
-  student_id: string;
-  responsible_id: string;
+  id: string
+  title: string
+  description: string
+  kind: string
+  severity: string
+  status: string
+  student_id: string
+  responsible_id: string
 }
 
 export const getOccurrences = async (): Promise<Occurrence[]> => {
   try {
-    const authToken = await getToken();
-    if (!authToken) throw new Error("Token de autenticação não encontrado.");
+    const authToken = await getToken()
+    if (!authToken) throw new Error("Token de autenticação não encontrado.")
 
     const response = await fetch(`${apiUrl}/api/v1/occurrencies`, {
       method: "GET",
@@ -48,13 +49,13 @@ export const getOccurrences = async (): Promise<Occurrence[]> => {
         Authorization: `Bearer ${authToken}`,
         "X-API-KEY": apiKey,
       },
-    });
+    })
 
-    const data = await response.json();
-    const allOccurrences = data.data;
+    const data = await response.json()
+    const allOccurrences = data.data
 
     if (!Array.isArray(allOccurrences) || allOccurrences.length === 0) {
-      throw new Error("Nenhuma ocorrência encontrada.");
+      throw new Error("Nenhuma ocorrência encontrada.")
     }
 
     const lastThree = await Promise.all(
@@ -65,8 +66,8 @@ export const getOccurrences = async (): Promise<Occurrence[]> => {
         )
         .slice(0, 5)
         .map(async (item: any) => {
-          const studentId = item.relationships.student.data.id;
-          const student = await getStudentById(studentId);
+          const studentId = item.relationships.student.data.id
+          const student = await getStudentById(studentId)
 
           return {
             id: item.id,
@@ -82,26 +83,27 @@ export const getOccurrences = async (): Promise<Occurrence[]> => {
               student: {
                 data: {
                   id: studentId,
+                  type : item.relationships.student.data.type,
                 },
               },
             },
-          };
+          }
         })
     );
 
-    return lastThree;
+    return lastThree
   } catch (error) {
-    console.error("Erro ao buscar dados da ocorrência:", error);
-    throw new Error("Erro ao buscar dados da ocorrência");
+    console.error("Erro ao buscar dados da ocorrência:", error)
+    throw new Error("Erro ao buscar dados da ocorrência")
   }
-};
+}
 
 export const getOccurrencesByStudentId = async (
   studentId: string
 ): Promise<Occurrence[]> => {
   try {
-    const authToken = await getToken();
-    if (!authToken) throw new Error("Token de autenticação não encontrado.");
+    const authToken = await getToken()
+    if (!authToken) throw new Error("Token de autenticação não encontrado.")
 
     const response = await fetch(
       `${apiUrl}/api/v1/occurrencies?filter[student_id]=${studentId}`,
@@ -113,17 +115,17 @@ export const getOccurrencesByStudentId = async (
           "X-API-KEY": apiKey,
         },
       }
-    );
+    )
 
-    const data = await response.json();
-    const occurrences = data.data;
+    const data = await response.json()
+    const occurrences = data.data
 
-    if (!Array.isArray(occurrences)) return [];
+    if (!Array.isArray(occurrences)) return []
 
     const result = await Promise.all(
       occurrences.map(async (item: any) => {
-        const studentId = item.relationships.student.data.id;
-        const student = await getStudentById(studentId);
+        const studentId = item.relationships.student.data.id
+        const student = await getStudentById(studentId)
 
         return {
           id: item.id,
@@ -142,21 +144,21 @@ export const getOccurrencesByStudentId = async (
             responsible: item.relationships.responsible,
             events: item.relationships.events,
           },
-        };
+        }
       })
-    );
+    )
 
-    return result;
+    return result
   } catch (error) {
-    console.error("Erro ao buscar ocorrências por aluno:", error);
-    throw new Error("Erro ao buscar ocorrências por aluno");
+    console.error("Erro ao buscar ocorrências por aluno:", error)
+    throw new Error("Erro ao buscar ocorrências por aluno")
   }
-};
+}
 
 export const getOccurrenceById = async (id: string): Promise<Occurrence> => {
   try {
-    const authToken = await getToken();
-    if (!authToken) throw new Error("Token de autenticação não encontrado.");
+    const authToken = await getToken()
+    if (!authToken) throw new Error("Token de autenticação não encontrado.")
 
     const response = await fetch(`${apiUrl}/api/v1/occurrencies/${id}`, {
       method: "GET",
@@ -165,16 +167,16 @@ export const getOccurrenceById = async (id: string): Promise<Occurrence> => {
         Authorization: `Bearer ${authToken}`,
         "X-API-KEY": apiKey,
       },
-    });
+    })
 
     if (!response.ok) {
-      const errorData = await response.json();
-      console.error("Erro ao buscar ocorrência por ID:", errorData);
-      throw new Error("Erro ao buscar ocorrência");
+      const errorData = await response.json()
+      console.error("Erro ao buscar ocorrência por ID:", errorData)
+      throw new Error("Erro ao buscar ocorrência")
     }
 
-    const data = await response.json();
-    const item = data.data;
+    const data = await response.json()
+    const item = data.data
 
     return {
       id: item.id,
@@ -188,19 +190,19 @@ export const getOccurrenceById = async (id: string): Promise<Occurrence> => {
         created_at: item.attributes.created_at,
       },
       relationships: item.relationships,
-    };
+    }
   } catch (error) {
-    console.error("Erro ao buscar ocorrência por ID:", error);
-    throw error;
+    console.error("Erro ao buscar ocorrência por ID:", error)
+    throw error
   }
-};
+}
 
 export const createOccurrence = async (
   payload: OccurrencePayload
 ): Promise<void> => {
   try {
-    const authToken = await getToken();
-    if (!authToken) throw new Error("Token de autenticação não encontrado.");
+    const authToken = await getToken()
+    if (!authToken) throw new Error("Token de autenticação não encontrado.")
 
     const response = await fetch(`${apiUrl}/api/v1/occurrencies`, {
       method: "POST",
@@ -210,31 +212,31 @@ export const createOccurrence = async (
         "X-API-KEY": apiKey,
       },
       body: JSON.stringify(payload),
-    });
+    })
 
     if (!response.ok) {
-      const errorData = await response.json();
-      console.error("Erro ao criar ocorrência:", errorData);
-      throw new Error("Erro ao criar ocorrência");
+      const errorData = await response.json()
+      console.error("Erro ao criar ocorrência:", errorData)
+      throw new Error("Erro ao criar ocorrência")
     }
   } catch (error) {
-    console.error("Erro ao criar ocorrência:", error);
-    throw error;
+    console.error("Erro ao criar ocorrência:", error)
+    throw error
   }
-};
+}
 
 export const updateOccurrence = async (
   id: string,
   payload: {
-    responsible_id?: string;
-    status?: string;
-    kind?: string;
-    severity?: string;
+    responsible_id?: string
+    status?: string
+    kind?: string
+    severity?: string
   }
 ): Promise<void> => {
   try {
-    const authToken = await getToken();
-    if (!authToken) throw new Error("Token de autenticação não encontrado.");
+    const authToken = await getToken()
+    if (!authToken) throw new Error("Token de autenticação não encontrado.")
 
     const response = await fetch(`${apiUrl}/api/v1/occurrencies/${id}_responsible`, {
       method: "PATCH",
@@ -244,15 +246,15 @@ export const updateOccurrence = async (
         "X-API-KEY": apiKey,
       },
       body: JSON.stringify(payload),
-    });
+    })
 
     if (!response.ok) {
-      const errorData = await response.json();
-      console.error("Erro ao atualizar ocorrência:", errorData);
-      throw new Error("Erro ao atualizar ocorrência");
+      const errorData = await response.json()
+      console.error("Erro ao atualizar ocorrência:", errorData)
+      throw new Error("Erro ao atualizar ocorrência")
     }
   } catch (error) {
-    console.error("Erro ao atualizar ocorrência:", error);
-    throw error;
+    console.error("Erro ao atualizar ocorrência:", error)
+    throw error
   }
-};
+}

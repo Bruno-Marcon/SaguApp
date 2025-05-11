@@ -1,9 +1,9 @@
-import { TouchableOpacity, Text } from 'react-native';
+import { TouchableOpacity, Text } from 'react-native'
 
 interface FilterButtonProps {
-  label: string;
-  active: boolean;
-  onPress: () => void;
+  label: string
+  active: boolean
+  onPress: () => void
 }
 
 export default function FilterButton({ label, active, onPress }: FilterButtonProps) {
@@ -16,5 +16,5 @@ export default function FilterButton({ label, active, onPress }: FilterButtonPro
         {label}
       </Text>
     </TouchableOpacity>
-  );
+  )
 }

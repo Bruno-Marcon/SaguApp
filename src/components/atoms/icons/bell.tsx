@@ -1,14 +1,14 @@
-import { Feather } from "@expo/vector-icons";
-import { StyleProp, TextStyle } from "react-native";
+import { Feather } from "@expo/vector-icons"
+import { StyleProp, TextStyle } from "react-native"
 
-type IconName = keyof typeof Feather.glyphMap;
+type IconName = keyof typeof Feather.glyphMap
 
 type DynamicIconProps = {
-  name: IconName;
-  color?: string;
-  size?: number;
-  style?: StyleProp<TextStyle>;
-};
+  name: IconName
+  color?: string
+  size?: number
+  style?: StyleProp<TextStyle>
+}
 
 export default function DynamicIcon({
   name,
@@ -16,5 +16,5 @@ export default function DynamicIcon({
   size = 24,
   style,
 }: DynamicIconProps) {
-  return <Feather name={name} color={color} size={size} style={style} />;
+  return <Feather name={name} color={color} size={size} style={style} />
 }

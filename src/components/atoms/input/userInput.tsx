@@ -1,13 +1,13 @@
-import React, { useState } from "react";
-import { View, TextInput, TextInputProps, Pressable } from "react-native";
-import { FontAwesome } from '@expo/vector-icons';
+import React, { useState } from "react"
+import { View, TextInput, TextInputProps, Pressable } from "react-native"
+import { FontAwesome } from '@expo/vector-icons'
 
 
 type IconInputProps = {
-  leftIcon: keyof typeof FontAwesome.glyphMap;
-  placeholder: string;
-  secureTextEntry?: boolean;
-} & TextInputProps;
+  leftIcon: keyof typeof FontAwesome.glyphMap
+  placeholder: string
+  secureTextEntry?: boolean
+} & TextInputProps
 
 export default function IconInput({
   leftIcon,
@@ -16,9 +16,9 @@ export default function IconInput({
   ...rest
 }: IconInputProps) {
 
-  const [isPasswordVisible, setIsPasswordVisible] = useState(!secureTextEntry);
+  const [isPasswordVisible, setIsPasswordVisible] = useState(!secureTextEntry)
 
-  const toggleVisibility = () => setIsPasswordVisible(prev => !prev);
+  const toggleVisibility = () => setIsPasswordVisible(prev => !prev)
 
   return (
     <View className="w-full mb-6 flex-row items-center bg-white p-4 rounded-full shadow-md">
@@ -43,5 +43,5 @@ export default function IconInput({
         </Pressable>
       )}
     </View>
-  );
+  )
 }

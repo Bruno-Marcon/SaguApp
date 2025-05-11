@@ -1,6 +1,6 @@
-import { TouchableOpacity, Image, Text } from "react-native";
-import { SubTitle } from "../subtitle/subtitle";
-import GoogleimageLogo from "../logo/logoGoogle";
+import { TouchableOpacity, Image, Text } from "react-native"
+import { SubTitle } from "../subtitle/subtitle"
+import GoogleimageLogo from "../logo/logoGoogle"
 
 
 export default function GoogleButton(){

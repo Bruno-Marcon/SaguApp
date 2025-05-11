@@ -1,9 +1,9 @@
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native'
 
 type ErrorMessageProps = {
-  message: string;
-  onRetry?: () => void;
-};
+  message: string
+  onRetry?: () => void
+}
 
 export const ErrorMessage = ({ message, onRetry }: ErrorMessageProps) => (
   <View className="flex-1 items-center justify-center p-4">
@@ -17,4 +17,4 @@ export const ErrorMessage = ({ message, onRetry }: ErrorMessageProps) => (
       </TouchableOpacity>
     )}
   </View>
-);
+)

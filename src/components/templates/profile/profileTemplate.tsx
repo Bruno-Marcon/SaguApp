@@ -1,22 +1,22 @@
 // components/templates/profile/profileTemplate.tsx
-import { View } from 'react-native';
-import { Link, router } from 'expo-router';
-import { ProfileHeader } from '../../molecules/header/profileHeader';
-import { ProfileMenu } from '../../organisms/menu/profileMenu';
-import { Button } from '../../atoms/button/button';
-import { Logout } from '@//services/auth/authService';
-import TemplateScreen from '../scrollView/templateScreen';
+import { View } from 'react-native'
+import { Link, router } from 'expo-router'
+import { ProfileHeader } from '../../molecules/header/profileHeader'
+import { ProfileMenu } from '../../organisms/menu/profileMenu'
+import { Button } from '../../atoms/button/button'
+import { Logout } from '@//services/auth/authService'
+import TemplateScreen from '../scrollView/templateScreen'
 
 const handleLogout = async () => {
-  await Logout();
-  router.replace('/(auth)/signin/page');
-};
+  await Logout()
+  router.replace('/(auth)/signin/page')
+}
 
 type ProfileTemplateProps = {
-  name: string;
-  email: string;
-  showBackButton?: boolean;
-};
+  name: string
+  email: string
+  showBackButton?: boolean
+}
 
 export const ProfileTemplate = ({ 
   name, 
@@ -49,5 +49,5 @@ export const ProfileTemplate = ({
         </View>
       </View>
     </TemplateScreen>
-  );
-};
+  )
+}

@@ -1,14 +1,14 @@
-import { View } from "react-native";
-import LogoIFC from "../../atoms/logo/logoIFC";
-import DynamicIcon from "../../atoms/icons/bell";
-import { JSX } from "react";
-import ProfileAvatar from "../avatar/profileAvatar";
+import { View } from "react-native"
+import LogoIFC from "../../atoms/logo/logoIFC"
+import DynamicIcon from "../../atoms/icons/bell"
+import { JSX } from "react"
+import ProfileAvatar from "../avatar/profileAvatar"
 
 type DefaultNavBarProps = {
-  logo?: JSX.Element;
-  icons?: JSX.Element[];
-  avatar?: JSX.Element;
-};
+  logo?: JSX.Element
+  icons?: JSX.Element[]
+  avatar?: JSX.Element
+}
 
 const DefaultNavBar: React.FC<DefaultNavBarProps> = ({
   logo = <LogoIFC className="w-14 h-14" />,
@@ -26,7 +26,7 @@ const DefaultNavBar: React.FC<DefaultNavBarProps> = ({
         {avatar}
       </View>
     </View>
-  );
-};
+  )
+}
 
-export default DefaultNavBar;
+export default DefaultNavBar

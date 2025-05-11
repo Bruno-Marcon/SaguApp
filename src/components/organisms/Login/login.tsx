@@ -1,9 +1,9 @@
-import { View} from 'react-native';
-import LogoIFC from '../../atoms/logo/logoIFC';
-import GoogleButton from '../../atoms/button/google';
-import React from 'react';
-import LoginForm from '../../molecules/form/loginForm';
-import { SubTitleOr } from '../../atoms/subtitle/subtitle';
+import { View} from 'react-native'
+import LogoIFC from '../../atoms/logo/logoIFC'
+import GoogleButton from '../../atoms/button/google'
+import React from 'react'
+import LoginForm from '../../molecules/form/loginForm'
+import { SubTitleOr } from '../../atoms/subtitle/subtitle'
 
 
 type LoginScreenProps = {
@@ -23,6 +23,6 @@ const LoginScreen:React.FC<LoginScreenProps> = ({
       {/* <SubTitleOr text={subSubTitle}/> */}
       {/* <GoogleButton/> */}
     </View>
-  );
+  )
 }
 export default LoginScreen

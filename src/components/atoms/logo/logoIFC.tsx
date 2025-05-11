@@ -1,9 +1,9 @@
-import { Image, ImageProps, ImageSourcePropType } from "react-native";
+import { Image, ImageProps, ImageSourcePropType } from "react-native"
 
 type LogoIFCProps = {
-  className?: string;
-  source?: ImageSourcePropType;
-} & Partial<ImageProps>;
+  className?: string
+  source?: ImageSourcePropType
+} & Partial<ImageProps>
 
 export default function LogoIFC({
   className = "w-20 h-20",
@@ -17,5 +17,5 @@ export default function LogoIFC({
       resizeMode="contain"
       {...rest}
     />
-  );
+  )
 }

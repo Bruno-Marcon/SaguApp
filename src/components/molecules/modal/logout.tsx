@@ -1,12 +1,12 @@
 // src/molecules/modal/LogoutModal.tsx
-import React from 'react';
-import { Modal, Text, TouchableOpacity, View } from 'react-native';
+import React from 'react'
+import { Modal, Text, TouchableOpacity, View } from 'react-native'
 
 type Props = {
-  visible: boolean;
-  onClose: () => void;
-  onLogout: () => void;
-};
+  visible: boolean
+  onClose: () => void
+  onLogout: () => void
+}
 
 const LogoutModal: React.FC<Props> = ({ visible, onClose, onLogout }) => {
   return (
@@ -28,7 +28,7 @@ const LogoutModal: React.FC<Props> = ({ visible, onClose, onLogout }) => {
         </View>
       </TouchableOpacity>
     </Modal>
-  );
-};
+  )
+}
 
-export default LogoutModal;
+export default LogoutModal

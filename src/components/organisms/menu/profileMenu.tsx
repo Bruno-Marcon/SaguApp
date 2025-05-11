@@ -1,5 +1,5 @@
-import { View } from 'react-native';
-import { MenuItem } from '../../molecules/menu/menuItem';
+import { View } from 'react-native'
+import { MenuItem } from '../../molecules/menu/menuItem'
 
 const menuItems = [
   { 
@@ -18,10 +18,10 @@ const menuItems = [
     title: 'Notificações' 
   },
 ] satisfies Array<{
-  iconName: string;
-  iconFamily?: 'feather' | 'ionicons' | 'material';
-  title: string;
-}>;
+  iconName: string
+  iconFamily?: 'feather' | 'ionicons' | 'material'
+  title: string
+}>
 
 export const ProfileMenu = () => {
   return (
@@ -35,5 +35,5 @@ export const ProfileMenu = () => {
         />
       ))}
     </View>
-  );
-};
+  )
+}

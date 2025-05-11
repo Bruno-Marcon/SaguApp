@@ -1,13 +1,13 @@
-import { Text } from 'react-native';
-import React from 'react';
+import { Text } from 'react-native'
+import React from 'react'
 
 type PrimaryTitleProps = {
-  name: string;
-  subtitle: string;
-  selectedStudent?: string;
-  className?: string;
-  subtitleClassName?: string;
-};
+  name: string
+  subtitle: string
+  selectedStudent?: string
+  className?: string
+  subtitleClassName?: string
+}
 
 export const PrimaryTitle = ({
   name,
@@ -24,5 +24,5 @@ export const PrimaryTitle = ({
         {subtitle}
       </Text>
     </Text>
-  );
-};
+  )
+}

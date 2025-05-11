@@ -1,21 +1,22 @@
-import { useState } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
-import OccurrenceCardAtom from '../../atoms/card/OccurrenceCard';
-import OccurrenceDetailModal from '../../molecules/modal/occurrenceDatailModal';
+import { useState } from 'react'
+import { View, Text, TouchableOpacity } from 'react-native'
+import OccurrenceCardAtom from '../../atoms/card/OccurrenceCard'
+import OccurrenceDetailModal from '../../molecules/modal/occurrenceDatailModal'
 
 interface OccurrenceItem {
-  title: string;
-  description: string;
-  isNew?: boolean;
-  authorName?: string;
-  category?: string;
-  createdAt?: Date | string;
+  title: string
+  description: string
+  isNew?: boolean
+  authorName?: string
+  category?: string
+  status?:string
+  createdAt?: Date | string
 }
 
 interface SectionOccurrencesProps {
-  sectionTitle: string;
-  items: readonly OccurrenceItem[] | OccurrenceItem[];
-  onPress: () => void;
+  sectionTitle: string
+  items: readonly OccurrenceItem[] | OccurrenceItem[]
+  onPress: () => void
 }
 
 export default function SectionOccurrences({
@@ -23,7 +24,7 @@ export default function SectionOccurrences({
   items,
   onPress
 }: SectionOccurrencesProps) {
-  const [selectedOccurrence, setSelectedOccurrence] = useState<OccurrenceItem | null>(null);
+  const [selectedOccurrence, setSelectedOccurrence] = useState<OccurrenceItem | null>(null)
 
   return (
     <View className="mt-3">
@@ -41,6 +42,7 @@ export default function SectionOccurrences({
           description={item.description}
           authorName={item.authorName}
           isNew={item.isNew}
+          status = {item.status}
           category={item.category}
           createdAt={item.createdAt}
           onPress={() => setSelectedOccurrence(item)}
@@ -56,5 +58,5 @@ export default function SectionOccurrences({
         />
       )}
     </View>
-  );
+  )
 }

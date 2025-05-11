@@ -1,13 +1,13 @@
-import { getToken } from "../../storage/secureToken";
-import Constants from "expo-constants";
+import { getToken } from "../../storage/secureToken"
+import Constants from "expo-constants"
 
-const apiUrl = Constants.expoConfig?.extra?.apiUrl;
-const apiKey = Constants.expoConfig?.extra?.apiKey;
+const apiUrl = Constants.expoConfig?.extra?.apiUrl
+const apiKey = Constants.expoConfig?.extra?.apiKey
 
 export const getStudentById = async (id: string): Promise<{ name: string }> => {
-  const authToken = await getToken();
+  const authToken = await getToken()
 
-  if (!authToken) throw new Error("Token de autenticação não encontrado.");
+  if (!authToken) throw new Error("Token de autenticação não encontrado.")
 
   const response = await fetch(`${apiUrl}/api/v1/students/${id}`, {
     method: "GET",
@@ -16,8 +16,8 @@ export const getStudentById = async (id: string): Promise<{ name: string }> => {
       Authorization: `Bearer ${authToken}`,
       "X-API-KEY": apiKey,
     },
-  });
+  })
 
-  const data = await response.json();
-  return { name: data.data.attributes.name };
-};
+  const data = await response.json()
+  return { name: data.data.attributes.name }
+}

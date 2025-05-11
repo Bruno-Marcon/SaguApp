@@ -1,11 +1,11 @@
-import React from "react";
-import { TouchableOpacity, Image, Text } from "react-native";
+import React from "react"
+import { TouchableOpacity, Image, Text } from "react-native"
 
 
 
 type EnterButtonProps = {
-  onPress: () => void | Promise<void>;
-};
+  onPress: () => void | Promise<void>
+}
 
 const EnterButton:React.FC<EnterButtonProps> = ({
     onPress

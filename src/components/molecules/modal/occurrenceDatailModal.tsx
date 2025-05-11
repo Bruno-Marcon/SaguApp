@@ -1,11 +1,11 @@
-import { Modal, Text, TouchableOpacity, View } from 'react-native';
-import { Feather } from '@expo/vector-icons';
+import { Modal, Text, TouchableOpacity, View } from 'react-native'
+import { Feather } from '@expo/vector-icons'
 
 interface OccurrenceDetailModalProps {
-  visible: boolean;
-  onClose: () => void;
-  title: string;
-  description: string;
+  visible: boolean
+  onClose: () => void
+  title: string
+  description: string
 }
 
 export default function OccurrenceDetailModal({
@@ -42,5 +42,5 @@ export default function OccurrenceDetailModal({
         </View>
       </View>
     </Modal>
-  );
+  )
 }

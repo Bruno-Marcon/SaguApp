@@ -1,22 +1,22 @@
-import { View, Text, Pressable } from "react-native";
-import { Link } from "expo-router";
-import DynamicIcon from "../../atoms/icons/bell";
-import { LinkProps } from "expo-router";
-import { Feather } from "@expo/vector-icons";
+import { View, Text, Pressable } from "react-native"
+import { Link } from "expo-router"
+import DynamicIcon from "../../atoms/icons/bell"
+import { LinkProps } from "expo-router"
+import { Feather } from "@expo/vector-icons"
 
-type IconName = keyof typeof Feather.glyphMap;
+type IconName = keyof typeof Feather.glyphMap
 
 type MenuItem = {
-  id: number;
-  title: string;
-  icon: IconName;
-  href: LinkProps["href"];
-};
+  id: number
+  title: string
+  icon: IconName
+  href: LinkProps["href"]
+}
 
 type MenuGridProps = {
-  title?: string;
-  item: readonly MenuItem[];
-};
+  title?: string
+  item: readonly MenuItem[]
+}
 
 const MenuGrid: React.FC<MenuGridProps> = ({ item }) => {
   return (
@@ -30,7 +30,7 @@ const MenuGrid: React.FC<MenuGridProps> = ({ item }) => {
         </Link>
       ))}
     </View>
-  );
-};
+  )
+}
 
-export default MenuGrid;
+export default MenuGrid

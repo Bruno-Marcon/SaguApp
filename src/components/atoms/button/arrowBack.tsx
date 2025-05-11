@@ -1,14 +1,14 @@
 // components/atoms/button/arrowBack.tsx
-import { TouchableOpacity } from 'react-native';
-import { Feather } from '@expo/vector-icons';
-import { router } from 'expo-router';
+import { TouchableOpacity } from 'react-native'
+import { Feather } from '@expo/vector-icons'
+import { router } from 'expo-router'
 
 type ArrowBackProps = {
-  size?: number;
-  color?: string;
-  className?: string;
-  onPress?: () => void;
-};
+  size?: number
+  color?: string
+  className?: string
+  onPress?: () => void
+}
 
 export const ArrowBack = ({
   size = 24,
@@ -18,15 +18,15 @@ export const ArrowBack = ({
 }: ArrowBackProps) => {
   const handlePress = () => {
     if (onPress) {
-      onPress();
+      onPress()
     } else {
       if (router.canGoBack()) {
-        router.back();
+        router.back()
       } else {
-        router.replace('/');
+        router.replace('/')
       }
     }
-  };
+  }
 
   return (
     <TouchableOpacity
@@ -36,5 +36,5 @@ export const ArrowBack = ({
     >
       <Feather name="arrow-left" size={size} color={color} />
     </TouchableOpacity>
-  );
-};
+  )
+}
