@@ -3,7 +3,7 @@ import React from 'react'
 
 type PrimaryTitleProps = {
   name: string
-  subtitle: string
+  subtitle?: string
   selectedStudent?: string
   className?: string
   subtitleClassName?: string

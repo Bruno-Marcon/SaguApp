@@ -33,34 +33,34 @@ export default function OccurrenceCardAtom({
   return (
     <TouchableOpacity
       onPress={onPress}
-      className={className}
+      className={`${className}`}
       activeOpacity={0.7}
     >
-      <View className="p-3 flex-row items-start">
-        <View className="mr-3 mt-1">
-          <Feather name="alert-triangle" size={20} color="#F59E0B" />
+      <View className="p-8 flex-row items-start" style={{ borderLeftWidth: 4, borderLeftColor: "#F59E0B" }}>
+        <View className="mr-4 mt-5">
+          <Feather name="alert-triangle" size={30} color="#F59E0B" />
         </View>
 
         <View className="flex-1">
-          <View className="flex-row items-center flex-wrap mb-1">
+          <View className="flex-row items-center flex-wrap">
             <Text className="text-base font-semibold text-gray-800 mr-2">{title}</Text>
             {isNew && (
-              <View className="bg-orange-100 px-2 py-0.5 rounded-full">
+              <View className="bg-orange-100 rounded-full">
                 <Text className="text-xs font-medium text-orange-600">{status}</Text>
               </View>
             )}
           </View>
 
-          <Text className="text-sm text-gray-600 mb-2" numberOfLines={2}>
+          <Text className="text-sm text-gray-600" numberOfLines={2}>
             {description}
           </Text>
 
-          <View className="flex-row justify-between items-center mt-1">
-            <View className="flex-row items-center">
-              <Text className="text-xs text-gray-500 mr-2">{authorName}</Text>
+          <View className="mt-2">
+            <View className="flex-col mb-1">
+              <Text className="text-xs text-gray-500">{authorName}</Text>
 
               {category && (
-                <View className="bg-blue-100 px-2 py-0.5 rounded-full">
+                <View className="bg-blue-100 rounded-full mt-1">
                   <Text className="text-xs font-medium text-blue-600">{category}</Text>
                 </View>
               )}

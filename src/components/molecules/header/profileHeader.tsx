@@ -23,6 +23,8 @@ export const ProfileHeader = ({
         <ArrowBack 
           onPress={onBackPress}
           className="mb-4"
+          color='#09a342'
+          size={29}
         />
       )}
       <View className="items-center">

@@ -95,7 +95,7 @@ export const CustomCalendar = () => {
   return (
     <View className="bg-white p-4 rounded-2xl" {...panResponder.panHandlers}>
       
-        <View className="flex-1 p-4">
+        <View className="p-2 mb-4">
             <ArrowBack color='#09a342' size={29}/>
         </View>
       <CalendarHeader

@@ -2,6 +2,7 @@ import { FlatList, Text, TouchableOpacity, View } from 'react-native'
 import { Feather } from '@expo/vector-icons'
 import { OccurrenceItem } from '@//utils/adapters/occurrence/occurrenceAdapter'
 import OccurrenceCardAtom from '../../atoms/card/OccurrenceCard'
+import { PrimaryTitle } from '../../atoms/title/primaryTitle';
 
 type Props = {
   occurrences: OccurrenceItem[];
@@ -19,13 +20,15 @@ export const OccurrenceSectionWithCarousel = ({
   onPressLink,
 }: Props) => {
   return (
-    <View>
-      <View className="flex-row justify-between items-center mb-4">
-        <Text className="text-xl font-semibold text-gray-800">{title}</Text>
-
+    <View >
+      <View className="flex-row justify-between items-center">
+        <PrimaryTitle
+          name={title}
+          className="mt-6 text-2xl font-bold text-gray-800"
+        />
         <TouchableOpacity className="flex-row items-center" onPress={onPressLink}>
-          <Text className="text-sm text-blue-900 mr-1">{linkText}</Text>
-          <Feather name="chevron-right" size={20} color="#1E40AF" />
+          <Text className="text-sm text-green-600 mr-1">{linkText}</Text>
+          <Feather name="chevron-right" size={20} color="#16a34a" />
         </TouchableOpacity>
       </View>
 
@@ -36,7 +39,6 @@ export const OccurrenceSectionWithCarousel = ({
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={{ paddingHorizontal: 16 }}
         renderItem={({ item }) => (
-          <View className="mr-4 w-96">
             <OccurrenceCardAtom
               title={item.title}
               description={item.description}
@@ -46,7 +48,6 @@ export const OccurrenceSectionWithCarousel = ({
               status={item.status}
               category={item.category}
             />
-          </View>
         )}
       />
     </View>

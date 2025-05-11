@@ -26,7 +26,7 @@ export const OccurrencesHeader = ({
 }: OccurrencesHeaderProps) => {
   return (
     <View className="mt-8 mb-2">
-      {showBackButton && <ArrowBack onPress={onBackPress} className="mb-2" />}
+      {showBackButton && <ArrowBack onPress={onBackPress} className="mb-2" color='#09a342' size={29} />}
       <Text className="text-2xl font-bold text-gray-800">Ocorrências</Text>
 
       <View className="flex-row justify-between mt-5 mb-2">
@@ -36,18 +36,6 @@ export const OccurrencesHeader = ({
           options={["Todos", "Turma 1", "Turma 2"]}
           onChange={onClassChange}
         />
-        {/* <DropdownFilter
-          label="Ano"
-          value={yearValue}
-          options={["2024", "2023", "2022"]}
-          onChange={onYearChange}
-        />
-        <DropdownFilter
-          label="Status"
-          value={statusValue}
-          options={["Todos", "Novo", "Em andamento", "Finalizado"]}
-          onChange={onStatusChange}
-        /> */}
       </View>
     </View>
   )
