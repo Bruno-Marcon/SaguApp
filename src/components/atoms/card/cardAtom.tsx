@@ -2,7 +2,7 @@ import { View, Text, TouchableOpacity } from "react-native"
 import { Feather } from "@expo/vector-icons"
 import { formatDate } from "@//utils/dateUtils"
 
-interface OccurrenceCardProps {
+interface CardAtomProps {
   title: string
   description: string
   createdAt?: Date | string
@@ -10,11 +10,16 @@ interface OccurrenceCardProps {
   isNew?: boolean
   status?: string
   category?: string
+  iconName?: string
+  iconColor?: string
+  borderColor?: string
   className?: string
   onPress?: () => void
+  studentName?: string
+  parentName?: string
 }
 
-export default function OccurrenceCardAtom({
+export default function CardAtom({
   title = "Sem título",
   description = "Sem descrição disponível.",
   createdAt,
@@ -22,9 +27,13 @@ export default function OccurrenceCardAtom({
   isNew = true,
   status = "Aberto",
   category = "Geral",
-  className = "mb-3 bg-white rounded-xl shadow-sm",
+  iconName = "alert-triangle",
+  iconColor = "#F59E0B",
+  borderColor = "#F59E0B",
+  className = "mb-1 bg-white rounded-xl shadow-sm",
   onPress,
-}: OccurrenceCardProps) {
+  studentName
+}: CardAtomProps) {
   const today = new Date()
   const formattedTime = createdAt
     ? formatDate(createdAt)
@@ -36,9 +45,16 @@ export default function OccurrenceCardAtom({
       className={`${className}`}
       activeOpacity={0.7}
     >
-      <View className="p-8 flex-row items-start" style={{ borderLeftWidth: 4, borderLeftColor: "#F59E0B" }}>
-        <View className="mr-4 mt-5">
-          <Feather name="alert-triangle" size={30} color="#F59E0B" />
+      <View
+        className="p-4 flex-row items-start"
+        style={{
+          borderLeftWidth: 4,
+          borderLeftColor: borderColor,
+          maxHeight: 200,
+        }}
+      >
+        <View className="mr-4 mt-2">
+          <Feather size={30} color={iconColor} />
         </View>
 
         <View className="flex-1">
@@ -55,18 +71,23 @@ export default function OccurrenceCardAtom({
             {description}
           </Text>
 
-          <View className="mt-2">
+          <View className="mt-1">
             <View className="flex-col mb-1">
               <Text className="text-xs text-gray-500">{authorName}</Text>
 
               {category && (
-                <View className="bg-blue-100 rounded-full mt-1">
+                <View className="bg-blue-100 rounded-full mt-1 p-2 items-center">
                   <Text className="text-xs font-medium text-blue-600">{category}</Text>
                 </View>
               )}
             </View>
 
             <Text className="text-xs text-gray-400">{formattedTime}</Text>
+
+            {/* Exibir o nome do aluno e do responsável */}
+            {studentName && (
+              <Text className="text-xs text-gray-500">Aluno: {studentName}</Text>
+            )}
           </View>
         </View>
       </View>

@@ -1,6 +1,6 @@
 import { View, Text } from "react-native"
 import { Feather } from "@expo/vector-icons"
-import OccurrenceCardAtom from "../../atoms/card/OccurrenceCard"
+import OccurrenceCardAtom from "../../atoms/card/cardAtom"
 import { OccurrenceItem } from "@//utils/adapters/occurrence/occurrenceAdapter"
 
 type OccurrencesListProps = {

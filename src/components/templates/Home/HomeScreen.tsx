@@ -5,20 +5,28 @@ import { LoadingIndicator } from '../../atoms/indicators/loadingIndicator'
 import { ErrorMessage } from '../../atoms/indicators/errorMessage'
 import TemplateScreen from '../scrollView/templateScreen'
 import { ApresentationSection } from '../../molecules/section/apresentation/apresentationSectionWithStatus'
-import SectionTableList from '../../molecules/section/table/sectionTableList'
-import GradesList from '../../molecules/grades/gradesList'
 import AttendanceSection from '../../molecules/section/attendance/sectionAttendance'
 import { useOccurrence } from "../../../hook/occurrence/useOccurence"
 import { useStats } from '@//hook/stats/useStats'
-import { OccurrenceSectionWithCarousel } from '../../organisms/carousel/occurrenceSectionWithCarousel'
+import { SectionWithCarousel } from '../../organisms/carousel/sectionWithCarousel'
+import { useAuthorizationsWithNames } from '@//hook/authorizations/useAuthorizations'
+import { AuthorizationItem } from '../../../../types/authorizations'
+import { useState, useEffect } from 'react'
 
 export const HomeScreen = () => {
   const { userData, loading, error, refresh } = useUserProfile()
   const { occurrences, loading: occurrencesLoading, error: occurrencesError } = useOccurrence()
-  
+  const { data } = useAuthorizationsWithNames()
   const { stats, loading: statsLoading, error: statsError, refetch: refetchStats } = useStats()
-
   const router = useRouter()
+
+  const [authorizationData, setAuthorizationData] = useState<AuthorizationItem[]>([])
+
+  useEffect(() => {
+    if (!loading && !error && data) {
+      setAuthorizationData(data)
+    }
+  }, [loading, error, data])
 
   const handleRefresh = async () => {
     await refresh()
@@ -32,6 +40,7 @@ export const HomeScreen = () => {
   if (loading || statsLoading) return <LoadingIndicator />
   if (error) return <ErrorMessage message={error} onRetry={handleRefresh} />
   if (!userData) return <ErrorMessage message="Dados do usuário não encontrados" onRetry={handleRefresh} />
+  if (authorizationData.length === 0) return <ErrorMessage message="Nenhuma autorização encontrada." onRetry={() => {}} />
 
   return (
     <TemplateScreen withHeader={true}>
@@ -39,7 +48,7 @@ export const HomeScreen = () => {
         <ApresentationSection
           name={`Olá, ${userData.name}`}
           subtitle="Seja bem-vindo ao Sagu App"
-          statusCards={[
+          statusCards={[ 
             {
               iconName: "calendar" as const,
               title: "Agendamentos",
@@ -60,21 +69,20 @@ export const HomeScreen = () => {
             }
           ]}
         />
-        <View className="p-4">
-          <OccurrenceSectionWithCarousel
-          occurrences={occurrences}
-          occurrencesLoading={occurrencesLoading}
-          occurrencesError={occurrencesError}
-          title={'Ocorrências'}
-          linkText={'Ver todos'}
-          onPressLink={handleOccurrencesPress}
-        />
+        <View className="m-2">
+          <SectionWithCarousel
+            data={occurrences}
+            title={'Ocorrências'}
+            linkText={'Ver Todos'}
+            onPressLink={handleOccurrencesPress} type={'occurrence'} />
         </View>
-        <View className="p-4">
-          <SectionTableList
-            title="Autorizações"
-            linkText="Ver autorizações"
-            onPressLink={() => console.log('Navigate to grades')}
+        <View className="m-2">
+          <SectionWithCarousel
+            data={authorizationData}
+            title={'Autorizações'}
+            linkText={'Ver Todas'}
+            onPressLink={handleOccurrencesPress} 
+            type="authorization"
           />
         </View>
         <AttendanceSection 
