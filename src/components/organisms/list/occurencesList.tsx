@@ -3,8 +3,44 @@ import { Feather } from "@expo/vector-icons"
 import OccurrenceCardAtom from "../../atoms/card/cardAtom"
 import { OccurrenceItem } from "@//utils/adapters/occurrence/occurrenceAdapter"
 
+type OccurrenceData = {
+  id: string
+  attributes: {
+    title: string
+    description: string
+    created_at: string
+    status?: string
+  }
+  relationships: {
+    student?: {
+      data: {
+        id: string
+        attributes: {
+          name: string
+        }
+      }
+    }
+    relator?: {
+      data: {
+        id: string
+        attributes: {
+          name: string
+        }
+      }
+    }
+  }
+}
+
+type Props = {
+  data: OccurrenceData
+  title: string
+  linkText: string
+  onPressLink: () => void
+  type: 'authorization' | 'occurrence'
+}
+
 type OccurrencesListProps = {
-  occurrences: OccurrenceItem[]
+  occurrences: OccurrenceData[]
   loading: boolean
 }
 
@@ -18,10 +54,10 @@ export default function OccurrencesList({ occurrences, loading }: OccurrencesLis
       {occurrences.length > 0 ? (
         occurrences.map((occurrence) => (
           <OccurrenceCardAtom
-            key={occurrence.id}
-            title={occurrence.title}
-            description={occurrence.description}
-            createdAt={occurrence.createdAt}
+            key={occurrence.id} // Uso de occurrence.id como key
+            title={occurrence.attributes.title}
+            description={occurrence.attributes.description}
+            createdAt={occurrence.attributes.created_at}
             onPress={() => console.log('Visualizar ocorrência', occurrence.id)}
           />
         ))

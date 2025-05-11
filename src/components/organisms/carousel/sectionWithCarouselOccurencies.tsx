@@ -59,7 +59,7 @@ export const SectionWithCarouselOccurences = ({
         keyExtractor={(item) => item.id}
         horizontal
         showsHorizontalScrollIndicator={false}
-        contentContainerStyle={{ paddingHorizontal: 8, flexGrow: 0 }}
+        contentContainerStyle={{ paddingHorizontal: 16, flexGrow: 0 }}
         renderItem={({ item }) => {
           const title = item.attributes?.title || "Sem título"
           const description = item.attributes?.description || "Sem descrição disponível"
@@ -70,16 +70,19 @@ export const SectionWithCarouselOccurences = ({
           const authorName = item.relationships?.relator?.data?.attributes?.name || "Relator desconhecido"
 
           return (
-            <CardAtom
-              title={title}
-              description={description}
-              createdAt={createdAt}
-              status={status}
-              authorName={authorName}
-              studentName={studentName}
-            />
+            <View style={{ width: 250 }}> {/* Defina a largura do card */}
+              <CardAtom
+                title={title}
+                description={description}
+                createdAt={createdAt}
+                status={status}
+                authorName={authorName}
+                studentName={studentName}
+              />
+            </View>
           )
         }}
+        ItemSeparatorComponent={() => <View style={{ width: 16 }} />}
       />
     </View>
   )
