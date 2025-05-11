@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import { CalendarHeader } from '../header/calendarHeaderOrganism';
 import { EventList } from '../list/eventListOrganism';
+import { ArrowBack } from '../../atoms/button/arrowBack';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
@@ -93,6 +94,10 @@ export const CustomCalendar = () => {
 
   return (
     <View className="bg-white p-4 rounded-2xl" {...panResponder.panHandlers}>
+      
+        <View className="flex-1 p-4">
+            <ArrowBack color='#09a342' size={29}/>
+        </View>
       <CalendarHeader
         title={`${monthName.charAt(0).toUpperCase() + monthName.slice(1)} ${year}`}
         onNext={goToNextWeek}

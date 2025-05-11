@@ -9,19 +9,16 @@ import { useRouter } from 'expo-router'
 export default function OccurrencesTemplate() {
   const router = useRouter()
 
-  // Filtros de classe, ano e status
   const [classFilter, setClassFilter] = useState<string>('Todos')
   const [yearFilter, setYearFilter] = useState<string>('2024')
   const [statusFilter, setStatusFilter] = useState<string>('Todos')
 
-  // Garantir que os filtros são passados de forma controlada
   const filters = useMemo(() => ({
     classId: classFilter === 'Todos' ? undefined : classFilter,
     year: yearFilter,
     status: statusFilter === 'Todos' ? undefined : statusFilter,
   }), [classFilter, yearFilter, statusFilter])
 
-  // Usando o hook com os filtros
   const { occurrences, loading } = useOccurrence(filters)
 
   const handleBackPress = () => {

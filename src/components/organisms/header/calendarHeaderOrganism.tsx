@@ -17,7 +17,7 @@ export const CalendarHeader = ({
 }: CalendarHeaderProps) => (
   <View className="flex-row items-center justify-between px-8 py-3 mb-1">
     <View className="flex-row items-center gap-4">
-      <Icon name="calendar" color="#00FF00" />
+      <Icon name="calendar" color="#09a342" />
       <TextAtom variant="title">{title}</TextAtom>
       {notificationCount > 0 && (
         <View className="bg-red-500 rounded-full w-5 h-5 items-center justify-center ml-2">
