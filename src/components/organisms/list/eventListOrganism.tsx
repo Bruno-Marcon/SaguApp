@@ -2,12 +2,14 @@ import { View, Text } from 'react-native';
 import { EventCard } from '../../molecules/card/eventCardMolecules';
 
 type EventListProps = {
-  selectedDate: Date;
+  selectedDate: Date | null;
 };
 
 export const EventList = ({ selectedDate }: EventListProps) => {
   const sampleDate = new Date('2025-05-11');
+  const otherSampleDate = new Date('2025-05-12'); // Outro exemplo de data
 
+  // Função para comparar se duas datas são o mesmo dia
   const isSameDay = (a: Date, b: Date) =>
     a.getDate() === b.getDate() &&
     a.getMonth() === b.getMonth() &&
@@ -15,17 +17,49 @@ export const EventList = ({ selectedDate }: EventListProps) => {
 
   return (
     <View className="mt-4 p-2">
-      {isSameDay(selectedDate, sampleDate) ? (
+      {selectedDate === null ? (  // Se selectedDate for null, exibe todos os eventos
         <>
           <EventCard
             title="Avaliação II - Individual"
             subtitle="Saúde Coletiva e Políticas Públicas em Saúde (20070)"
             time="00:00 - 23:59"
+            date={new Date('2025-05-10')}
           />
           <EventCard
             title="Avaliação Final (Discursiva) - Individual"
             subtitle="Saúde Coletiva e Políticas Públicas em Saúde (20070)"
             time="00:00 - 23:59"
+            date={new Date('2025-05-11')}
+          />
+          <EventCard
+            title="Avaliação II - Coletiva"
+            subtitle="Saúde Coletiva e Políticas Públicas em Saúde (20070)"
+            time="10:00 - 18:00"
+            date={new Date('2025-05-12')}
+          />
+        </>
+      ) : isSameDay(selectedDate, sampleDate) ? (
+        <>
+          <EventCard
+            title="Avaliação II - Individual"
+            subtitle="Saúde Coletiva e Políticas Públicas em Saúde (20070)"
+            time="00:00 - 23:59"
+            date={sampleDate}  // Passando a data correta
+          />
+          <EventCard
+            title="Avaliação Final (Discursiva) - Individual"
+            subtitle="Saúde Coletiva e Políticas Públicas em Saúde (20070)"
+            time="00:00 - 23:59"
+            date={sampleDate}  // Passando a data correta
+          />
+        </>
+      ) : isSameDay(selectedDate, otherSampleDate) ? (
+        <>
+          <EventCard
+            title="Avaliação III - Coletiva"
+            subtitle="Saúde Coletiva e Políticas Públicas em Saúde (20070)"
+            time="09:00 - 16:00"
+            date={otherSampleDate}  // Passando a data correta
           />
         </>
       ) : (

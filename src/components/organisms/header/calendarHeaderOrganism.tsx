@@ -21,7 +21,9 @@ export const CalendarHeader = ({
       <TextAtom variant="title">{title}</TextAtom>
       {notificationCount > 0 && (
         <View className="bg-red-500 rounded-full w-5 h-5 items-center justify-center ml-2">
-          <TextAtom variant="body" className="text-white text-xs">{notificationCount}</TextAtom>
+          <TextAtom variant="body" className="text-white text-xs">
+            {notificationCount}
+          </TextAtom>
         </View>
       )}
     </View>

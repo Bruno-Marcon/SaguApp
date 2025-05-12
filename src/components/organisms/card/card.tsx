@@ -19,12 +19,12 @@ const StatusCard: React.FC<StatusCardProps> = ({
   subtitleClassName,
 }) => {
   return (
-    <View className={`bg-white rounded-xl p-2 w-[33%] items-center ${containerClassName || ""}`}>
+    <View className={`bg-white mt-5 rounded-xl p-2 w-[33%] items-center ${containerClassName || ""}`}>
       <Text className={`text-sm font-medium text-gray-800 mt-2 text-center ${titleClassName || ""}`}>
         {title}
       </Text>
 
-      <View className="flex-row items-center justify-center mt-1 gap-x-4">
+      <View className="flex-row items-center justify-start mt-1 gap-x-8">
         {icon}
         <Text className={`text-2xl text-gray-500 text-center ${subtitleClassName || ""}`}>
           {subtitle}

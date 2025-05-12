@@ -25,7 +25,7 @@ export const ApresentationSection = ({
   name,
   subtitle,
   statusCards,
-  containerClassName = 'p-7',
+  containerClassName = 'p-6',
   backgroundClassName = 'bg-green-600'
 }: ApresentationSectionProps) => {
   return (
