@@ -9,7 +9,6 @@ const HelpWidget = () => {
   const toggleModal = () => setIsModalVisible(prev => !prev)
 
   const handleHelpPress = () => {
-    // Aqui você pode definir a ação para "Pedir ajuda"
     console.log('Usuário pediu ajuda')
     setIsModalVisible(false)
   }

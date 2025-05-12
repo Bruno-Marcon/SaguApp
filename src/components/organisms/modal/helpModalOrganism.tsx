@@ -9,18 +9,15 @@ type HelpModalProps = {
 }
 
 const HelpModal = ({ isVisible, onClose, onHelpPress, onReportPress }: HelpModalProps) => {
-  const [slideAnim] = useState(new Animated.Value(0))  // Inicializa a animação com a posição 0 (fora da tela)
-
+  const [slideAnim] = useState(new Animated.Value(0))
   useEffect(() => {
     if (isVisible) {
-      // Se o modal estiver visível, anima para a posição normal (0)
       Animated.timing(slideAnim, {
         toValue: 1,
         duration: 300,
         useNativeDriver: true,
       }).start()
     } else {
-      // Se o modal não estiver visível, anima de volta para a posição fora da tela
       Animated.timing(slideAnim, {
         toValue: 0,
         duration: 300,
@@ -35,7 +32,7 @@ const HelpModal = ({ isVisible, onClose, onHelpPress, onReportPress }: HelpModal
         transform: [{
           translateY: slideAnim.interpolate({
             inputRange: [0, 1],
-            outputRange: [300, 0],  // Faz o modal deslizar de baixo para cima
+            outputRange: [300, 0],
           }),
         }],
       }}
