@@ -37,6 +37,9 @@ export const HomeScreen = () => {
   const handleOccurrencesPress = () => {
     router.push('/(panel)/occurences/occurences')
   }
+  const handleAuthorizationPress = () => {
+    router.push('/(panel)/authorization/page')
+  }
 
   if (loading || statsLoading || occurrencesLoading) return <Loading/>
   if (error || statsError || occurrencesError) {
@@ -86,7 +89,7 @@ export const HomeScreen = () => {
             data={authorizationData}
             title={'Autorizações'}
             linkText={'Ver Todas'}
-            onPressLink={handleOccurrencesPress}
+            onPressLink={handleAuthorizationPress}
             type="authorization"
           />
         </View>

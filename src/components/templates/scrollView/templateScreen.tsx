@@ -2,6 +2,7 @@ import React, { useState, useCallback } from 'react'
 import { View, ScrollView, SafeAreaView, RefreshControl } from 'react-native'
 import BottomTabBar from '../../organisms/tabBar/BottomTabBar'
 import DefaultNavBar from '../../organisms/navbar/defaultNav'
+import HelpWidget from '../../organisms/widget/helpWidgetOrganism'
 
 type TemplateScreenProps = {
   children: React.ReactNode
@@ -51,6 +52,9 @@ export default function TemplateScreen({
       </ScrollView>
       
       {withBottomBar && <BottomTabBar />}
+      
+      {/* HelpWidget agora está disponível em todas as telas usando TemplateScreen */}
+      <HelpWidget />
     </View>
   )
 }
