@@ -70,7 +70,7 @@ export const SectionWithCarouselOccurences = ({
           const authorName = item.relationships?.relator?.data?.attributes?.name || "Relator desconhecido"
 
           return (
-            <View style={{ width: 250 }}> {/* Defina a largura do card */}
+            <View style={{ width: 250 }}>
               <CardAtom
                 title={title}
                 description={description}

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { View, Text, TouchableOpacity } from 'react-native'
 import OccurrenceCardAtom from '../../atoms/card/cardAtom'
-import OccurrenceDetailModal from '../../molecules/modal/occurrenceDatailModal'
+import OccurrenceDetailModal from '../modal/occurrenceDatailModal'
 
 interface OccurrenceItem {
   title: string

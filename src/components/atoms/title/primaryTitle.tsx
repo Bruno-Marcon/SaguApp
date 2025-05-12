@@ -17,12 +17,16 @@ export const PrimaryTitle = ({
   subtitleClassName = 'text-base font-normal text-gray-200'
 }: PrimaryTitleProps) => {
   return (
-    <Text className={className}>
-      {name}{selectedStudent && `, ${selectedStudent}!`}
-      {"\n"}
-      <Text className={subtitleClassName}>
-        {subtitle}
+    <>
+      <Text className={className}>
+        {name}
+        {selectedStudent ? `, ${selectedStudent}!` : ''}
       </Text>
-    </Text>
+      {subtitle && (
+        <Text className={subtitleClassName}>
+          {subtitle}
+        </Text>
+      )}
+    </>
   )
 }

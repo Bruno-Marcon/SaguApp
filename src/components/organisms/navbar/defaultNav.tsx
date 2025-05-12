@@ -1,8 +1,8 @@
 import { View } from "react-native"
 import LogoIFC from "../../atoms/logo/logoIFC"
-import DynamicIcon from "../../atoms/icons/bell"
 import { JSX } from "react"
 import ProfileAvatar from "../avatar/profileAvatar"
+import { BellWithModal } from "../header/bell/bellWithModal"
 
 type DefaultNavBarProps = {
   logo?: JSX.Element
@@ -12,7 +12,6 @@ type DefaultNavBarProps = {
 
 const DefaultNavBar: React.FC<DefaultNavBarProps> = ({
   logo = <LogoIFC className="w-14 h-14" />,
-  icons = [<DynamicIcon name="bell" size={24} color="#4B5563" />],
   avatar = <ProfileAvatar size={40} modal={true}/>,
 }) => {
   return (
@@ -20,9 +19,7 @@ const DefaultNavBar: React.FC<DefaultNavBarProps> = ({
       {logo}
 
       <View className="flex-row items-center gap-x-4">
-        {icons.map((icon, index) => (
-          <View key={index}>{icon}</View>
-        ))}
+        <BellWithModal/>
         {avatar}
       </View>
     </View>

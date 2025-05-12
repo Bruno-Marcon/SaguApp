@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { View } from 'react-native'
 import { router } from 'expo-router'
 import InitialsAvatar from '../../atoms/avatar/avatar'
-import LogoutModal from '../../molecules/modal/logout'
+import LogoutModal from '../modal/logout'
 import { Logout } from '@//services/auth/authService'
 
 

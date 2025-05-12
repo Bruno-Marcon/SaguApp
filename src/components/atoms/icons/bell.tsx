@@ -1,20 +1,24 @@
-import { Feather } from "@expo/vector-icons"
-import { StyleProp, TextStyle } from "react-native"
+import { View, TouchableOpacity, Text } from 'react-native'
+import { Feather } from '@expo/vector-icons'
 
-type IconName = keyof typeof Feather.glyphMap
-
-type DynamicIconProps = {
-  name: IconName
-  color?: string
-  size?: number
-  style?: StyleProp<TextStyle>
+type Props = {
+  onPress: () => void
+  notificationCount?: number
 }
 
-export default function DynamicIcon({
-  name,
-  color = "#4B5563",
-  size = 24,
-  style,
-}: DynamicIconProps) {
-  return <Feather name={name} color={color} size={size} style={style} />
+export const NotificationBell = ({ onPress, notificationCount = 0 }: Props) => {
+  const hasNotifications = notificationCount > 0
+
+  return (
+    <TouchableOpacity onPress={onPress} className="relative">
+      <Feather name="bell" size={24} color="#4B5563" />
+      {hasNotifications && (
+        <View className="absolute -top-1 -right-1 bg-red-500 rounded-full w-5 h-5 justify-center items-center">
+          <Text className="text-white text-xs font-bold">
+            {notificationCount > 99 ? '99+' : notificationCount}
+          </Text>
+        </View>
+      )}
+    </TouchableOpacity>
+  )
 }
