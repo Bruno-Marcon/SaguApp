@@ -3,7 +3,8 @@ import { useEffect, useState } from 'react'
 import { getAuthorizations } from '@//services/authorizations/authorizationsService'
 import { mapAuthorizationToItem } from '@//utils/adapters/authorizations/authorizationsAdapter'
 import { getStudentById } from '@//services/studentes/studentsServices'
-import { AuthorizationItem } from '../../../types/types'
+import { AuthorizationItem } from '../../../types/authorizations'
+
 
 export const useAuthorizationsWithNames = () => {
   const [data, setData] = useState<AuthorizationItem[]>([])

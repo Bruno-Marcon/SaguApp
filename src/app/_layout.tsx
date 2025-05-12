@@ -54,6 +54,7 @@ export default function RootLayout() {
         <Stack.Screen name="(panel)/profile/profile" options={{ headerShown: false }} />
         <Stack.Screen name="(panel)/occurences/occurences" options={{ headerShown: false }} />
         <Stack.Screen name="(panel)/schedules/page" options={{ headerShown: false }} />
+        <Stack.Screen name="(panel)/authorization/page" options={{ headerShown: false }} />
       </Stack>
       <Toast />
     </View>

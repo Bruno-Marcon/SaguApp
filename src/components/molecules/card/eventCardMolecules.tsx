@@ -1,6 +1,6 @@
 import { View } from 'react-native';
 import { TextAtom } from '../../atoms/text/textAtom';
-import { format } from 'date-fns'; // Para formatação da data
+import { format } from 'date-fns';
 
 type Props = {
   title: string;

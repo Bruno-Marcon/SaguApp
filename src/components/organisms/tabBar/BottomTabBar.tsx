@@ -7,12 +7,11 @@ import { TabItem } from "../../molecules/tab/tabItens"
 export default function BottomTabBar() {
   const router = useRouter()
   const pathname = usePathname()
-
   const [isOptionsVisible, setIsOptionsVisible] = useState(false)
 
   const tabs = [
-    { label: "Home", icon: "home" as keyof typeof Feather.glyphMap, route: "/home/page" },
     { label: "Calendário", icon: "calendar" as keyof typeof Feather.glyphMap, route: "/(panel)/schedules/page" },
+    { label: "Autorizações", icon: "file-text" as keyof typeof Feather.glyphMap, route: "/(panel)/authorization/page" },
     { label: "Ocorrências", icon: "clock" as keyof typeof Feather.glyphMap, route: "/(panel)/occurences/occurences" },
     { label: "Perfil", icon: "user" as keyof typeof Feather.glyphMap, route: "/(panel)/profile/profile" },
   ]
@@ -34,6 +33,8 @@ export default function BottomTabBar() {
 
   return (
     <View className="flex-row justify-around items-center bg-white rounded-t-2xl p-6 shadow-md shadow-black/10 relative">
+      
+      {/* Primeira metade dos tabs */}
       {tabs.slice(0, 2).map((tab) => (
         <TabItem
           key={tab.label}
@@ -43,32 +44,33 @@ export default function BottomTabBar() {
           active={pathname.startsWith(tab.route)}
         />
       ))}
-      
-      <View className="relative">
-        <TouchableOpacity
-          onPress={() => setIsOptionsVisible(!isOptionsVisible)}
-          className="bg-green-500 p-4 rounded-full -mt-10 shadow-lg shadow-green-300 z-10"
-        >
-          <Feather name={isOptionsVisible ? "x" : "plus"} color="white" size={24} />
-        </TouchableOpacity>
 
-        {isOptionsVisible && (
+      {/* Botão central */}
+      <View className="relative -mt-10">
+      <TouchableOpacity
+        onPress={() => setIsOptionsVisible(!isOptionsVisible)}
+        className="bg-green-500 p-4 rounded-full shadow-lg shadow-green-300 z-10 transform -translate-x-[14px]" // Ajuste aqui
+      >
+        <Feather name={isOptionsVisible ? "x" : "plus"} color="white" size={24} />
+      </TouchableOpacity>
+
+      {isOptionsVisible && (
           <View className="absolute bottom-full left-1/2 transform -translate-x-1/2 flex-row items-center mb-8 gap-x-3">
-            <TouchableOpacity 
+            <TouchableOpacity
               className="bg-green-500 p-5 rounded-full shadow-md shadow-green-100"
               onPress={() => handleOptionPress("checkin")}
             >
               <Feather name="check-circle" size={20} color="white" />
             </TouchableOpacity>
-            
-            <TouchableOpacity 
+
+            <TouchableOpacity
               className="bg-green-500 p-5 rounded-full shadow-md shadow-green-200"
               onPress={() => handleOptionPress("review")}
             >
               <Feather name="edit-2" size={20} color="white" />
             </TouchableOpacity>
-            
-            <TouchableOpacity 
+
+            <TouchableOpacity
               className="bg-green-500 p-5 rounded-full shadow-md shadow-green-300"
               onPress={() => handleOptionPress("photo")}
             >
@@ -78,6 +80,7 @@ export default function BottomTabBar() {
         )}
       </View>
 
+      {/* Segunda metade dos tabs */}
       {tabs.slice(2).map((tab) => (
         <TabItem
           key={tab.label}

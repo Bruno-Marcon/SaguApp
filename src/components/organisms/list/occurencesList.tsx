@@ -2,6 +2,7 @@ import { View, Text } from "react-native"
 import { Feather } from "@expo/vector-icons"
 import OccurrenceCardAtom from "../../atoms/card/cardAtom"
 import { OccurrenceItem } from "@//utils/adapters/occurrence/occurrenceAdapter"
+import Loading from "../../atoms/indicators/loadingAtom"
 
 type OccurrenceData = {
   id: string
@@ -46,7 +47,7 @@ type OccurrencesListProps = {
 
 export default function OccurrencesList({ occurrences, loading }: OccurrencesListProps) {
   if (loading) {
-    return <Text>Carregando...</Text>
+    return <Loading/>
   }
 
   return (

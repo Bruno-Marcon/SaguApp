@@ -1,23 +1,38 @@
+import { useState, useEffect } from 'react';
 import { View, Text } from 'react-native';
 import { EventCard } from '../../molecules/card/eventCardMolecules';
+import Loading from '../../atoms/indicators/loadingAtom';
 
 type EventListProps = {
   selectedDate: Date | null;
 };
 
 export const EventList = ({ selectedDate }: EventListProps) => {
-  const sampleDate = new Date('2025-05-11');
-  const otherSampleDate = new Date('2025-05-12'); // Outro exemplo de data
+  const [loading, setLoading] = useState(true)
 
-  // Função para comparar se duas datas são o mesmo dia
+  const sampleDate = new Date('2025-05-11');
+  const otherSampleDate = new Date('2025-05-12')
+
   const isSameDay = (a: Date, b: Date) =>
     a.getDate() === b.getDate() &&
     a.getMonth() === b.getMonth() &&
     a.getFullYear() === b.getFullYear();
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) {
+    return <Loading />;
+  }
+
   return (
     <View className="mt-4 p-2">
-      {selectedDate === null ? (  // Se selectedDate for null, exibe todos os eventos
+      {selectedDate === null ? (
         <>
           <EventCard
             title="Avaliação II - Individual"
@@ -59,7 +74,7 @@ export const EventList = ({ selectedDate }: EventListProps) => {
             title="Avaliação III - Coletiva"
             subtitle="Saúde Coletiva e Políticas Públicas em Saúde (20070)"
             time="09:00 - 16:00"
-            date={otherSampleDate}  // Passando a data correta
+            date={otherSampleDate}
           />
         </>
       ) : (

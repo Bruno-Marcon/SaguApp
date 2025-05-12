@@ -1,7 +1,6 @@
 import { View, ScrollView } from 'react-native'
 import { useRouter } from 'expo-router'
 import { useUserProfile } from '@//hook/useUserProfile'
-import { LoadingIndicator } from '../../atoms/indicators/loadingIndicator'
 import { ErrorMessage } from '../../atoms/indicators/errorMessage'
 import TemplateScreen from '../scrollView/templateScreen'
 import { ApresentationSection } from '../../molecules/section/apresentation/apresentationSectionWithStatus'
@@ -13,6 +12,7 @@ import { useOccurrenciesByRelator } from '@//hook/occurrence/useOccurenciesByRel
 import { useState, useEffect } from 'react'
 import { AuthorizationItem } from '../../../../types/authorizations'
 import { SectionWithCarouselOccurences } from '../../organisms/carousel/sectionWithCarouselOccurencies'
+import Loading from '../../atoms/indicators/loadingAtom'
 
 export const HomeScreen = () => {
   const { userData, loading, error, refresh } = useUserProfile()
@@ -38,7 +38,7 @@ export const HomeScreen = () => {
     router.push('/(panel)/occurences/occurences')
   }
 
-  if (loading || statsLoading || occurrencesLoading) return <LoadingIndicator />
+  if (loading || statsLoading || occurrencesLoading) return <Loading/>
   if (error || statsError || occurrencesError) {
     const message = error || statsError || occurrencesError || 'Erro desconhecido'
     return <ErrorMessage message={message} onRetry={handleRefresh} />
