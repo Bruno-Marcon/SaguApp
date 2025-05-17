@@ -1,67 +1,60 @@
-import { FlatList, Text, TouchableOpacity, View } from 'react-native'
-import { Feather } from '@expo/vector-icons'
-import { PrimaryTitle } from '../../atoms/title/primaryTitle'
-import CardAtom from '../../atoms/card/cardAtom'
+import { FlatList, Text, TouchableOpacity, View } from 'react-native';
+import { Feather } from '@expo/vector-icons';
+import { PrimaryTitle } from '../../atoms/title/primaryTitle';
+import CardAuthorizationAtom from '../../atoms/card/cardAuthorizationAtom';
+import { Authorization } from '../../../../types/authorizations';
+import Animated, { FadeInRight } from 'react-native-reanimated';
+
+interface CarouselItem {
+  id?: string;
+  rawData: Authorization;
+}
 
 type Props = {
-  data: Array<{
-    title: string
-    description: string
-    createdAt?: Date | string
-    authorName?: string
-    studentName?: string
-    parentName?: string
-    status?: string
-    category?: string
-    iconName?: string
-    iconColor?: string
-    borderColor?: string
-  }>
-  title: string
-  linkText: string
-  onPressLink: () => void
-  type: 'authorization' | 'occurrence'
-}
+  data: CarouselItem[];
+  title: string;
+  linkText: string;
+  onPressLink: () => void;
+};
 
 export const SectionWithCarousel = ({
   data,
   title,
   linkText,
   onPressLink,
-  type,
 }: Props) => {
   return (
-    <View>
-      <View className="flex-row justify-between items-center">
-        <PrimaryTitle name={title} className="text-2xl font-bold text-gray-800" />
-        <TouchableOpacity className="flex-row items-center" onPress={onPressLink}>
-          <Text className="text-sm text-green-600 mr-1">{linkText}</Text>
-          <Feather name="chevron-right" size={20} color="#16a34a" />
+    <View className="mt-6 px-4">
+      <View className="flex-row justify-between items-center mb-4">
+        <View className="flex-row items-center space-x-2">
+          <Feather name="file-text" size={20} color="#3B82F6" />
+          <PrimaryTitle name={title} className="text-xl font-extrabold text-gray-800 tracking-tight" />
+        </View>
+
+        <TouchableOpacity
+          onPress={onPressLink}
+          className="flex-row items-center bg-blue-50 px-3 py-1 rounded-full shadow-sm"
+        >
+          <Text className="text-sm font-semibold text-blue-600 mr-1">{linkText}</Text>
+          <Feather name="arrow-right" size={16} color="#3B82F6" />
         </TouchableOpacity>
       </View>
 
       <FlatList
-        data={data}
-        keyExtractor={(_, index) => `carousel-item-${index}`}
         horizontal
+        data={data}
+        keyExtractor={(item, index) => item.id ?? `carousel-item-${index}`}
         showsHorizontalScrollIndicator={false}
-        contentContainerStyle={{ paddingHorizontal: 8, flexGrow: 0 }}
-        renderItem={({ item }) => (
-          <CardAtom
-            title={item.title}
-            description={item.description}
-            createdAt={item.createdAt}
-            authorName={item.authorName}
-            status={item.status}
-            category={item.category}
-            iconName={item.iconName}
-            iconColor={item.iconColor}
-            borderColor={item.borderColor}
-            studentName={item.studentName}
-            parentName={item.parentName}
-          />
+        contentContainerStyle={{ gap: 16, paddingBottom: 8, paddingTop: 2 }}
+        renderItem={({ item, index }) => (
+          <Animated.View entering={FadeInRight.delay(index * 100).duration(300)}>
+            <CardAuthorizationAtom
+              authorization={item.rawData}
+              className="w-[260px] transition-all duration-300 active:scale-95"
+            />
+          </Animated.View>
         )}
       />
     </View>
-  )
-}
+  );
+};

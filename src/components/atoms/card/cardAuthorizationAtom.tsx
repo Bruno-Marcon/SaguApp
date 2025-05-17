@@ -1,67 +1,58 @@
 import { View, Text, TouchableOpacity } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { formatDate } from '@//utils/dateUtils';
-import { Occurrence } from '../../../../types/occurrence';
+import { Authorization } from '../../../../types/authorizations';
 
-interface CardAtomProps extends Occurrence {
+export type FeatherIconName = React.ComponentProps<typeof Feather>['name'];
+
+interface CardAuthorizationAtomProps {
+  authorization: Authorization;
   onPress?: () => void;
-  iconName?: keyof typeof Feather.glyphMap;
+  iconName?: FeatherIconName;
   iconColor?: string;
   borderColor?: string;
   className?: string;
 }
 
-export default function CardAtom({
-  title,
-  description,
-  created_at,
-  status = 'Aberto',
-  kind,
-  severity,
-  iconName,
-  iconColor,
-  borderColor,
+function isValidFeatherIconName(name: string): name is FeatherIconName {
+  return name in Feather.glyphMap;
+}
+
+export default function CardAuthorizationAtom({
+  authorization,
+  iconName = 'file-text',
+  iconColor = '#3B82F6',
+  borderColor = '#3B82F6',
   className = '',
   onPress,
-}: CardAtomProps) {
+}: CardAuthorizationAtomProps) {
+  const {
+    attributes: { description, created_at, status },
+  } = authorization;
+
   const formattedTime = formatDate(created_at);
-
-  const severityColorMap: Record<string, string> = {
-    low: '#10B981',
-    medium: '#F59E0B',
-    high: '#EF4444',
-  };
-
-  const kindIconMap: Record<string, keyof typeof Feather.glyphMap> = {
-    discipline: 'alert-triangle',
-    academic: 'book-open',
-    attendance: 'clock',
-    default: 'file-text',
-  };
-
-  const finalColor = severityColorMap[severity || ''] || '#F59E0B';
-  const finalIcon = kindIconMap[kind || ''] || kindIconMap.default;
+  const validatedIconName: FeatherIconName = isValidFeatherIconName(iconName) ? iconName : 'file-text';
 
   return (
     <TouchableOpacity
       onPress={onPress}
       activeOpacity={0.9}
       accessibilityRole="button"
-      accessibilityLabel={`Ocorrência: ${title}, status: ${status}`}
+      accessibilityLabel={`Autorização, status: ${status}`}
       className={`bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden ${className}`}
       style={{ width: 260 }}
     >
-      {/* Borda luminosa lateral */}
+      {/* Borda lateral */}
       <View
         className="w-[5px] rounded-tl-3xl rounded-bl-3xl absolute left-0 top-0 bottom-0"
-        style={{ backgroundColor: borderColor || finalColor }}
+        style={{ backgroundColor: borderColor }}
       />
 
       <View className="p-4 pl-6 flex-row items-start">
         {/* Ícone */}
         <View className="mr-4 mt-1">
           <View className="bg-gray-100 p-2 rounded-xl">
-            <Feather name={iconName || finalIcon} size={22} color={iconColor || finalColor} />
+            <Feather name={validatedIconName} size={22} color={iconColor} />
           </View>
         </View>
 
@@ -74,12 +65,12 @@ export default function CardAtom({
               numberOfLines={1}
               ellipsizeMode="tail"
             >
-              {title}
+              Autorização
             </Text>
 
-            <View className="bg-orange-50 px-3 py-1 rounded-full shadow-sm">
-              <Text className="text-[10px] font-bold text-orange-600 uppercase tracking-wide">
-                {status}
+            <View className="bg-blue-50 px-3 py-1 rounded-full shadow-sm">
+              <Text className="text-[10px] font-bold text-blue-600 uppercase tracking-wide">
+                {status ?? 'N/A'}
               </Text>
             </View>
           </View>
@@ -89,10 +80,12 @@ export default function CardAtom({
             {description}
           </Text>
 
-          {/* Data com ícone */}
+          {/* Data */}
           <View className="flex-row items-center mt-3">
             <Feather name="calendar" size={12} color="#9CA3AF" />
-            <Text className="text-xs text-gray-400 ml-1">{formattedTime}</Text>
+            <Text className="text-xs text-gray-400 ml-1">
+              {formattedTime ?? ''}
+            </Text>
           </View>
         </View>
       </View>

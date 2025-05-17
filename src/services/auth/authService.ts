@@ -1,104 +1,59 @@
-import { deleteUserInfo, setUserInfo } from "@//storage/SecureUser"
-import { setToken, deleteToken, getToken} from "../../storage/secureToken" 
-import Constants from 'expo-constants'
-const apiUrl = Constants.expoConfig?.extra?.apiUrl
-const apiKey = Constants.expoConfig?.extra?.apiKey
+import { setUserInfo } from '@//storage/SecureUser';
+import { setToken, getToken } from '../../storage/secureToken';
+import { api} from '../api/api';
+import { cleanAuthSession } from './authSession';
+import { LoginResponse } from '../../../types/auth';
+import { endpoints } from '../endpoints';
 
-type UserAttributes = {
-  id: string
-  email: string
-  name: string
-  document: string
-  type: string
-}
-
-type LoginResponseData = {
-  id: string
-  type: string
-  attributes: UserAttributes
-}
-
-type LoginResponse = { 
-  token: string 
-  data: LoginResponseData
-  [key: string]: any 
-}
-
-export const HandleLogin = async (email: string, password: string): Promise<LoginResponse> => { 
-  try {  
-    const response = await fetch(`${apiUrl}/api/v1/auth/login`, { 
-      method: "POST", 
-      headers: { 
-        "Content-Type": "application/json",
-        "X-API-KEY": apiKey
-      }, 
-      body: JSON.stringify({ 
-        email: email,
-        password: password 
-      }), 
-    })
-
-    console.log(`HTTP Response Status: ${response.status}`)
-
-    if (!response.ok) { 
-      const errorText = await response.text() 
-      console.error(`Erro ao fazer login. Código de status: ${response.status}, Mensagem: ${errorText}`)
-      throw new Error(`Erro ao fazer login: ${errorText}`) 
-    } 
-
-    const data: LoginResponse = await response.json() 
-
-    if (data.token) { 
-      await setToken(data.token)
-      await setUserInfo(data.data.attributes)
-      console.info("Login bem-sucedido. Token salvo com SecureStore.") 
-      return data
-    } else { 
-      console.warn("Login realizado, mas nenhum token retornado.") 
-      throw new Error("Token não encontrado. Não foi possível autenticar o usuário.")
-    } 
-  } catch (error: any) { 
-    console.error("Erro no login:", error.message || error)
-    console.error("Erro no login:", error.code || error) 
-    console.log("API URL:", apiUrl)
-    console.log("API Key:", apiKey)
-    throw new Error("Não foi possível realizar o login. Verifique suas credenciais.")
-  } 
-}
-
-export const Logout = async () => { 
+export const HandleLogin = async (
+  email: string,
+  password: string
+): Promise<LoginResponse> => {
   try {
-    const token = await getToken()
-    console.log("Token encontrado para logout:", token)
+    console.log('[Login] Iniciando login com:', { email });
+
+    const data = await api.post(endpoints.auth.login, { email, password });
+    console.log('[Login] Resposta da API:', data);
+
+    if (data?.token) {
+      console.log('[Login] Token recebido:', data.token);
+      await setToken(data.token);
+
+      if (data.data?.attributes) {
+        console.log('[Login] Dados do usuário recebidos:', data.data.attributes);
+        await setUserInfo(data.data.attributes);
+      } else {
+        console.warn('[Login] Nenhum dado de usuário encontrado.');
+      }
+
+      console.info('[Login] Login bem-sucedido.');
+      return data;
+    } else {
+      console.warn('[Login] Token não encontrado na resposta.');
+      throw new Error('Token não encontrado. Não foi possível autenticar o usuário.');
+    }
+  } catch (error: any) {
+    console.error('[Login] Erro durante o login:', error.message || error);
+    throw new Error('Não foi possível realizar o login. Verifique suas credenciais.');
+  }
+};
+
+export const Logout = async () => {
+  try {
+    const token = await getToken();
+    console.log('[Logout] Token atual:', token);
 
     if (token) {
-      const headers = new Headers({
-        "Authorization": `Bearer ${token}`,
-        "X-API-KEY": apiKey,
-      })
-
-      const response = await fetch(`${apiUrl}/api/v1/auth/logout`, {
-        method: 'DELETE',
-        headers: headers,
-      })
-
-      console.log(`HTTP Response Status: ${response.status}`)
-
-      if (!response.ok) {
-        const errorText = await response.text() 
-        console.error(`Erro ao fazer logout. Código de status: ${response.status}, Mensagem: ${errorText}`)
-        throw new Error(`Erro ao fazer logout: ${errorText}`)
-      }
+      console.log('[Logout] Enviando requisição para API...');
+      await api.delete(endpoints.auth.logout);
     } else {
-      console.warn("Token ausente, pulando requisição de logout.")
+      console.warn('[Logout] Nenhum token encontrado, pulando requisição de logout.');
     }
 
-    deleteToken()
-    deleteUserInfo()
-    console.info("Logout bem-sucedido. Token removido.")
-    
-  } catch (error: any) { 
-    console.error("Erro ao fazer logout:", error)
-    throw error
-  } 
-}
+    await cleanAuthSession();
+    console.info('[Logout] Sessão limpa e logout finalizado com sucesso.');
+  } catch (error: any) {
+    console.error('[Logout] Erro durante o logout:', error.message || error);
+    throw error;
+  }
+};

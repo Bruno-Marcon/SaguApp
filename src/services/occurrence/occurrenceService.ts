@@ -1,70 +1,61 @@
-import { getToken } from "../../storage/secureToken"
-import Constants from "expo-constants"
+import { Occurrence, OccurrenceFilters, OccurrenceResponse } from "../../../types/occurrence";
+import { api } from "../api/api";
+import { endpoints } from "../endpoints";
 
-const apiUrl = Constants.expoConfig?.extra?.apiUrl
-const apiKey = Constants.expoConfig?.extra?.apiKey
+export const occurrenceService = {
+  getAll: async (filters: OccurrenceFilters = {}): Promise<OccurrenceResponse> => {
+    const params = new URLSearchParams();
 
-export const getOccurrencies = async (page = 1, size = 20) => {
-  const authToken = await getToken()
+    if (filters.page) params.append('page[number]', filters.page.toString());
+    if (filters.severity) params.append('filter[severity]', filters.severity);
+    if (filters.status) params.append('filter[status]', filters.status);
 
-  if (!authToken) {
-    throw new Error("Token de autenticação não encontrado")
-  }
+    const response = await api.get(`${endpoints.occurrencies.root}?${params.toString()}`);
 
-  try {
-    const response = await fetch(
-      `${apiUrl}/api/v1/occurrencies?page[number]=${page}&page[size]=${size}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${authToken}`,
-          "X-API-KEY": apiKey
-        }
-      }
-    )
+    const mapped = {
+      ...response,
+      data: response.data.map((item: any): Occurrence => ({
+        id: item.id,
+        title: item.attributes.title,
+        description: item.attributes.description,
+        created_at: item.attributes.created_at,
+        kind: item.attributes.kind,
+        status: item.attributes.status,
+        severity: item.attributes.severity,
+        student_id: item.relationships.student.data.id,
+      })),
+    };
 
-    if (!response.ok) {
-      const errorData = await response.json()
-      throw new Error(errorData?.message || "Erro ao buscar ocorrências")
-    }
+    return mapped;
+  },
 
-    const data = await response.json()
-    return data
-  } catch (error) {
-    console.error("Erro em getOccurrencies:", error)
-    throw error
-  }
-}
+  getById: async (id: string): Promise<Occurrence> => {
+    return await api.get(`${endpoints.occurrencies.root}/${id}`);
+  },
 
-export const getOccurrencyById = async (id: string) => {
-  const authToken = await getToken()
+  getByStudentId: async (
+    studentId: string,
+    page = 1,
+    pageSize = 5
+  ): Promise<OccurrenceResponse> => {
+    const response = await api.get(
+      `${endpoints.occurrencies.root}?filter[student_id]=${studentId}&page[number]=${page}&page[size]=${pageSize}`
+    );
 
-  if (!authToken) {
-    throw new Error("Token de autenticação não encontrado")
-  }
+    const mapped = {
+      ...response,
+      data: response.data.map((item: any): Occurrence => ({
+        id: item.id,
+        title: item.attributes.title,
+        description: item.attributes.description,
+        created_at: item.attributes.created_at,
+        kind: item.attributes.kind,
+        status: item.attributes.status,
+        severity: item.attributes.severity,
+        student_id: item.relationships.student.data.id,
+      })),
+    };
 
-  try {
-    const response = await fetch(`${apiUrl}/api/v1/occurrencies/${id}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${authToken}`,
-        "X-API-KEY": apiKey
-      }
-    })
-
-    if (!response.ok) {
-      const errorData = await response.json()
-      throw new Error(errorData?.message || "Erro ao buscar detalhes da ocorrência")
-    }
-
-    const data = await response.json()
-    return data
-  } catch (error) {
-    console.error("Erro em getOccurrencyById:", error)
-    throw error
-  }
-}
-
-
+    return mapped;
+  },
+};

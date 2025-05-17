@@ -1,10 +1,7 @@
 import { View} from 'react-native'
 import LogoIFC from '../../atoms/logo/logoIFC'
-import GoogleButton from '../../atoms/button/google'
 import React from 'react'
 import LoginForm from '../../molecules/form/loginForm'
-import { SubTitleOr } from '../../atoms/subtitle/subtitle'
-
 
 type LoginScreenProps = {
     text: string
@@ -18,10 +15,8 @@ const LoginScreen:React.FC<LoginScreenProps> = ({
 }) => {
   return (
     <View className={viewClassName}>
-      <LogoIFC source={require("../../../assets/images/logo-ifc.png")} className="w-30 h-30 mb-20"  />
+      <LogoIFC source={require("../../../assets/images/logo-sagu-mobile-brancoBg.png")} className="w-15 h-15 mb-20"  />
       <LoginForm text={text}/>
-      {/* <SubTitleOr text={subSubTitle}/> */}
-      {/* <GoogleButton/> */}
     </View>
   )
 }

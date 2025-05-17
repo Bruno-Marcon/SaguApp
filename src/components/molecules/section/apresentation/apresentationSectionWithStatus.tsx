@@ -1,50 +1,57 @@
-import { View } from 'react-native'
-import React from 'react'
-import { Feather } from '@expo/vector-icons'
-import { PrimaryTitle } from '@//components/atoms/title/primaryTitle'
-import StatusCard from '@//components/organisms/card/card'
+import { View } from 'react-native';
+import React from 'react';
+import { Feather } from '@expo/vector-icons';
+import { PrimaryTitle } from '@//components/atoms/title/primaryTitle';
+import StatusCard from '@//components/organisms/card/card';
+import Animated, { FadeInUp } from 'react-native-reanimated';
 
-type FeatherIconName = React.ComponentProps<typeof Feather>['name']
-
-type StatusCardItem = {
-  iconName: FeatherIconName
-  title: string
-  subtitle: string
-  iconColor?: string
+interface StatusCardItem {
+  iconName: React.ComponentProps<typeof Feather>['name'];
+  title: string;
+  subtitle: string;
+  iconColor?: string;
 }
 
-type ApresentationSectionProps = {
-  name: string
-  subtitle: string
-  statusCards: ReadonlyArray<StatusCardItem>
-  containerClassName?: string
-  backgroundClassName?: string
+interface ApresentationSectionProps {
+  name: string;
+  subtitle: string;
+  statusCards: ReadonlyArray<StatusCardItem>;
+  containerClassName?: string;
+  backgroundClassName?: string;
 }
 
 export const ApresentationSection = ({
   name,
   subtitle,
   statusCards,
-  containerClassName = 'p-6',
-  backgroundClassName = 'bg-green-600'
+  containerClassName = 'px-5 pt-6 pb-4',
+  backgroundClassName = 'bg-[#0E7C4A]',
 }: ApresentationSectionProps) => {
   return (
-    <View className={`${containerClassName} ${backgroundClassName}`}>
+    <View className={`${containerClassName} ${backgroundClassName} rounded-b-3xl`}>
       <PrimaryTitle
         name={name}
         subtitle={subtitle}
+        className="text-xl font-bold text-white"
+        subtitleClassName="text-sm text-emerald-100"
       />
 
-      <View className="flex-row gap-x-4 justify-center">
+      <View className="flex-row justify-between gap-x-3 mt-5">
         {statusCards.map((card, index) => (
-          <StatusCard
+          <Animated.View
             key={`status-card-${index}`}
-            icon={<Feather name={card.iconName} size={24} color={card.iconColor || '#16A34A'} />}
-            title={card.title}
-            subtitle={card.subtitle}
-          />
+            entering={FadeInUp.duration(400).delay(index * 100)}
+          >
+            <StatusCard
+              icon={
+                <Feather name={card.iconName} size={20} color={card.iconColor || '#16A34A'} />
+              }
+              title={card.title}
+              subtitle={card.subtitle}
+            />
+          </Animated.View>
         ))}
       </View>
     </View>
-  )
-}
+  );
+};

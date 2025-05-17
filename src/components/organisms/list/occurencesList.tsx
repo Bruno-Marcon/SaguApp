@@ -1,73 +1,43 @@
-import { View, Text } from "react-native"
-import { Feather } from "@expo/vector-icons"
-import OccurrenceCardAtom from "../../atoms/card/cardAtom"
-import { OccurrenceItem } from "@//utils/adapters/occurrence/occurrenceAdapter"
-import Loading from "../../atoms/indicators/loadingAtom"
-
-type OccurrenceData = {
-  id: string
-  attributes: {
-    title: string
-    description: string
-    created_at: string
-    status?: string
-  }
-  relationships: {
-    student?: {
-      data: {
-        id: string
-        attributes: {
-          name: string
-        }
-      }
-    }
-    relator?: {
-      data: {
-        id: string
-        attributes: {
-          name: string
-        }
-      }
-    }
-  }
-}
-
-type Props = {
-  data: OccurrenceData
-  title: string
-  linkText: string
-  onPressLink: () => void
-  type: 'authorization' | 'occurrence'
-}
+import { View, Text } from 'react-native';
+import { Feather } from '@expo/vector-icons';
+import OccurrenceCardAtom from '../../atoms/card/cardAtom';
+import Loading from '../../atoms/indicators/loadingAtom';
+import { Occurrence } from '../../../../types/occurrence';
 
 type OccurrencesListProps = {
-  occurrences: OccurrenceData[]
-  loading: boolean
-}
+  occurrences: Occurrence[];
+  loading: boolean;
+};
 
 export default function OccurrencesList({ occurrences, loading }: OccurrencesListProps) {
-  if (loading) {
-    return <Loading/>
-  }
+  if (loading) return <Loading />;
 
   return (
-    <View className="mb-8">
+    <View className="mb-10">
       {occurrences.length > 0 ? (
-        occurrences.map((occurrence) => (
-          <OccurrenceCardAtom
-            key={occurrence.id} // Uso de occurrence.id como key
-            title={occurrence.attributes.title}
-            description={occurrence.attributes.description}
-            createdAt={occurrence.attributes.created_at}
-            onPress={() => console.log('Visualizar ocorrência', occurrence.id)}
-          />
-        ))
+        <View className="space-y-3">
+          {occurrences.map((occurrence) => (
+            <OccurrenceCardAtom
+              key={occurrence.id}
+              title={occurrence.title}
+              description={occurrence.description}
+              created_at={occurrence.created_at}
+              status={occurrence.status}
+              student_id={occurrence.student_id}
+              kind={occurrence.kind}
+              severity={occurrence.severity}
+              id={occurrence.id}
+            />
+          ))}
+        </View>
       ) : (
-        <View className="items-center justify-center py-8">
-          <Feather name="inbox" size={48} color="#9ca3af" />
-          <Text className="text-gray-500 mt-2">Nenhuma ocorrência encontrada</Text>
+        <View className="flex items-center justify-center py-16 opacity-70">
+          <Feather name="inbox" size={50} color="#9CA3AF" />
+          <Text className="text-base text-gray-500 mt-3 font-medium">
+            Nenhuma ocorrência encontrada
+          </Text>
         </View>
       )}
     </View>
-  )
+  );
 }

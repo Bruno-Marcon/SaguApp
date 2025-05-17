@@ -1,104 +1,131 @@
-import { View, ScrollView } from 'react-native'
-import { useRouter } from 'expo-router'
-import { useUserProfile } from '@//hook/useUserProfile'
-import { ErrorMessage } from '../../atoms/indicators/errorMessage'
-import TemplateScreen from '../scrollView/templateScreen'
-import { ApresentationSection } from '../../molecules/section/apresentation/apresentationSectionWithStatus'
-import AttendanceSection from '../../molecules/section/attendance/sectionAttendance'
-import { useStats } from '@//hook/stats/useStats'
-import { SectionWithCarousel } from '../../organisms/carousel/sectionWithCarousel'
-import { useAuthorizationsWithNames } from '@//hook/authorizations/useAuthorizations'
-import { useOccurrenciesByRelator } from '@//hook/occurrence/useOccurenciesByRelator'
-import { useState, useEffect } from 'react'
-import { AuthorizationItem } from '../../../../types/authorizations'
-import { SectionWithCarouselOccurences } from '../../organisms/carousel/sectionWithCarouselOccurencies'
-import Loading from '../../atoms/indicators/loadingAtom'
+import { View, ScrollView } from 'react-native';
+import { useRouter } from 'expo-router';
+import { useEffect, useState } from 'react';
+import { ErrorMessage } from '../../atoms/indicators/errorMessage';
+import Loading from '../../atoms/indicators/loadingAtom';
+import TemplateScreen from '../scrollView/templateScreen';
+
+import { getUserInfo } from '@//storage/SecureUser';
+import { occurrenceService } from '@//services/occurrence/occurrenceService';
+import { authorizationService } from '@//services/authorizations/authorizationsService';
+import { statsService } from '@//services/dashBoard/stats';
+
+import { Occurrence } from '../../../../types/occurrence';
+import { Authorization } from '../../../../types/authorizations';
+import { StatsData } from '../../../../types/stats';
+
+import OccurrenceModal from '../../organisms/modal/occurrenceModal';
+import { ApresentationSection } from '../../molecules/section/apresentation/apresentationSectionWithStatus';
+import { SectionWithCarouselOccurences } from '../../organisms/carousel/sectionWithCarouselOccurencies';
+import { SectionWithCarousel } from '../../organisms/carousel/sectionWithCarousel';
 
 export const HomeScreen = () => {
-  const { userData, loading, error, refresh } = useUserProfile()
-  const { data } = useAuthorizationsWithNames()
-  const { stats, loading: statsLoading, error: statsError, refetch: refetchStats } = useStats()
-  const { occurrences, loading: occurrencesLoading, error: occurrencesError } = useOccurrenciesByRelator()
+  const [userData, setUserData] = useState<{ name: string } | null>(null);
+  const [authorizationData, setAuthorizationData] = useState<Authorization[]>([]);
+  const [occurrences, setOccurrences] = useState<Occurrence[]>([]);
+  const [selectedOccurrence, setSelectedOccurrence] = useState<Occurrence | null>(null);
+  const [stats, setStats] = useState<StatsData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const router = useRouter()
-  const [authorizationData, setAuthorizationData] = useState<AuthorizationItem[]>([])
+  const router = useRouter();
 
   useEffect(() => {
-    if (!loading && !error && data) {
-      setAuthorizationData(data)
-    }
-  }, [loading, error, data])
+    const fetchData = async () => {
+      try {
+        const [user, statsResponse, occurrencesResponse, authorizationsResponse] = await Promise.all([
+          getUserInfo(),
+          statsService.getStats(),
+          occurrenceService.getAll(),
+          authorizationService.getAll(),
+        ]);
+
+        setUserData(user);
+        setStats(statsResponse);
+        setOccurrences(occurrencesResponse.data);
+        setAuthorizationData(authorizationsResponse.data);
+      } catch (err: any) {
+        setError(err.message || 'Erro ao carregar dados');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const handleRefresh = async () => {
-    await refresh()
-    refetchStats()
-  }
+    try {
+      setLoading(true);
+      const [user, statsResponse] = await Promise.all([
+        getUserInfo(),
+        statsService.getStats(),
+      ]);
+
+      setUserData(user);
+      setStats(statsResponse);
+    } catch (err: any) {
+      setError(err.message || 'Erro ao atualizar dados');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleOccurrencesPress = () => {
-    router.push('/(panel)/occurences/occurences')
-  }
-  const handleAuthorizationPress = () => {
-    router.push('/(panel)/authorization/page')
-  }
+    router.push('/(panel)/occurences/occurences');
+  };
 
-  if (loading || statsLoading || occurrencesLoading) return <Loading/>
-  if (error || statsError || occurrencesError) {
-    const message = error || statsError || occurrencesError || 'Erro desconhecido'
-    return <ErrorMessage message={message} onRetry={handleRefresh} />
-  }
-  if (!userData) return <ErrorMessage message="Dados do usuário não encontrados" onRetry={handleRefresh} />
-  if (authorizationData.length === 0) return <ErrorMessage message="Nenhuma autorização encontrada." onRetry={() => {}} />
+  const handleAuthorizationPress = () => {
+    router.push('/(panel)/authorization/page');
+  };
+
+  if (loading) return <Loading />;
+  if (error) return <ErrorMessage message={error} onRetry={handleRefresh} />;
+  if (!userData) return <ErrorMessage message="Dados do usuário não encontrados" onRetry={handleRefresh} />;
 
   return (
-    <TemplateScreen withHeader={true}>
+    <TemplateScreen withHeader>
       <ScrollView className="flex-1">
         <ApresentationSection
           name={`Olá, ${userData.name}`}
           subtitle="Seja bem-vindo ao Sagu App"
-          statusCards={[ 
+          statusCards={[
             {
-              iconName: "calendar" as const,
-              title: "Agendamentos",
-              subtitle: stats ? stats.scheduled_appointments.toString() : 'Carregando...',
-              iconColor: "#F59E0B"
+              iconName: 'calendar',
+              title: 'Agend.',
+              subtitle: stats?.scheduled_appointments?.toString() || '...',
+              iconColor: '#F59E0B',
             },
             {
-              iconName: "alert-circle" as const,
-              title: "Ocorrências",
-              subtitle: stats ? stats.pending_occurrencies.toString() : 'Carregando...',
-              iconColor: "#EF4444"
+              iconName: 'alert-circle',
+              title: 'Ocorrências',
+              subtitle: stats?.pending_occurrencies?.toString() || '...',
+              iconColor: '#EF4444',
             },
             {
-              iconName: "edit" as const,
-              title: "Orientações",
-              subtitle: stats ? stats.pending_orientations.toString() : 'Carregando...',
-              iconColor: "#10B981"
-            }
+              iconName: 'edit',
+              title: 'Orientações',
+              subtitle: stats?.pending_orientations?.toString() || '...',
+              iconColor: '#10B981',
+            },
           ]}
         />
-        <View className="m-2">
-          <SectionWithCarouselOccurences
-            data={occurrences}
-            title={'Ocorrências'}
-            linkText={'Ver Todos'}
-            onPressLink={handleOccurrencesPress}
-            type={'occurrence'} />
-        </View>
-        <View className="m-2">
-          <SectionWithCarousel
-            data={authorizationData}
-            title={'Autorizações'}
-            linkText={'Ver Todas'}
-            onPressLink={handleAuthorizationPress}
-            type="authorization"
-          />
-        </View>
-        <AttendanceSection 
-          title="Eventos Agendados"
-          percentage={85} 
-          onPressLink={() => console.log('Navigate to attendance')}
-        />
+
+        <SectionWithCarouselOccurences
+          data={occurrences}
+          onPressLink={handleOccurrencesPress}
+          onCardPress={setSelectedOccurrence} title={'Ocorrencias'} linkText={'Ver todos'}        />
+
+        <SectionWithCarousel
+          data={authorizationData.map((item) => ({ id: item.id, rawData: item }))}
+          onPressLink={handleAuthorizationPress} title={'Autorizações'} linkText={'Ver todos'}        />
       </ScrollView>
+
+      <OccurrenceModal
+        visible={!!selectedOccurrence}
+        occurrence={selectedOccurrence}
+        onClose={() => setSelectedOccurrence(null)}
+      />
     </TemplateScreen>
-  )
-}
+  );
+};

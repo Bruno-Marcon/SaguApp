@@ -51,9 +51,7 @@ export default function TemplateScreen({
         {children}
       </ScrollView>
       
-      {withBottomBar && <BottomTabBar />}
-      
-      {/* HelpWidget agora está disponível em todas as telas usando TemplateScreen */}
+      {withBottomBar && <BottomTabBar />}      
       <HelpWidget />
     </View>
   )

@@ -1,28 +1,24 @@
-import { View, Text } from "react-native"
-import { Feather } from "@expo/vector-icons"
-import OccurrenceCardAtom from "../../atoms/card/cardAtom"
-import { AuthorizationItem } from "../../../../types/authorizations"
-import Loading from "../../atoms/indicators/loadingAtom"
+import { View, Text } from "react-native";
+import { Feather } from "@expo/vector-icons";
+import CardAuthorizationAtom from "../../atoms/card/cardAuthorizationAtom";
+import Loading from "../../atoms/indicators/loadingAtom";
+import { Authorization } from "../../../../types/authorizations";
 
-type AuthorizationsListProps = {
-  authorizations: AuthorizationItem[]
-  loading: boolean
+interface AuthorizationsListProps {
+  authorizations: Authorization[];
+  loading: boolean;
 }
 
 export default function AuthorizationsList({ authorizations, loading }: AuthorizationsListProps) {
-  if (loading) {
-    return <Loading />
-  }
+  if (loading) return <Loading />;
 
   return (
     <View className="mb-8">
       {authorizations.length > 0 ? (
-        authorizations.map((authorization, index) => (
-          <OccurrenceCardAtom
-            key={authorization.id || index}
-            title={authorization.title}
-            description={authorization.description}
-            createdAt={authorization.createdAt}
+        authorizations.map((authorization) => (
+          <CardAuthorizationAtom
+            key={authorization.id}
+            authorization={authorization}
             onPress={() => console.log('Visualizar autorização', authorization.id)}
           />
         ))
@@ -33,5 +29,5 @@ export default function AuthorizationsList({ authorizations, loading }: Authoriz
         </View>
       )}
     </View>
-  )
+  );
 }

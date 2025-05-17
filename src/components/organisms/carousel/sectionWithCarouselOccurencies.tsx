@@ -1,56 +1,37 @@
-import { FlatList, Text, TouchableOpacity, View } from 'react-native'
-import { Feather } from '@expo/vector-icons'
-import { PrimaryTitle } from '../../atoms/title/primaryTitle'
-import CardAtom from '../../atoms/card/cardAtom'
+import { FlatList, Text, TouchableOpacity, View } from 'react-native';
+import { Feather } from '@expo/vector-icons';
+import { PrimaryTitle } from '../../atoms/title/primaryTitle';
+import CardAtom from '../../atoms/card/cardAtom';
+import { Occurrence } from '../../../../types/occurrence';
 
 type Props = {
-  data: Array<{
-    id: string
-    attributes: {
-      title: string
-      description: string
-      created_at: string
-      status?: string
-    }
-    relationships: {
-      student?: {
-        data: {
-          id: string
-          attributes: {
-            name: string
-          }
-        }
-      }
-      relator?: {
-        data: {
-          id: string
-          attributes: {
-            name: string
-          }
-        }
-      }
-    }
-  }>
-  title: string
-  linkText: string
-  onPressLink: () => void
-  type: 'authorization' | 'occurrence'
-}
+  data: Occurrence[];
+  title: string;
+  linkText: string;
+  onPressLink: () => void;
+  onCardPress?: (occurrence: Occurrence) => void;
+};
 
 export const SectionWithCarouselOccurences = ({
   data,
   title,
   linkText,
   onPressLink,
-  type,
+  onCardPress,
 }: Props) => {
   return (
-    <View>
-      <View className="flex-row justify-between items-center">
-        <PrimaryTitle name={title} className="text-2xl font-bold text-gray-800" />
-        <TouchableOpacity className="flex-row items-center" onPress={onPressLink}>
-          <Text className="text-sm text-green-600 mr-1">{linkText}</Text>
-          <Feather name="chevron-right" size={20} color="#16a34a" />
+    <View className="mt-6 px-4">
+      <View className="flex-row justify-between items-center mb-4">
+        <View className="flex-row items-center space-x-2">
+          <Feather name="alert-circle" size={20} color="#F87171" />
+          <PrimaryTitle name={title} className="text-xl font-extrabold text-gray-800 tracking-tight" />
+        </View>
+        <TouchableOpacity
+          onPress={onPressLink}
+          className="flex-row items-center bg-green-50 px-3 py-1 rounded-full shadow-sm"
+        >
+          <Text className="text-sm font-semibold text-green-600 mr-1"> {linkText} </Text>
+          <Feather name="arrow-right" size={16} color="#16A34A" />
         </TouchableOpacity>
       </View>
 
@@ -59,31 +40,19 @@ export const SectionWithCarouselOccurences = ({
         keyExtractor={(item) => item.id}
         horizontal
         showsHorizontalScrollIndicator={false}
-        contentContainerStyle={{ paddingHorizontal: 16, flexGrow: 0 }}
-        renderItem={({ item }) => {
-          const title = item.attributes?.title || "Sem título"
-          const description = item.attributes?.description || "Sem descrição disponível"
-          const status = item.attributes?.status || "Status desconhecido"
-          const createdAt = item.attributes?.created_at || new Date().toString()
-
-          const studentName = item.relationships?.student?.data?.attributes?.name
-          const authorName = item.relationships?.relator?.data?.attributes?.name || "Relator desconhecido"
-
-          return (
-            <View style={{ width: 250 }}>
-              <CardAtom
-                title={title}
-                description={description}
-                createdAt={createdAt}
-                status={status}
-                authorName={authorName}
-                studentName={studentName}
-              />
-            </View>
-          )
+        contentContainerStyle={{
+          gap: 16,
+          paddingBottom: 8,
+          paddingTop: 2,
         }}
-        ItemSeparatorComponent={() => <View style={{ width: 16 }} />}
+        renderItem={({ item }) => (
+          <CardAtom
+            {...item}
+            onPress={() => onCardPress?.(item)}
+            className="w-[260px] transition-all duration-300 active:scale-95"
+          />
+        )}
       />
     </View>
-  )
-}
+  );
+};

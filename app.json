@@ -4,7 +4,7 @@
     "slug": "SaguIFC",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./src/assets/images/logo-ifc.png",
+    "icon": "./src/assets/images/logo-sagu-mobile-brancoBg.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
