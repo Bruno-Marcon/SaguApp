@@ -1,96 +1,106 @@
-import { View, Text, TouchableOpacity } from "react-native"
-import { Feather } from "@expo/vector-icons"
-import { formatDate } from "@//utils/dateUtils"
+import { View, Text, TouchableOpacity } from 'react-native';
+import { Feather } from '@expo/vector-icons';
+import { formatDate } from '@//utils/dateUtils';
+import { Occurrence } from '../../../../types/occurrence';
 
-interface CardAtomProps {
-  title: string
-  description: string
-  createdAt?: Date | string
-  authorName?: string
-  isNew?: boolean
-  status?: string
-  category?: string
-  iconName?: string
-  iconColor?: string
-  borderColor?: string
-  className?: string
-  onPress?: () => void
-  studentName?: string
-  parentName?: string
+interface CardAtomProps extends Occurrence {
+  onPress?: () => void;
+  iconName?: keyof typeof Feather.glyphMap;
+  iconColor?: string;
+  borderColor?: string;
+  className?: string;
 }
 
-export default function CardAtomOccurrences({
-  title = "Sem título",
-  description = "Sem descrição disponível.",
-  createdAt,
-  authorName = "Autor desconhecido",
-  isNew = true,
-  status = "Aberto",
-  category = "Geral",
-  iconName = "alert-triangle",
-  iconColor = "#F59E0B",
-  borderColor = "#F59E0B",
-  className = "mb-1 bg-white rounded-xl shadow-sm",
+export default function CardAtomOccurrencesList({
+  title,
+  description,
+  created_at,
+  status = 'Aberto',
+  kind,
+  severity,
+  iconName,
+  iconColor,
+  borderColor,
+  className = '',
   onPress,
-  studentName
 }: CardAtomProps) {
-  const today = new Date()
-  const formattedTime = createdAt
-    ? formatDate(createdAt)
-    : `Hoje às ${today.getHours()}:${today.getMinutes().toString().padStart(2, "0")}`
+  const formattedTime = formatDate(created_at);
+
+  const severityColorMap: Record<string, string> = {
+    low: '#10B981',      // Verde
+    medium: '#F59E0B',   // Amarelo
+    high: '#EF4444',     // Vermelho
+  };
+
+  const kindIconMap: Record<string, keyof typeof Feather.glyphMap> = {
+    discipline: 'alert-triangle',
+    academic: 'book-open',
+    attendance: 'clock',
+    default: 'file-text',
+  };
+
+  const finalColor = severityColorMap[severity || ''] || '#F59E0B';
+  const finalIcon = kindIconMap[kind || ''] || kindIconMap.default;
+
+  const statusColorClass =
+    status === 'Fechado'
+      ? 'bg-gray-100 text-gray-500'
+      : 'bg-orange-100 text-orange-600';
 
   return (
     <TouchableOpacity
       onPress={onPress}
-      className={`${className}`}
-      activeOpacity={0.7}
+      activeOpacity={0.9}
+      accessibilityRole="button"
+      accessibilityLabel={`Ocorrência: ${title}, status: ${status}`}
+      className={`bg-white rounded-3xl shadow-md border border-gray-100 overflow-hidden ${className}`}
+      style={{ width: '100%' }}
     >
+      {/* Borda lateral colorida */}
       <View
-        className="p-4 flex-row items-start"
-        style={{
-          borderLeftWidth: 4,
-          borderLeftColor: borderColor,
-          maxHeight: 200,
-        }}
-      >
-        <View className="mr-4 mt-2">
-          <Feather size={30} color={iconColor} />
+        className="w-[5px] rounded-tl-3xl rounded-bl-3xl absolute left-0 top-0 bottom-0"
+        style={{ backgroundColor: borderColor || finalColor }}
+      />
+
+      <View className="p-4 pl-6 flex-row items-start">
+        {/* Ícone da ocorrência */}
+        <View className="mr-4 mt-1">
+          <View className="bg-gray-100 p-2 rounded-xl">
+            <Feather name={iconName || finalIcon} size={22} color={iconColor || finalColor} />
+          </View>
         </View>
 
+        {/* Conteúdo */}
         <View className="flex-1">
-          <View className="flex-row items-center flex-wrap">
-            <Text className="text-base font-semibold text-gray-800 mr-2">{title}</Text>
-            {isNew && (
-              <View className="bg-orange-100 rounded-full">
-                <Text className="text-xs font-medium text-orange-600">{status}</Text>
-              </View>
-            )}
+          {/* Título e status */}
+          <View className="flex-row justify-between items-start mb-1">
+            <Text
+              className="text-base font-bold text-gray-900 flex-1"
+              numberOfLines={1}
+              ellipsizeMode="tail"
+            >
+              {title}
+            </Text>
+
+            <View className={`px-3 py-1 rounded-full shadow-sm ${statusColorClass}`}>
+              <Text className="text-[10px] font-bold uppercase tracking-wide">
+                {status}
+              </Text>
+            </View>
           </View>
 
-          <Text className="text-sm text-gray-600" numberOfLines={2}>
+          {/* Descrição */}
+          <Text className="text-sm text-gray-600 mt-0.5 leading-snug" numberOfLines={2}>
             {description}
           </Text>
 
-          <View className="mt-1">
-            <View className="flex-col mb-1">
-              <Text className="text-xs text-gray-500">{authorName}</Text>
-
-              {category && (
-                <View className="bg-blue-100 rounded-full mt-1 p-2 items-center">
-                  <Text className="text-xs font-medium text-blue-600">{category}</Text>
-                </View>
-              )}
-            </View>
-
-            <Text className="text-xs text-gray-400">{formattedTime}</Text>
-
-            {/* Exibir o nome do aluno e do responsável */}
-            {studentName && (
-              <Text className="text-xs text-gray-500">Aluno: {studentName}</Text>
-            )}
+          {/* Data */}
+          <View className="flex-row items-center mt-3">
+            <Feather name="calendar" size={12} color="#9CA3AF" />
+            <Text className="text-xs text-gray-400 ml-1">{formattedTime}</Text>
           </View>
         </View>
       </View>
     </TouchableOpacity>
-  )
+  );
 }

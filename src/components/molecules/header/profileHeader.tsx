@@ -3,6 +3,7 @@ import { View } from 'react-native'
 import { CustomText } from '../../atoms/text/text'
 import ProfileAvatar from '../../organisms/avatar/profileAvatar'
 import { ArrowBack } from '../../atoms/button/arrowBack'
+import Animated, { FadeInUp, FadeIn, SlideInLeft, BounceInUp } from 'react-native-reanimated';
 
 type ProfileHeaderProps = {
   name: string
@@ -18,26 +19,35 @@ export const ProfileHeader = ({
   onBackPress
 }: ProfileHeaderProps) => {
   return (
-    <View className="mb-8">
+    <View className="mb-10">
       {showBackButton && (
         <ArrowBack 
           onPress={onBackPress}
           className="mb-4"
-          color='#09a342'
-          size={29}
+          color='#16A34A'
+          size={28}
         />
       )}
+
       <View className="items-center">
-        <View className="bg-blue-100 rounded-full p-2 mb-4">
-          <ProfileAvatar size={80} modal={false}/>
-        </View>
-        
-        <CustomText variant="primary" size="xl" className="font-bold">
-          {name}
-        </CustomText>
-        <CustomText variant="secondary" size="base">
-          {email}
-        </CustomText>
+        <Animated.View
+          entering={FadeInUp.duration(600).delay(200)}
+          className="bg-green-100 p-2 rounded-full border-2 border-green-500 mb-4 shadow-sm"
+        >
+          <ProfileAvatar size={80} modal={false} />
+        </Animated.View>
+
+        <Animated.View entering={FadeIn.delay(400)}>
+          <CustomText variant="primary" size="xl" className="font-bold text-gray-900">
+            {name}
+          </CustomText>
+        </Animated.View>
+
+        <Animated.View entering={FadeIn.delay(600)}>
+          <CustomText variant="secondary" size="sm" className="text-gray-500">
+            {email}
+          </CustomText>
+        </Animated.View>
       </View>
     </View>
   )

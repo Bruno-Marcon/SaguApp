@@ -6,6 +6,7 @@ import { ProfileMenu } from '../../organisms/menu/profileMenu'
 import { Button } from '../../atoms/button/button'
 import { Logout } from '@//services/auth/authService'
 import TemplateScreen from '../scrollView/templateScreen'
+import Animated, { BounceInUp } from 'react-native-reanimated'
 
 const handleLogout = async () => {
   await Logout()
@@ -25,28 +26,32 @@ export const ProfileTemplate = ({
 }: ProfileTemplateProps) => {
   return (
     <TemplateScreen withHeader={false} withBottomBar={false}>
-      <View className="flex-1 px-4 pt-8">
-        <View className="mt-4">
+      <View className="flex-1 px-4 pt-6 bg-white">
+        <View className="mt-2">
           <ProfileHeader 
             name={name} 
             email={email} 
             showBackButton={showBackButton}
           />
         </View>
-        
+
         <View className="mt-6">
           <ProfileMenu />
         </View>
-        
-        <View className="mt-auto mb-6">
+
+        <Animated.View
+          entering={BounceInUp.delay(100)}
+          className="mt-auto mb-10"
+        >
           <Button 
             title="Sair"
             variant="primary" 
             size="lg"
-            className="w-full"
+            className="w-full rounded-2xl"
             onPress={handleLogout}
           />
-        </View>
+        </Animated.View>
+
       </View>
     </TemplateScreen>
   )

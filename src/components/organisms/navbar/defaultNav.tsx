@@ -12,10 +12,10 @@ type DefaultNavBarProps = {
 
 const DefaultNavBar: React.FC<DefaultNavBarProps> = ({
   logo = <LogoIFC className="w-14 h-14" />,
-  avatar = <ProfileAvatar size={40} modal={true}/>,
+  avatar = <ProfileAvatar size={40} modal={true} />,
 }) => {
   return (
-    <View className="flex-row items-center gap-x-4 justify-between px-4 py-4">
+    <View className="flex-row items-center gap-x-4 justify-between px-4 pt-safe pb-2 bg-[#0E7C4A]">
       {logo}
 
       <View className="flex-row items-center gap-x-4">

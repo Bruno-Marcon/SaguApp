@@ -26,9 +26,9 @@ export const SectionWithCarousel = ({
   return (
     <View className="mt-6 px-4">
       <View className="flex-row justify-between items-center mb-4">
-        <View className="flex-row items-center space-x-2">
+        <View className="flex-row gap-x-2 items-center space-x-2">
           <Feather name="file-text" size={20} color="#3B82F6" />
-          <PrimaryTitle name={title} className="text-xl font-extrabold text-gray-800 tracking-tight" />
+          <PrimaryTitle name={title} className="text-xl gap-x-2 font-extrabold text-gray-800 tracking-tight" />
         </View>
 
         <TouchableOpacity

@@ -18,6 +18,9 @@ import OccurrenceModal from '../../organisms/modal/occurrenceModal';
 import { ApresentationSection } from '../../molecules/section/apresentation/apresentationSectionWithStatus';
 import { SectionWithCarouselOccurences } from '../../organisms/carousel/sectionWithCarouselOccurencies';
 import { SectionWithCarousel } from '../../organisms/carousel/sectionWithCarousel';
+import NewsCarousel from '../../molecules/section/news/newsCarrousel';
+
+
 
 export const HomeScreen = () => {
   const [userData, setUserData] = useState<{ name: string } | null>(null);
@@ -111,6 +114,8 @@ export const HomeScreen = () => {
           ]}
         />
 
+        <NewsCarousel />
+        
         <SectionWithCarouselOccurences
           data={occurrences}
           onPressLink={handleOccurrencesPress}

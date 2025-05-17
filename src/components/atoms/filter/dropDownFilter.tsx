@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text } from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
+import { Feather } from '@expo/vector-icons';
 
 type Option = {
   label: string;
@@ -21,8 +22,8 @@ export default function DropdownFilter({
   onChange,
 }: DropdownFilterProps) {
   return (
-    <View className="mb-3 w-full">
-      <Text className="text-xs text-gray-500 mb-1">{label}</Text>
+    <View className="w-full">
+      <Text className="text-sm font-medium text-gray-700 mb-2">{label}</Text>
 
       <RNPickerSelect
         onValueChange={onChange}
@@ -30,22 +31,36 @@ export default function DropdownFilter({
         items={options}
         useNativeAndroidPickerStyle={false}
         placeholder={{ label: `Selecione ${label.toLowerCase()}`, value: '' }}
+        Icon={() => (
+          <Feather name="chevron-down" size={20} color="#6B7280" style={{ marginRight: 12 }} />
+        )}
         style={{
           inputAndroid: {
             borderWidth: 1,
             borderColor: '#D1D5DB',
-            padding: 10,
-            borderRadius: 8,
+            paddingVertical: 12,
+            paddingHorizontal: 14,
+            borderRadius: 12,
             color: '#111827',
-            backgroundColor: '#fff',
+            backgroundColor: '#F9FAFB',
+            fontSize: 16,
           },
           inputIOS: {
             borderWidth: 1,
             borderColor: '#D1D5DB',
-            padding: 10,
-            borderRadius: 8,
+            paddingVertical: 12,
+            paddingHorizontal: 14,
+            borderRadius: 12,
             color: '#111827',
-            backgroundColor: '#fff',
+            backgroundColor: '#F9FAFB',
+            fontSize: 16,
+          },
+          iconContainer: {
+            top: 14,
+            right: 10,
+          },
+          placeholder: {
+            color: '#9CA3AF',
           },
         }}
       />

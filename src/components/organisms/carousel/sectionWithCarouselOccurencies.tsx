@@ -22,7 +22,7 @@ export const SectionWithCarouselOccurences = ({
   return (
     <View className="mt-6 px-4">
       <View className="flex-row justify-between items-center mb-4">
-        <View className="flex-row items-center space-x-2">
+        <View className="flex-row gap-x-2 items-center space-x-2">
           <Feather name="alert-circle" size={20} color="#F87171" />
           <PrimaryTitle name={title} className="text-xl font-extrabold text-gray-800 tracking-tight" />
         </View>

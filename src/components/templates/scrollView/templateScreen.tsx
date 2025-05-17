@@ -45,13 +45,20 @@ export default function TemplateScreen({
         }}
         showsVerticalScrollIndicator={false}
         refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          <RefreshControl 
+            refreshing={refreshing} 
+            onRefresh={onRefresh} 
+            colors={['#0E7C4A']}    // Android
+            tintColor="#0E7C4A"     // iOS
+          />
         }
       >
         {children}
       </ScrollView>
       
-      {withBottomBar && <BottomTabBar />}      
+      {withBottomBar && <BottomTabBar />}
+      
+      {/* HelpWidget agora está disponível em todas as telas usando TemplateScreen */}
       <HelpWidget />
     </View>
   )

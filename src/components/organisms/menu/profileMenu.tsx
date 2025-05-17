@@ -1,5 +1,6 @@
 import { View } from 'react-native'
 import { MenuItem } from '../../molecules/menu/menuItem'
+import Animated, { SlideInLeft } from 'react-native-reanimated'
 
 const menuItems = [
   { 
@@ -25,14 +26,18 @@ const menuItems = [
 
 export const ProfileMenu = () => {
   return (
-    <View className="gap-y-5">
+    <View className="gap-y-4">
       {menuItems.map((item, index) => (
-        <MenuItem
+        <Animated.View
+          entering={SlideInLeft.delay(index * 100).duration(400)}
           key={index}
-          iconName={item.iconName}
-          iconFamily={item.iconFamily}
-          title={item.title}
-        />
+        >
+          <MenuItem
+            iconName={item.iconName}
+            iconFamily={item.iconFamily}
+            title={item.title}
+          />
+        </Animated.View>
       ))}
     </View>
   )
