@@ -12,7 +12,7 @@ export default function LogoSagu({
 }: LogoIFCProps) {
   return (
     <Image
-      source={source ?? require("../../../assets/images/logo-sagu-mobile-brancoBg.png")}
+      source={source ?? require("../../../assets/images/logo-sagu-mobile-borda-branca.png")}
       className={className}
       resizeMode="contain"
       {...rest}
