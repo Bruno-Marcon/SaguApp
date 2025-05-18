@@ -16,9 +16,10 @@ type Option = {
 type Props = {
   refreshing: boolean;
   onRefreshEnd: () => void;
+  onOccurrencePress: (occurrence: Occurrence) => void;
 };
 
-export default function OccurrenceTemplate({ refreshing, onRefreshEnd }: Props) {
+export default function OccurrenceTemplate({ refreshing, onRefreshEnd, onOccurrencePress }: Props) {
   const [allOccurrences, setAllOccurrences] = useState<Occurrence[]>([]);
   const [filteredOccurrences, setFilteredOccurrences] = useState<Occurrence[]>([]);
   const [loading, setLoading] = useState(false);
@@ -113,43 +114,49 @@ export default function OccurrenceTemplate({ refreshing, onRefreshEnd }: Props) 
       <OccurrenceHeader title="Ocorrências" />
 
       <GenericFilters
-      status={{
-        value: status,
-        onChange: setStatus,
-        options: [
-          { label: 'Todos', value: 'Todos' },
-          { label: 'Aberta', value: 'Aberta' },
-          { label: 'Em andamento', value: 'Em andamento' },
-          { label: 'Resolvida', value: 'Resolvida' },
-        ],
-      }}
-      severity={{
-        value: severity,
-        onChange: setSeverity,
-        options: [
-          { label: 'Todos', value: 'Todos' },
-          { label: 'Alta', value: 'Alta' },
-          { label: 'Média', value: 'Média' },
-          { label: 'Baixa', value: 'Baixa' },
-        ],
-      }}
-      student={{
-        value: studentId,
-        onChange: setStudentId,
-        options: studentOptions,
-      }}
-      dateRange={{
-        start: dateRange.start,
-        end: dateRange.end,
-        onStartChange: (date) => setDateRange((prev) => ({ ...prev, start: date })),
-        onEndChange: (date) => setDateRange((prev) => ({ ...prev, end: date })),
-      }}
-    />
+        status={{
+          value: status,
+          onChange: setStatus,
+          options: [
+            { label: 'Todos', value: 'Todos' },
+            { label: 'Aberta', value: 'Aberta' },
+            { label: 'Em andamento', value: 'Em andamento' },
+            { label: 'Resolvida', value: 'Resolvida' },
+          ],
+        }}
+        severity={{
+          value: severity,
+          onChange: setSeverity,
+          options: [
+            { label: 'Todos', value: 'Todos' },
+            { label: 'Alta', value: 'Alta' },
+            { label: 'Média', value: 'Média' },
+            { label: 'Baixa', value: 'Baixa' },
+          ],
+        }}
+        student={{
+          value: studentId,
+          onChange: setStudentId,
+          options: studentOptions,
+        }}
+        dateRange={{
+          start: dateRange.start,
+          end: dateRange.end,
+          onStartChange: (date) => setDateRange((prev) => ({ ...prev, start: date })),
+          onEndChange: (date) => setDateRange((prev) => ({ ...prev, end: date })),
+        }}
+      />
 
       {loading ? (
         <ActivityIndicator size="large" color="#0E7C4A" className="my-4" />
       ) : filteredOccurrences.length > 0 ? (
-        filteredOccurrences.map(occ => <OccurrenceCard key={occ.id} occurrence={occ} />)
+        filteredOccurrences.map(occ => (
+          <OccurrenceCard
+            key={occ.id}
+            occurrence={occ}
+            onPress={() => onOccurrencePress(occ)} // <- chama o modal
+          />
+        ))
       ) : (
         <Text className="text-center text-gray-500 mt-4">Nenhuma ocorrência encontrada.</Text>
       )}

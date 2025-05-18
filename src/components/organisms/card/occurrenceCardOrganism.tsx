@@ -1,30 +1,30 @@
-import { View, TouchableOpacity } from 'react-native'
-import { format } from 'date-fns'
-import { ptBR } from 'date-fns/locale'
-import { Occurrence } from '../../../../types/occurrence'
-import KindIcon from '../../atoms/icons/kindIcon'
-import OccurrenceCardHeader from '../../molecules/header/occurrenceCardHeaderMolecules'
-import OccurrenceCardBody from '../../molecules/card/occurrenceCardBodyMolecules'
-import OccurrenceCardMeta from '../../molecules/card/occurrenceCardMetaMolecules'
+import { View, TouchableOpacity } from 'react-native';
+import { format } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
+import { Occurrence } from '../../../../types/occurrence';
+import KindIcon from '../../atoms/icons/kindIcon';
+import OccurrenceCardHeader from '../../molecules/header/occurrenceCardHeaderMolecules';
+import OccurrenceCardBody from '../../molecules/card/occurrenceCardBodyMolecules';
+import OccurrenceCardMeta from '../../molecules/card/occurrenceCardMetaMolecules';
 
 type Props = {
-  occurrence: Occurrence
-  onPress?: () => void
-}
+  occurrence: Occurrence;
+  onPress?: () => void;
+};
 
 export default function OccurrenceCard({ occurrence, onPress }: Props) {
   const formattedTime = format(new Date(occurrence.created_at), 'dd/MM/yyyy HH:mm', {
     locale: ptBR,
-  })
+  });
 
   const severityColorMap: Record<string, string> = {
     low: '#10B981',
     medium: '#F59E0B',
     high: '#EF4444',
-  }
+  };
 
-  const normalizedSeverity = (occurrence.severity || '').toLowerCase()
-  const color = severityColorMap[normalizedSeverity] || '#F59E0B'
+  const normalizedSeverity = occurrence.severity?.toLowerCase() ?? 'medium';
+  const color = severityColorMap[normalizedSeverity] || '#F59E0B';
 
   return (
     <TouchableOpacity
@@ -41,12 +41,12 @@ export default function OccurrenceCard({ occurrence, onPress }: Props) {
       />
 
       <View className="p-4 pl-6 flex-row items-start">
-        {/* Ícone */}
+        {/* Ícone da ocorrência */}
         <View className="mr-4 mt-1">
           <KindIcon kind={occurrence.kind} color={color} />
         </View>
 
-        {/* Conteúdo */}
+        {/* Conteúdo textual do card */}
         <View className="flex-1">
           <OccurrenceCardHeader
             title={occurrence.title}
@@ -58,5 +58,5 @@ export default function OccurrenceCard({ occurrence, onPress }: Props) {
         </View>
       </View>
     </TouchableOpacity>
-  )
+  );
 }
