@@ -2,7 +2,7 @@ import { View } from "react-native"
 import { JSX } from "react"
 import ProfileAvatar from "../avatar/profileAvatar"
 import LogoSagu from "../../atoms/logo/logoSagu"
-// import { BellWithModal } from "../header/bell/bellWithModal"
+import { BellWithModal } from "../header/bell/bellWithModal"
 
 type DefaultNavBarProps = {
   logo?: JSX.Element
@@ -19,7 +19,7 @@ const DefaultNavBar: React.FC<DefaultNavBarProps> = ({
       {logo}
 
       <View className="flex-row items-center gap-x-4">
-        {/* <BellWithModal/> */}
+        <BellWithModal/>
         {avatar}
       </View>
     </View>

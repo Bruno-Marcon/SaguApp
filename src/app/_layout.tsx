@@ -6,12 +6,29 @@ import * as Font from "expo-font"
 import { Asset } from "expo-asset"
 import { useEffect, useState, useCallback } from "react"
 import { View } from "react-native"
+import * as Notifications from "expo-notifications"
+
+import { registerForPushNotificationsAsync } from "../services/notification/registerForPushNotifications"
+import { useNotificationListener } from "../services/notification/notificationsListner"
+import { useNotificationWatcher } from "../hook/useNotificationWatcher"
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowBanner: true,
+    shouldPlaySound: true,
+    shouldSetBadge: false,
+    shouldShowList: true,
+  }),
+})
 
 SplashScreen.preventAutoHideAsync()
 
 export default function RootLayout() {
   const [appIsReady, setAppIsReady] = useState(false)
 
+  useNotificationListener()
+  useNotificationWatcher()
+  
   useEffect(() => {
     async function prepare() {
       try {
@@ -24,8 +41,9 @@ export default function RootLayout() {
         ])
 
         await Promise.all([fontPromise, imagePromise])
+        await registerForPushNotificationsAsync()
       } catch (e) {
-        console.warn("Erro ao carregar assets:", e)
+        console.warn("Erro ao carregar assets ou registrar notificações:", e)
       } finally {
         setAppIsReady(true)
         await SplashScreen.hideAsync()
@@ -41,9 +59,7 @@ export default function RootLayout() {
     }
   }, [appIsReady])
 
-  if (!appIsReady) {
-    return null
-  }
+  if (!appIsReady) return null
 
   return (
     <View style={{ flex: 1 }} onLayout={onLayoutRootView}>

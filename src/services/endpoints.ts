@@ -43,16 +43,13 @@ export const endpoints = {
     root: '/orientations',
     show: (id: string) => `/orientations/${id}`,
   },
-  document: {
-    root: '/documents',
-  },
-  classrooms: {
-    root: '/classrooms',
-  },
   conditions: {
     root: '/conditions',
   },
   announcements: {
     root: '/announcements',
   },
+  expoToken: {
+    root: '/push_tokens'
+  }
 };
