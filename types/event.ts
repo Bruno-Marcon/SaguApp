@@ -1,14 +1,15 @@
-export interface Event {
-    id: string;
-    type: string;
-    attributes: {
-      description: string;
-      created_at: string;
-      author_id: string;
-      eventable_id: string;
-      target_id: string;
-    };
-  }
+export type Event = {
+  id: string;
+  type: string;
+  attributes: {
+    description: string;
+    created_at: string;
+    author_id: string;
+    eventable_id: string;
+    eventable_type: string; // ✅ adicionado
+    target_id?: string;
+  };
+};
   
   export interface EventsResponse {
     data: Event[];

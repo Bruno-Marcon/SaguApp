@@ -1,70 +1,124 @@
-// Atualizado: OccurrenceModal.tsx com estilo moderno e acessibilidade
-import { Modal, View, Text, TouchableOpacity } from 'react-native';
-import { Feather } from '@expo/vector-icons';
+import React, { useEffect, useState } from 'react';
+import {
+  Modal,
+  View,
+  ScrollView,
+  TouchableOpacity,
+  Text,
+  ActivityIndicator,
+} from 'react-native';
+
 import { Occurrence } from '../../../../types/occurrence';
-import { formatDate } from '@//utils/dateUtils';
+import { Event as OccurrenceEvent } from '../../../../types/event';
+
+import { occurrenceService } from '@//services/occurrence/occurrenceService';
+import { eventService } from '@//services/events/eventServices';
+
+
+import CommentList from '../../molecules/comments/commentList';
+import CommentInput from '../../atoms/input/commentInput';
+import OccurrenceModalHeader from '../../molecules/header/occurrenceModalHeader';
+import TagGroup from '../../molecules/badge/tagGroup';
+import OccurrenceDetailsSectionModal from '../../molecules/section/occurence/OccurrenceDetailsSectionModal';
 
 interface Props {
   visible: boolean;
   onClose: () => void;
-  occurrence: Occurrence | null;
+  occurrenceId: string | null;
+  occurrence?: Occurrence | null;
 }
 
-export default function OccurrenceModal({ visible, onClose, occurrence }: Props) {
-  if (!occurrence) return null;
+export default function OccurrenceDetailModal({
+  visible,
+  onClose,
+  occurrenceId,
+  occurrence: initialOccurrence,
+}: Props) {
+  const [occurrence, setOccurrence] = useState<Occurrence | null>(initialOccurrence ?? null);
+  const [events, setEvents] = useState<OccurrenceEvent[]>([]);
+  const [comment, setComment] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
 
-  const { title, description, created_at, status, kind, severity } = occurrence;
+  useEffect(() => {
+    if (!visible || (!occurrenceId && !initialOccurrence)) return;
+
+    const fetchDetails = async () => {
+      setLoading(true);
+      try {
+        const occData = await occurrenceService.getById(occurrenceId!);
+        const allEvents = await eventService.getAll();
+        const filteredEvents = allEvents.data.filter(
+          (e) => e.attributes.eventable_id === occData.id
+        );
+        setOccurrence(occData);
+        setEvents(filteredEvents);
+      } catch (err) {
+        console.error('Erro ao buscar detalhes:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDetails();
+  }, [visible, occurrenceId, initialOccurrence]);
+
+  const handleSendComment = async () => {
+    if (!comment.trim() || !occurrenceId) return;
+    setSubmitting(true);
+    try {
+      await eventService.create({
+        eventable_id: occurrenceId,
+        eventable_type: 'Occurrency',
+        description: comment.trim(),
+      });
+      setComment('');
+      const allEvents = await eventService.getAll();
+      const filteredEvents = allEvents.data.filter(
+        (e) => e.attributes.eventable_id === occurrenceId
+      );
+      setEvents(filteredEvents);
+    } catch (err) {
+      console.error('Erro ao enviar comentário:', err);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  if (!visible || (loading && !occurrence)) return null;
 
   return (
-    <Modal visible={visible} transparent animationType="slide" onRequestClose={onClose}>
-      <View className="flex-1 justify-center items-center bg-black/60 px-4">
-        <View className="bg-white rounded-3xl w-full p-6 shadow-lg shadow-black/20">
+    <Modal visible={visible} animationType="slide" transparent onRequestClose={onClose}>
+      <View className="flex-1 bg-black/60 justify-center items-center px-4">
+        <View className="bg-white rounded-3xl p-5 w-full max-h-[90%]">
+          <OccurrenceModalHeader title={occurrence?.title ?? '-'} onClose={onClose} />
+
+          <TagGroup
+            status={occurrence?.status}
+            kind={occurrence?.kind}
+            severity={occurrence?.severity}
+          />
+
+          <ScrollView className="mb-2">
+            <OccurrenceDetailsSectionModal occurrence={occurrence!} />
+
+            <Text className="text-base font-semibold text-gray-700 mb-2">Comentários</Text>
+            <CommentList events={events} loading={loading} />
+
+            <CommentInput value={comment} onChangeText={setComment} />
+          </ScrollView>
+
           <TouchableOpacity
-            onPress={onClose}
-            accessibilityRole="button"
-            accessibilityLabel="Fechar modal"
-            className="absolute top-4 right-4"
+            onPress={handleSendComment}
+            disabled={submitting}
+            className="bg-green-600 mt-2 py-3 rounded-xl"
           >
-            <Feather name="x" size={24} color="#6B7280" />
+            <Text className="text-white font-semibold text-center">
+              {submitting ? 'Enviando...' : 'Enviar Comentário'}
+            </Text>
           </TouchableOpacity>
-
-          <View className="mb-4">
-            <Text className="text-2xl font-bold text-gray-900" accessibilityRole="header">
-              {title}
-            </Text>
-            <View className="flex-row items-center mt-1 gap-x-1">
-              <Feather name="calendar" size={14} color="#9CA3AF" />
-              <Text className="text-sm text-gray-500">{formatDate(created_at)}</Text>
-            </View>
-          </View>
-
-          <View className="mb-4">
-            <Text className="text-base text-gray-700 leading-relaxed">
-              {description}
-            </Text>
-          </View>
-
-          <View className="flex-row flex-wrap gap-2">
-            <Tag label={`Status: ${status ?? 'N/A'}`} color="orange" />
-            <Tag label={`Gravidade: ${severity ?? 'N/A'}`} color="red" />
-            <Tag label={`Tipo: ${kind ?? 'N/A'}`} color="blue" />
-          </View>
         </View>
       </View>
     </Modal>
-  );
-}
-
-function Tag({ label, color }: { label: string; color: 'orange' | 'red' | 'blue' }) {
-  const colors = {
-    orange: { bg: 'bg-orange-100', text: 'text-orange-700' },
-    red: { bg: 'bg-red-100', text: 'text-red-700' },
-    blue: { bg: 'bg-blue-100', text: 'text-blue-700' },
-  }[color];
-
-  return (
-    <View className={`rounded-full px-3 py-1 ${colors.bg}`}>
-      <Text className={`text-xs font-semibold ${colors.text}`}>{label}</Text>
-    </View>
   );
 }

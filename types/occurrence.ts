@@ -7,12 +7,17 @@ export type Occurrence = {
   severity?: string;
   created_at: string;
   student_id: string;
+  student_name?: string;
+  relator_name?: string;
+  responsible_name?: string;
+  private?: boolean
 };
 
 export interface OccurrenceFilters {
   page?: number;
   severity?: string;
   status?: string;
+  student_id?: string;
 }
 
 export interface OccurrenceResponse {
@@ -21,5 +26,6 @@ export interface OccurrenceResponse {
     total?: number;
     current_page?: number;
     last_page?: number;
+    total_pages?: number;
   };
 }

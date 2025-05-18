@@ -127,10 +127,11 @@ export const HomeScreen = () => {
       </ScrollView>
 
       <OccurrenceModal
-        visible={!!selectedOccurrence}
-        occurrence={selectedOccurrence}
-        onClose={() => setSelectedOccurrence(null)}
-      />
+      visible={!!selectedOccurrence}
+      onClose={() => setSelectedOccurrence(null)}
+      occurrenceId={selectedOccurrence?.id || null}
+      occurrence={selectedOccurrence}
+    />
     </TemplateScreen>
   );
 };
