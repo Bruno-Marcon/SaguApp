@@ -1,21 +1,23 @@
-import { View, Text, TouchableOpacity } from 'react-native';
-import { Feather } from '@expo/vector-icons';
-import { formatDate } from '@//utils/dateUtils';
-import { Occurrence } from '../../../../types/occurrence';
+import { View, Text, TouchableOpacity } from 'react-native'
+import { Feather } from '@expo/vector-icons'
+import { formatDate } from '@//utils/dateUtils'
+import { Occurrence } from '../../../../types/occurrence'
+import StatusBadge from '../../atoms/badge/statusBadge'
+import SeverityBadge from '../../atoms/badge/severityBadge'
 
 interface CardAtomProps extends Occurrence {
-  onPress?: () => void;
-  iconName?: keyof typeof Feather.glyphMap;
-  iconColor?: string;
-  borderColor?: string;
-  className?: string;
+  onPress?: () => void
+  iconName?: keyof typeof Feather.glyphMap
+  iconColor?: string
+  borderColor?: string
+  className?: string
 }
 
 export default function CardAtom({
   title,
   description,
   created_at,
-  status = 'Aberto',
+  status,
   kind,
   severity,
   iconName,
@@ -24,23 +26,23 @@ export default function CardAtom({
   className = '',
   onPress,
 }: CardAtomProps) {
-  const formattedTime = formatDate(created_at);
+  const formattedTime = formatDate(created_at)
 
   const severityColorMap: Record<string, string> = {
     low: '#10B981',
     medium: '#F59E0B',
     high: '#EF4444',
-  };
+  }
 
   const kindIconMap: Record<string, keyof typeof Feather.glyphMap> = {
     discipline: 'alert-triangle',
     academic: 'book-open',
     attendance: 'clock',
     default: 'file-text',
-  };
+  }
 
-  const finalColor = severityColorMap[severity || ''] || '#F59E0B';
-  const finalIcon = kindIconMap[kind || ''] || kindIconMap.default;
+  const finalColor = severityColorMap[severity || ''] || '#F59E0B'
+  const finalIcon = kindIconMap[kind || ''] || kindIconMap.default
 
   return (
     <TouchableOpacity
@@ -67,7 +69,7 @@ export default function CardAtom({
 
         {/* Conteúdo */}
         <View className="flex-1">
-          {/* Título + Status */}
+          {/* Título + Badges */}
           <View className="flex-row justify-between items-start mb-1">
             <Text
               className="text-base font-bold text-gray-900 flex-1"
@@ -77,10 +79,8 @@ export default function CardAtom({
               {title}
             </Text>
 
-            <View className="bg-orange-50 px-3 py-1 rounded-full shadow-sm">
-              <Text className="text-[10px] font-bold text-orange-600 uppercase tracking-wide">
-                {status}
-              </Text>
+            <View className="flex flex-col items-end gap-y-1 ml-2">
+              {status && <StatusBadge status={status} />}
             </View>
           </View>
 
@@ -97,5 +97,5 @@ export default function CardAtom({
         </View>
       </View>
     </TouchableOpacity>
-  );
+  )
 }

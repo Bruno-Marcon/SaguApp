@@ -1,75 +1,97 @@
-import { useEffect, useMemo, useState } from 'react';
-import { ScrollView, View, Text, TouchableOpacity } from 'react-native';
-import TemplateScreen from '../../../components/templates/scrollView/templateScreen';
-import { OccurrencesHeader } from '../../organisms/header/occurrencesHeader';
-import OccurrencesList from '../../organisms/list/occurencesList';
-import { useRouter } from 'expo-router';
-import { Occurrence } from '../../../../types/occurrence';
-import { occurrenceService } from '@//services/occurrence/occurrenceService';
-import { Feather } from '@expo/vector-icons';
+import { useEffect, useState } from 'react'
+import { View, ActivityIndicator, Text } from 'react-native'
+import { Occurrence } from '../../../../types/occurrence'
+import { occurrenceService } from '@//services/occurrence/occurrenceService'
+import { OccurrenceHeader } from '../../organisms/header/occurrencesHeader'
+import DropdownFilter from '../../atoms/filter/dropDownFilter'
+import OccurrenceList from '../../organisms/list/occurencesList'
 
-export default function OccurrencesTemplate() {
-  const router = useRouter();
-  const [classFilter, setClassFilter] = useState<string>('Todos');
-  const [yearFilter, setYearFilter] = useState<string>('2024');
-  const [statusFilter, setStatusFilter] = useState<string>('Todos');
-  const [studentFilter, setStudentFilter] = useState<string>('');
-  const [dateFilter, setDateFilter] = useState<string>('');
-  const [occurrences, setOccurrences] = useState<Occurrence[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+type Props = {
+  refreshing: boolean
+  onRefreshEnd: () => void
+}
 
-  const filters = useMemo(() => ({
-    status: statusFilter === 'Todos' ? undefined : statusFilter,
-    student_id: studentFilter || undefined,
-    year: yearFilter,
-    classId: classFilter === 'Todos' ? undefined : classFilter,
-    date_range: dateFilter || undefined,
-  }), [statusFilter, studentFilter, yearFilter, classFilter, dateFilter]);
+export default function OccurrenceTemplate({ refreshing, onRefreshEnd }: Props) {
+  const [occurrences, setOccurrences] = useState<Occurrence[]>([])
+  const [loading, setLoading] = useState(true)
+
+  const [status, setStatus] = useState('Todos')
+  const [severity, setSeverity] = useState('Todos')
+
+  const fetchData = async () => {
+    setLoading(true)
+    try {
+      const response = await occurrenceService.getAll({
+        status: status !== 'Todos' ? status : undefined,
+        severity: severity !== 'Todos' ? severity : undefined,
+      })
+      setOccurrences(response.data)
+    } catch (err) {
+      console.error('Erro ao buscar ocorrências:', err)
+    }
+    setLoading(false)
+    onRefreshEnd()
+  }
 
   useEffect(() => {
-    const fetchOccurrences = async () => {
-      try {
-        const response = await occurrenceService.getAll(filters);
-        setOccurrences(response.data);
-      } catch (error) {
-        console.error('Erro ao buscar ocorrências:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchOccurrences();
-  }, [filters]);
+    fetchData()
+  }, [status, severity])
 
-  const handleBackPress = () => {
-    if (router.canGoBack()) {
-      router.back();
-    } else {
-      router.replace('/');
-    }
-  };
+  useEffect(() => {
+    if (refreshing) fetchData()
+  }, [refreshing])
+
+  const today = occurrences.filter((o) =>
+    new Date(o.created_at).toDateString() === new Date().toDateString()
+  )
+
+  const others = occurrences.filter((o) =>
+    new Date(o.created_at).toDateString() !== new Date().toDateString()
+  )
+
+  if (loading && !refreshing) {
+    return (
+      <View className="flex-1 justify-center items-center">
+        <ActivityIndicator size="large" color="#0E7C4A" />
+      </View>
+    )
+  }
 
   return (
-    <TemplateScreen withHeader={false}>
-      <ScrollView className="flex-1 px-4 pt-12 bg-white">
-        {/* Área de filtros com visual inspirado na home */}
-        <View className="bg-white rounded-2xl px-4 py-4 shadow-sm border border-gray-100 mb-4">
-          <OccurrencesHeader
-            showBackButton={true}
-            onBackPress={handleBackPress}
-            classValue={classFilter}
-            yearValue={yearFilter}
-            statusValue={statusFilter}
-            onClassChange={setClassFilter}
-            onYearChange={setYearFilter}
-            onStatusChange={setStatusFilter}
-            onStudentChange={setStudentFilter}
-            onDateChange={setDateFilter}
-          />
-        </View>
+    <View className="flex-1 bg-gray-50">
+      <OccurrenceHeader title="Ocorrências Recentes" />
 
-        {/* Lista com cards modernos */}
-        <OccurrencesList occurrences={occurrences} loading={loading} />
-      </ScrollView>
-    </TemplateScreen>
-  );
+      <View className="px-4 pt-2">
+        <DropdownFilter
+          label="Status"
+          selected={status}
+          onSelect={setStatus}
+          options={[
+            { label: 'Todos', value: 'Todos' },
+            { label: 'Aberta', value: 'Aberta' },
+            { label: 'Em andamento', value: 'Em andamento' },
+            { label: 'Resolvida', value: 'Resolvida' },
+          ]}
+        />
+        <DropdownFilter
+          label="Gravidade"
+          selected={severity}
+          onSelect={setSeverity}
+          options={[
+            { label: 'Todos', value: 'Todos' },
+            { label: 'Alta', value: 'Alta' },
+            { label: 'Média', value: 'Média' },
+            { label: 'Baixa', value: 'Baixa' },
+          ]}
+        />
+
+        {today.length > 0 && <OccurrenceList title="Hoje" data={today} />}
+        {others.length > 0 && <OccurrenceList title="Ocorrências anteriores" data={others} />}
+
+        {today.length === 0 && others.length === 0 && !loading && (
+          <Text className="text-center text-gray-500 mt-4">Nenhuma ocorrência encontrada.</Text>
+        )}
+      </View>
+    </View>
+  )
 }

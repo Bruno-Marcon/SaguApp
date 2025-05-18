@@ -1,9 +1,28 @@
-import OccurrencesTemplate from "@//components/templates/occurences/occurencesTemplate"
+import OccurrenceTemplate from '@//components/templates/occurences/occurencesTemplate'
+import TemplateScreen from '@//components/templates/scrollView/templateScreen'
+import { useState, useCallback } from 'react'
 
-function HomePage() {
+export default function OcorrenciasPage() {
+  const [refreshing, setRefreshing] = useState(false)
+
+  const handleRefresh = useCallback(() => {
+    setRefreshing(true)
+  }, [])
+
+  const handleRefreshEnd = () => {
+    setRefreshing(false)
+  }
+
   return (
-    <OccurrencesTemplate/>
+    <TemplateScreen 
+      withSafeArea 
+      withHeader={false}
+      withBottomBar
+    >
+      <OccurrenceTemplate 
+        refreshing={refreshing}
+        onRefreshEnd={handleRefreshEnd}
+      />
+    </TemplateScreen>
   )
 }
-
-export default HomePage

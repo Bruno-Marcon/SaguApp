@@ -1,69 +1,50 @@
-import React from 'react';
-import { View, Text } from 'react-native';
-import RNPickerSelect from 'react-native-picker-select';
-import { Feather } from '@expo/vector-icons';
+import { View, Text, TouchableOpacity } from 'react-native'
+import { useState } from 'react'
+import { Feather } from '@expo/vector-icons'
 
 type Option = {
-  label: string;
-  value: string;
-};
+  label: string
+  value: string
+}
 
-type DropdownFilterProps = {
-  label: string;
-  value: string;
-  options: Option[];
-  onChange: (newValue: string) => void;
-};
+type Props = {
+  label: string
+  options: Option[]
+  selected: string
+  onSelect: (value: string) => void
+}
 
-export default function DropdownFilter({
-  label,
-  value,
-  options,
-  onChange,
-}: DropdownFilterProps) {
+export default function DropdownFilter({ label, options, selected, onSelect }: Props) {
+  const [open, setOpen] = useState(false)
+
   return (
-    <View className="w-full">
-      <Text className="text-sm font-medium text-gray-700 mb-2">{label}</Text>
+    <View className="mb-4 z-10">
+      <Text className="text-sm text-gray-600 mb-1">{label}</Text>
+      
+      <TouchableOpacity
+        onPress={() => setOpen(!open)}
+        className="bg-white border border-gray-300 rounded-lg p-3 flex-row justify-between items-center"
+      >
+        <Text className="text-gray-800">{selected}</Text>
+        <Feather name={open ? 'chevron-up' : 'chevron-down'} size={20} color="#6B7280" />
+      </TouchableOpacity>
 
-      <RNPickerSelect
-        onValueChange={onChange}
-        value={value}
-        items={options}
-        useNativeAndroidPickerStyle={false}
-        placeholder={{ label: `Selecione ${label.toLowerCase()}`, value: '' }}
-        Icon={() => (
-          <Feather name="chevron-down" size={20} color="#6B7280" style={{ marginRight: 12 }} />
-        )}
-        style={{
-          inputAndroid: {
-            borderWidth: 1,
-            borderColor: '#D1D5DB',
-            paddingVertical: 12,
-            paddingHorizontal: 14,
-            borderRadius: 12,
-            color: '#111827',
-            backgroundColor: '#F9FAFB',
-            fontSize: 16,
-          },
-          inputIOS: {
-            borderWidth: 1,
-            borderColor: '#D1D5DB',
-            paddingVertical: 12,
-            paddingHorizontal: 14,
-            borderRadius: 12,
-            color: '#111827',
-            backgroundColor: '#F9FAFB',
-            fontSize: 16,
-          },
-          iconContainer: {
-            top: 14,
-            right: 10,
-          },
-          placeholder: {
-            color: '#9CA3AF',
-          },
-        }}
-      />
+      {open && (
+        <View className="max-h-48 bg-white border border-gray-300 rounded-lg mt-1 overflow-scroll">
+          {options.map((item) => (
+            <TouchableOpacity
+              key={item.value}
+              onPress={() => {
+                onSelect(item.value)
+                setOpen(false)
+              }}
+              className="p-3 border-b border-gray-100"
+            >
+              <Text className="text-gray-700">{item.label}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+      )}
     </View>
-  );
+  )
 }
