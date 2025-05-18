@@ -1,7 +1,7 @@
 import { View } from "react-native"
-import LogoIFC from "../../atoms/logo/logoIFC"
 import { JSX } from "react"
 import ProfileAvatar from "../avatar/profileAvatar"
+import LogoSagu from "../../atoms/logo/logoSagu"
 // import { BellWithModal } from "../header/bell/bellWithModal"
 
 type DefaultNavBarProps = {
@@ -11,7 +11,7 @@ type DefaultNavBarProps = {
 }
 
 const DefaultNavBar: React.FC<DefaultNavBarProps> = ({
-  logo = <LogoIFC className="w-14 h-14" />,
+  logo = <LogoSagu className="w-14 h-14" />,
   avatar = <ProfileAvatar size={40} modal={true} />,
 }) => {
   return (

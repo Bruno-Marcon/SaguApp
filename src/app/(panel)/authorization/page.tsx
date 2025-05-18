@@ -1,9 +1,21 @@
-import AuthorizationsTemplate from "@//components/templates/authorization/authorizationTemplate"
+import { useState, useCallback } from 'react';
+import TemplateScreen from '@//components/templates/scrollView/templateScreen';
+import AuthorizationTemplate from '@//components/templates/authorization/authorizationTemplate';
 
-function AuthorizationPage() {
+export default function AuthorizationsPage() {
+  const [refreshing, setRefreshing] = useState(false);
+
+  const handleRefresh = useCallback(() => {
+    setRefreshing(true);
+  }, []);
+
+  const handleRefreshEnd = () => {
+    setRefreshing(false);
+  };
+
   return (
-    <AuthorizationsTemplate/>
-  )
+    <TemplateScreen withSafeArea withHeader={false} withBottomBar>
+      <AuthorizationTemplate refreshing={refreshing} onRefreshEnd={handleRefreshEnd} />
+    </TemplateScreen>
+  );
 }
-
-export default AuthorizationPage

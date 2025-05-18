@@ -1,14 +1,20 @@
 // src/services/authorization/authorizationService.ts
-import { AuthorizationResponse, SingleAuthorizationResponse, UpdateAuthorizationPayload } from '../../../types/authorizations';
+import { AuthorizationFilters, AuthorizationResponse, SingleAuthorizationResponse, UpdateAuthorizationPayload } from '../../../types/authorizations';
 import { api} from '../api/api';
 import { endpoints } from '../endpoints';
 
 
 export const authorizationService = {
-  getAll: async (page = 1): Promise<AuthorizationResponse> => {
-    const response = await api.get(`${endpoints.authorizations.root}?page[number]=${page}`);
-    return response;
-  },
+  getAll: async (filters: AuthorizationFilters = {}): Promise<AuthorizationResponse> => {
+  const params = new URLSearchParams();
+
+  if (filters.page) params.append('page[number]', filters.page.toString());
+  if (filters.status) params.append('filter[status]', filters.status);
+  if (filters.student_id) params.append('filter[student_id]', filters.student_id);
+
+  const response = await api.get(`${endpoints.authorizations.root}?${params.toString()}`);
+  return response;
+},
 
   getById: async (id: string): Promise<SingleAuthorizationResponse> => {
     const response = await api.get(endpoints.authorizations.show(id));

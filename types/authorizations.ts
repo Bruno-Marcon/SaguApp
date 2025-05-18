@@ -34,6 +34,7 @@ export interface Authorization {
 export interface AuthorizationResponse {
   data: Authorization[];
   meta: {
+    last_page: any;
     current_page: number;
     next_page: number | null;
     prev_page: number | null;
@@ -55,7 +56,9 @@ export interface SingleAuthorizationResponse {
 export interface AuthorizationFilters {
   page?: number;
   status?: string;
+  student_id?: string;
 }
+
 
 export interface CreateAuthorizationPayload {
   description: string;
