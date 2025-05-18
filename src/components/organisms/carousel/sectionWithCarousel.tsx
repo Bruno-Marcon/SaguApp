@@ -15,6 +15,7 @@ type Props = {
   title: string;
   linkText: string;
   onPressLink: () => void;
+  onCardPress?: (authorization: Authorization) => void;
 };
 
 export const SectionWithCarousel = ({
@@ -22,7 +23,17 @@ export const SectionWithCarousel = ({
   title,
   linkText,
   onPressLink,
+  onCardPress,
 }: Props) => {
+  // ✅ filtra e ordena autorizações pendentes
+  const pendingItems = data
+    .filter((item) => item.rawData.attributes.status === 'pending')
+    .sort((a, b) =>
+      new Date(b.rawData.attributes.created_at).getTime() -
+      new Date(a.rawData.attributes.created_at).getTime()
+    )
+    .slice(0, 3); // ✅ limita para 3
+
   return (
     <View className="mt-6 px-4">
       <View className="flex-row justify-between items-center mb-4">
@@ -42,7 +53,7 @@ export const SectionWithCarousel = ({
 
       <FlatList
         horizontal
-        data={data}
+        data={pendingItems}
         keyExtractor={(item, index) => item.id ?? `carousel-item-${index}`}
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={{ gap: 16, paddingBottom: 8, paddingTop: 2 }}
@@ -50,6 +61,7 @@ export const SectionWithCarousel = ({
           <Animated.View entering={FadeInRight.delay(index * 100).duration(300)}>
             <CardAuthorizationAtom
               authorization={item.rawData}
+              onPress={() => onCardPress?.(item.rawData)}
               className="w-[260px] transition-all duration-300 active:scale-95"
             />
           </Animated.View>

@@ -19,6 +19,11 @@ export const SectionWithCarouselOccurences = ({
   onPressLink,
   onCardPress,
 }: Props) => {
+  // Ordena por data e limita os 3 mais recentes
+  const latestOccurrences = [...data]
+    .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+    .slice(0, 3);
+
   return (
     <View className="mt-6 px-4">
       <View className="flex-row justify-between items-center mb-4">
@@ -30,13 +35,13 @@ export const SectionWithCarouselOccurences = ({
           onPress={onPressLink}
           className="flex-row items-center bg-green-50 px-3 py-1 rounded-full shadow-sm"
         >
-          <Text className="text-sm font-semibold text-green-600 mr-1"> {linkText} </Text>
+          <Text className="text-sm font-semibold text-green-600 mr-1">{linkText}</Text>
           <Feather name="arrow-right" size={16} color="#16A34A" />
         </TouchableOpacity>
       </View>
 
       <FlatList
-        data={data}
+        data={latestOccurrences}
         keyExtractor={(item) => item.id}
         horizontal
         showsHorizontalScrollIndicator={false}

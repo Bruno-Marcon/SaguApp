@@ -2,6 +2,7 @@ import { View, Text, TouchableOpacity } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { formatDate } from '@//utils/dateUtils';
 import { Authorization } from '../../../../types/authorizations';
+import AuthorizationStatusBadge from '../../atoms/badge/authorizationBadge'; // ✅ novo badge
 
 export type FeatherIconName = React.ComponentProps<typeof Feather>['name'];
 
@@ -42,7 +43,7 @@ export default function CardAuthorizationAtom({
       className={`bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden ${className}`}
       style={{ width: 260 }}
     >
-      {/* Borda lateral */}
+      {/* Borda lateral colorida */}
       <View
         className="w-[5px] rounded-tl-3xl rounded-bl-3xl absolute left-0 top-0 bottom-0"
         style={{ backgroundColor: borderColor }}
@@ -68,11 +69,8 @@ export default function CardAuthorizationAtom({
               Autorização
             </Text>
 
-            <View className="bg-blue-50 px-3 py-1 rounded-full shadow-sm">
-              <Text className="text-[10px] font-bold text-blue-600 uppercase tracking-wide">
-                {status ?? 'N/A'}
-              </Text>
-            </View>
+            {/* ✅ Badge do status */}
+            <AuthorizationStatusBadge status={status} />
           </View>
 
           {/* Descrição */}

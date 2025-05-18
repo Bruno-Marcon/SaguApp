@@ -1,6 +1,7 @@
 import { View, ScrollView } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
+
 import { ErrorMessage } from '../../atoms/indicators/errorMessage';
 import Loading from '../../atoms/indicators/loadingAtom';
 import TemplateScreen from '../scrollView/templateScreen';
@@ -15,18 +16,19 @@ import { Authorization } from '../../../../types/authorizations';
 import { StatsData } from '../../../../types/stats';
 
 import OccurrenceModal from '../../organisms/modal/occurrenceModal';
+import AuthorizationModal from '../../organisms/modal/authorizationModal';
+
 import { ApresentationSection } from '../../molecules/section/apresentation/apresentationSectionWithStatus';
 import { SectionWithCarouselOccurences } from '../../organisms/carousel/sectionWithCarouselOccurencies';
 import { SectionWithCarousel } from '../../organisms/carousel/sectionWithCarousel';
 import NewsCarousel from '../../molecules/section/news/newsCarrousel';
-
-
 
 export const HomeScreen = () => {
   const [userData, setUserData] = useState<{ name: string } | null>(null);
   const [authorizationData, setAuthorizationData] = useState<Authorization[]>([]);
   const [occurrences, setOccurrences] = useState<Occurrence[]>([]);
   const [selectedOccurrence, setSelectedOccurrence] = useState<Occurrence | null>(null);
+  const [selectedAuthorization, setSelectedAuthorization] = useState<Authorization | null>(null); // ✅ novo estado
   const [stats, setStats] = useState<StatsData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -115,23 +117,37 @@ export const HomeScreen = () => {
         />
 
         <NewsCarousel />
-        
+
         <SectionWithCarouselOccurences
           data={occurrences}
           onPressLink={handleOccurrencesPress}
-          onCardPress={setSelectedOccurrence} title={'Ocorrencias'} linkText={'Ver todos'}        />
+          onCardPress={setSelectedOccurrence}
+          title="Ocorrências"
+          linkText="Ver todos"
+        />
 
         <SectionWithCarousel
           data={authorizationData.map((item) => ({ id: item.id, rawData: item }))}
-          onPressLink={handleAuthorizationPress} title={'Autorizações'} linkText={'Ver todos'}        />
+          onPressLink={handleAuthorizationPress}
+          onCardPress={(item) => setSelectedAuthorization(item)} // ✅ funciona agora
+          title="Autorizações"
+          linkText="Ver todos"
+        />
       </ScrollView>
 
       <OccurrenceModal
-      visible={!!selectedOccurrence}
-      onClose={() => setSelectedOccurrence(null)}
-      occurrenceId={selectedOccurrence?.id || null}
-      occurrence={selectedOccurrence}
-    />
+        visible={!!selectedOccurrence}
+        onClose={() => setSelectedOccurrence(null)}
+        occurrenceId={selectedOccurrence?.id || null}
+        occurrence={selectedOccurrence}
+      />
+
+      <AuthorizationModal
+        visible={!!selectedAuthorization}
+        onClose={() => setSelectedAuthorization(null)}
+        authorizationId={selectedAuthorization?.id || null}
+        authorization={selectedAuthorization}
+      />
     </TemplateScreen>
   );
 };

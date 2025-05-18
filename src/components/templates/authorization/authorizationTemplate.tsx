@@ -11,6 +11,8 @@ import { authorizationService } from '@//services/authorizations/authorizationsS
 type Props = {
   refreshing: boolean;
   onRefreshEnd: () => void;
+  onCardPress?: (auth: Authorization) => void;
+  refreshKey?: number;
 };
 
 type Option = {
@@ -18,7 +20,12 @@ type Option = {
   value: string;
 };
 
-export default function AuthorizationTemplate({ refreshing, onRefreshEnd }: Props) {
+export default function AuthorizationTemplate({
+  refreshing,
+  onRefreshEnd,
+  onCardPress,
+  refreshKey,
+}: Props) {
   const [allAuthorizations, setAllAuthorizations] = useState<Authorization[]>([]);
   const [filteredAuthorizations, setFilteredAuthorizations] = useState<Authorization[]>([]);
   const [loading, setLoading] = useState(false);
@@ -72,6 +79,10 @@ export default function AuthorizationTemplate({ refreshing, onRefreshEnd }: Prop
   }, [refreshing]);
 
   useEffect(() => {
+    fetchData(); // 🔄 Atualiza ao mudar refreshKey
+  }, [refreshKey]);
+
+  useEffect(() => {
     let filtered = [...allAuthorizations];
 
     const statusMap: Record<string, string> = {
@@ -87,7 +98,6 @@ export default function AuthorizationTemplate({ refreshing, onRefreshEnd }: Prop
     if (dateRange.start && dateRange.end) {
       const start = new Date(dateRange.start).setHours(0, 0, 0, 0);
       const end = new Date(dateRange.end).setHours(23, 59, 59, 999);
-
       filtered = filtered.filter(a => {
         const createdAt = new Date(a.attributes.created_at).getTime();
         return createdAt >= start && createdAt <= end;
@@ -136,7 +146,11 @@ export default function AuthorizationTemplate({ refreshing, onRefreshEnd }: Prop
           <Text className="text-center text-gray-500 mt-4">Nenhuma autorização encontrada.</Text>
         ) : (
           filteredAuthorizations.map((auth) => (
-            <AuthorizationCard key={auth.id} authorization={auth} />
+            <AuthorizationCard
+              key={auth.id}
+              authorization={auth}
+              onPress={() => onCardPress?.(auth)}
+            />
           ))
         )}
       </ScrollView>

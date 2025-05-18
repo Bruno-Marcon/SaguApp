@@ -7,7 +7,7 @@ export interface Authorization {
     description: string;
     date: string;
     created_at: string;
-    status: 'pending' | 'approved' | 'refuse';
+    status: 'pending' | 'approved' | 'refused';
   };
   relationships: {
     student: {
