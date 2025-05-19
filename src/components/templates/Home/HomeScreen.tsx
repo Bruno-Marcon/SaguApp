@@ -18,9 +18,9 @@ import OccurrenceModal from '../../organisms/modal/occurrenceModal';
 import AuthorizationModal from '../../organisms/modal/authorizationModal';
 
 import { ApresentationSection } from '../../molecules/section/apresentation/apresentationSectionWithStatus';
-import { SectionWithCarouselOccurences } from '../../organisms/carousel/sectionWithCarouselOccurencies';
-import { SectionWithCarousel } from '../../organisms/carousel/sectionWithCarousel';
+import { SectionOccurrences} from '../../organisms/carousel/SectionOccurrences';
 import NewsCarousel from '../../molecules/section/news/newsCarrousel';
+import { SectionAuthorization } from '../../organisms/carousel/sectionAuthorization';
 
 export const HomeScreen = () => {
   const [userData, setUserData] = useState<{ name: string } | null>(null);
@@ -96,7 +96,7 @@ export const HomeScreen = () => {
 
           <NewsCarousel />
 
-          <SectionWithCarouselOccurences
+          <SectionOccurrences
             data={occurrences}
             onPressLink={() => router.push('/(panel)/occurences/occurences')}
             onCardPress={setSelectedOccurrence}
@@ -104,11 +104,11 @@ export const HomeScreen = () => {
             linkText="Ver todos"
           />
 
-          <SectionWithCarousel
+          <SectionAuthorization
             data={authorizationData.map((item) => ({ id: item.id, rawData: item }))}
             onPressLink={() => router.push('/(panel)/authorization/page')}
             onCardPress={setSelectedAuthorization}
-            title="Autorizações"
+            title="Autorizações Pendentes"
             linkText="Ver todos"
           />
         </View>

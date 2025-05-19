@@ -50,12 +50,12 @@ export default function CardAtom({
       activeOpacity={0.9}
       accessibilityRole="button"
       accessibilityLabel={`Ocorrência: ${title}, status: ${status}`}
-      className={`z-0 bg-white rounded-3xl shadow-xl border border-gray-100 ${className}`} // 🔧 removido overflow-hidden, adicionado z-0
+      className={`z-0 bg-white rounded-3xl border border-gray-200 overflow-hidden ${className}`}
       style={{ width: 260 }}
     >
-      {/* Borda luminosa lateral */}
+      {/* Borda lateral interna */}
       <View
-        className="w-[5px] rounded-tl-3xl rounded-bl-3xl absolute left-0 top-0 bottom-0"
+        className="absolute top-0 bottom-0 left-0 w-[6px]"
         style={{ backgroundColor: borderColor || finalColor }}
       />
 
@@ -89,7 +89,7 @@ export default function CardAtom({
             {description}
           </Text>
 
-          {/* Data com ícone */}
+          {/* Data */}
           <View className="flex-row items-center mt-3">
             <Feather name="calendar" size={12} color="#9CA3AF" />
             <Text className="text-xs text-gray-400 ml-1">{formattedTime}</Text>

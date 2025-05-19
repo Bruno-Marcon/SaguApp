@@ -9,7 +9,7 @@ type TemplateScreenProps = {
   withSafeArea?: boolean
   withHeader?: boolean
   withBottomBar?: boolean
-  scrollable?: boolean // <- Novo controle
+  scrollable?: boolean 
 }
 
 export default function TemplateScreen({ 
@@ -27,7 +27,6 @@ export default function TemplateScreen({
         </SafeAreaView>
       )}
 
-      {/* Área principal da tela */}
       <View className="flex-1">
         {scrollable ? (
           <ScrollView

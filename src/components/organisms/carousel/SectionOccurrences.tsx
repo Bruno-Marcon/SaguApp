@@ -12,7 +12,7 @@ type Props = {
   onCardPress?: (occurrence: Occurrence) => void
 }
 
-export const SectionWithCarouselOccurences = ({
+export const SectionOccurrences = ({
   data,
   title,
   linkText,
@@ -21,18 +21,20 @@ export const SectionWithCarouselOccurences = ({
 }: Props) => {
   const latestOccurrences = [...data]
     .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
-    .slice(0, 3)
+    .slice(0, 3) // Limita aos 3 mais recentes
 
   return (
-    <View className="mt-6 px-4 z-0 overflow-visible"> {/* ✅ adicionados */}
+    <View className="mt-6 px-4 z-0 overflow-visible">
       <View className="flex-row justify-between items-center mb-4">
-        <View className="flex-row gap-x-2 items-center space-x-2">
+        <View className="flex-row items-center gap-x-2">
           <Feather name="alert-circle" size={20} color="#F87171" />
-          <PrimaryTitle name={title} className="text-xl font-extrabold text-gray-800 tracking-tight" />
+          <Text className="text-xl font-extrabold text-gray-800 tracking-tight">
+            {title}
+          </Text>
         </View>
         <TouchableOpacity
           onPress={onPressLink}
-          className="flex-row items-center bg-green-50 px-3 py-1 rounded-full shadow-sm"
+          className="flex-row items-center bg-green-50 px-3 py-1 rounded-full"
         >
           <Text className="text-sm font-semibold text-green-600 mr-1">{linkText}</Text>
           <Feather name="arrow-right" size={16} color="#16A34A" />

@@ -18,28 +18,30 @@ type Props = {
   onCardPress?: (authorization: Authorization) => void;
 };
 
-export const SectionWithCarousel = ({
+export const SectionAuthorization = ({
   data,
   title,
   linkText,
   onPressLink,
   onCardPress,
 }: Props) => {
-  // ✅ filtra e ordena autorizações pendentes
   const pendingItems = data
     .filter((item) => item.rawData.attributes.status === 'pending')
     .sort((a, b) =>
       new Date(b.rawData.attributes.created_at).getTime() -
       new Date(a.rawData.attributes.created_at).getTime()
     )
-    .slice(0, 3); // ✅ limita para 3
+    .slice(0, 3);
 
   return (
     <View className="mt-6 px-4">
       <View className="flex-row justify-between items-center mb-4">
-        <View className="flex-row gap-x-2 items-center space-x-2">
+        <View className="flex-row gap-x-2 items-center">
           <Feather name="file-text" size={20} color="#3B82F6" />
-          <PrimaryTitle name={title} className="text-xl gap-x-2 font-extrabold text-gray-800 tracking-tight" />
+          <PrimaryTitle
+            name={title}
+            className="text-xl font-extrabold text-gray-800 tracking-tight"
+          />
         </View>
 
         <TouchableOpacity
@@ -57,14 +59,14 @@ export const SectionWithCarousel = ({
         keyExtractor={(item, index) => item.id ?? `carousel-item-${index}`}
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={{ gap: 16, paddingBottom: 8, paddingTop: 2 }}
-        renderItem={({ item, index }) => (
-          <Animated.View entering={FadeInRight.delay(index * 100).duration(300)}>
+        renderItem={({ item }) => (
+          <View>
             <CardAuthorizationAtom
               authorization={item.rawData}
               onPress={() => onCardPress?.(item.rawData)}
               className="w-[260px] transition-all duration-300 active:scale-95"
             />
-          </Animated.View>
+          </View>
         )}
       />
     </View>
