@@ -11,7 +11,7 @@ export const NotificationBell = ({ onPress, notificationCount = 0 }: Props) => {
 
   return (
     <TouchableOpacity onPress={onPress} className="relative">
-      <Feather name="bell" size={24} color="#4B5563" />
+      <Feather name="bell" size={24} color="#FFFFFF" />
       {hasNotifications && (
         <View className="absolute -top-1 -right-1 bg-red-500 rounded-full w-5 h-5 justify-center items-center">
           <Text className="text-white text-xs font-bold">
