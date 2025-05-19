@@ -1,57 +1,58 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { View, Text } from 'react-native';
+import Toast from 'react-native-toast-message';
 import { EventCard } from '../../molecules/card/eventCardMolecules';
-import Loading from '../../atoms/indicators/loadingAtom';
-import { Event } from '../../../../types/event';
-import { eventService } from '@//services/events/eventServices';
+import { Schedule } from '../../../../types/schedules';
+import { scheduleService } from '@//services/schedules/schedulesService';
 
 type EventListProps = {
   selectedDate: Date | null;
+  events: Schedule[];
+  onCardPress?: (event: Schedule) => void;
 };
 
-export const EventList = ({ selectedDate }: EventListProps) => {
-  const [events, setEvents] = useState<Event[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  const isSameDay = (a: Date, b: Date) =>
-    a.getDate() === b.getDate() &&
-    a.getMonth() === b.getMonth() &&
-    a.getFullYear() === b.getFullYear();
-
-  useEffect(() => {
-    const fetchEvents = async () => {
-      try {
-        const response = await eventService.getLatestEvents();
-        setEvents(response.data);
-      } catch (err: any) {
-        console.error('[EVENT LIST] Erro ao carregar eventos:', err);
-        setError('Ocorreu um erro ao carregar os eventos 😵');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchEvents();
-  }, []);
+export const EventList = ({ selectedDate, events: initialEvents, onCardPress }: EventListProps) => {
+  const [localEvents, setLocalEvents] = useState(initialEvents);
 
   const filteredEvents = useMemo(() => {
-    if (!selectedDate) return events;
-    return events.filter(event => {
-      const eventDateUTC = new Date(event.attributes.created_at);
-      const eventDateLocal = new Date(
-        eventDateUTC.getTime() + eventDateUTC.getTimezoneOffset() * 60000
-      );
-      return isSameDay(eventDateLocal, selectedDate);
+    if (!selectedDate) return localEvents;
+
+    const selectedDateStr = selectedDate.toISOString().split('T')[0];
+
+    return localEvents.filter(event => {
+      const eventDateStr = event.attributes.starts_at.split('T')[0];
+      return eventDateStr === selectedDateStr;
     });
-  }, [events, selectedDate]);
+  }, [localEvents, selectedDate]);
 
-  if (loading) return <Loading />;
+  const handleConfirm = async (event: Schedule) => {
+    try {
+      await scheduleService.updateSchedule(event.id, { status: 'confirmed' });
 
-  if (error) {
+      // Atualizar localmente o status
+      setLocalEvents(prev =>
+        prev.map(e =>
+          e.id === event.id ? { ...e, attributes: { ...e.attributes, status: 'confirmed' } } : e
+        )
+      );
+
+      Toast.show({
+        type: 'success',
+        text1: 'Agendamento confirmado!',
+      });
+    } catch (error) {
+      Toast.show({
+        type: 'error',
+        text1: 'Erro ao confirmar agendamento',
+      });
+      console.error('[EVENT LIST] Erro ao confirmar:', error);
+    }
+  };
+
+  if (!initialEvents || initialEvents.length === 0) {
     return (
-      <Text className="text-center text-red-500 mt-4">
-        {error}
+      <Text className="text-center text-gray-500 mt-4">
+        Nenhum agendamento encontrado.
       </Text>
     );
   }
@@ -60,22 +61,24 @@ export const EventList = ({ selectedDate }: EventListProps) => {
     <View className="mt-4 p-2">
       {filteredEvents.length === 0 ? (
         <Text className="text-center text-gray-500">
-          Nenhum evento para esta data.
+          Nenhum agendamento para esta data.
         </Text>
       ) : (
         filteredEvents.map(event => {
-          const eventDate = new Date(event.attributes.created_at);
-          const eventDateLocal = new Date(
-            eventDate.getTime() + eventDate.getTimezoneOffset() * 60000
-          );
+          const startsAt = event.attributes.starts_at;
+          const dateStr = startsAt.split('T')[0];
+          const timeStr = startsAt.split('T')[1]?.substring(0, 5);
 
           return (
             <EventCard
               key={event.id}
-              title={event.attributes.description}
-              subtitle={`ID: ${event.attributes.eventable_id}`}
-              time={eventDateLocal.toLocaleTimeString('pt-BR')}
-              date={eventDateLocal}
+              title={event.attributes.subject}
+              subtitle={event.attributes.area}
+              author={event.attributes.status}
+              dateString={dateStr}
+              time={timeStr}
+              onPress={() => onCardPress?.(event)}
+              onConfirm={() => handleConfirm(event)}
             />
           );
         })
