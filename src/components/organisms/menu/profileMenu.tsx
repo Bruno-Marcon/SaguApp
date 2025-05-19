@@ -28,8 +28,7 @@ export const ProfileMenu = () => {
   return (
     <View className="gap-y-4">
       {menuItems.map((item, index) => (
-        <Animated.View
-          entering={SlideInLeft.delay(index * 100).duration(400)}
+        <View
           key={index}
         >
           <MenuItem
@@ -37,7 +36,7 @@ export const ProfileMenu = () => {
             iconFamily={item.iconFamily}
             title={item.title}
           />
-        </Animated.View>
+        </View>
       ))}
     </View>
   )

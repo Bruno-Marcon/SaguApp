@@ -1,16 +1,16 @@
-import { FlatList, Text, TouchableOpacity, View } from 'react-native';
-import { Feather } from '@expo/vector-icons';
-import { PrimaryTitle } from '../../atoms/title/primaryTitle';
-import CardAtom from '../../atoms/card/cardAtom';
-import { Occurrence } from '../../../../types/occurrence';
+import { FlatList, Text, TouchableOpacity, View } from 'react-native'
+import { Feather } from '@expo/vector-icons'
+import { PrimaryTitle } from '../../atoms/title/primaryTitle'
+import CardAtom from '../../atoms/card/cardAtom'
+import { Occurrence } from '../../../../types/occurrence'
 
 type Props = {
-  data: Occurrence[];
-  title: string;
-  linkText: string;
-  onPressLink: () => void;
-  onCardPress?: (occurrence: Occurrence) => void;
-};
+  data: Occurrence[]
+  title: string
+  linkText: string
+  onPressLink: () => void
+  onCardPress?: (occurrence: Occurrence) => void
+}
 
 export const SectionWithCarouselOccurences = ({
   data,
@@ -19,13 +19,12 @@ export const SectionWithCarouselOccurences = ({
   onPressLink,
   onCardPress,
 }: Props) => {
-  // Ordena por data e limita os 3 mais recentes
   const latestOccurrences = [...data]
     .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
-    .slice(0, 3);
+    .slice(0, 3)
 
   return (
-    <View className="mt-6 px-4">
+    <View className="mt-6 px-4 z-0 overflow-visible"> {/* ✅ adicionados */}
       <View className="flex-row justify-between items-center mb-4">
         <View className="flex-row gap-x-2 items-center space-x-2">
           <Feather name="alert-circle" size={20} color="#F87171" />
@@ -50,6 +49,7 @@ export const SectionWithCarouselOccurences = ({
           paddingBottom: 8,
           paddingTop: 2,
         }}
+        style={{ zIndex: 0, overflow: 'visible' }}
         renderItem={({ item }) => (
           <CardAtom
             {...item}
@@ -59,5 +59,5 @@ export const SectionWithCarouselOccurences = ({
         )}
       />
     </View>
-  );
-};
+  )
+}

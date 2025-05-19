@@ -39,10 +39,7 @@ export const ProfileTemplate = ({
           <ProfileMenu />
         </View>
 
-        <Animated.View
-          entering={BounceInUp.delay(100)}
-          className="mt-auto mb-10"
-        >
+        <View className="mt-auto mb-10">
           <Button 
             title="Sair"
             variant="primary" 
@@ -50,7 +47,7 @@ export const ProfileTemplate = ({
             className="w-full rounded-2xl"
             onPress={handleLogout}
           />
-        </Animated.View>
+        </View>
 
       </View>
     </TemplateScreen>

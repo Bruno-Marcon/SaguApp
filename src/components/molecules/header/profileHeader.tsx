@@ -30,24 +30,23 @@ export const ProfileHeader = ({
       )}
 
       <View className="items-center">
-        <Animated.View
-          entering={FadeInUp.duration(600).delay(200)}
+        <View
           className="bg-green-100 p-2 rounded-full border-2 border-green-500 mb-4 shadow-sm"
         >
           <ProfileAvatar size={80} modal={false} />
-        </Animated.View>
+        </View>
 
-        <Animated.View entering={FadeIn.delay(400)}>
+        <View>
           <CustomText variant="primary" size="xl" className="font-bold text-gray-900">
             {name}
           </CustomText>
-        </Animated.View>
+        </View>
 
-        <Animated.View entering={FadeIn.delay(600)}>
+        <View >
           <CustomText variant="secondary" size="sm" className="text-gray-500">
             {email}
           </CustomText>
-        </Animated.View>
+        </View>
       </View>
     </View>
   )

@@ -50,7 +50,7 @@ export default function CardAtom({
       activeOpacity={0.9}
       accessibilityRole="button"
       accessibilityLabel={`Ocorrência: ${title}, status: ${status}`}
-      className={`bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden ${className}`}
+      className={`z-0 bg-white rounded-3xl shadow-xl border border-gray-100 ${className}`} // 🔧 removido overflow-hidden, adicionado z-0
       style={{ width: 260 }}
     >
       {/* Borda luminosa lateral */}

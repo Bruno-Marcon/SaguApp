@@ -44,18 +44,16 @@ export const authorizationService = {
     return response;
   },
 
-  updateStatusViaPost: async (
-  original: Authorization,
-  newStatus: 'pending' | 'approved' | 'refused'
-): Promise<SingleAuthorizationResponse> => {
-  const payload = {
-    description: original.attributes.description,
-    status: newStatus,
-    student_id: original.relationships.student.data.id,
-    date: original.attributes.date,
-  };
+  updateStatus: async (
+    id: string,
+    newStatus: 'pending' | 'approved' | 'refused'
+  ): Promise<SingleAuthorizationResponse> => {
+    const payload = {
+      status: newStatus,
+    };
 
-  const response = await api.post(endpoints.authorizations.root, payload);
-  return response;
+    const response = await api.patch(endpoints.authorizations.show(id), payload);
+    return response;
+  },
 }
-};
+

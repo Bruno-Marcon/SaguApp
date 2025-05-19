@@ -19,8 +19,7 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./src/assets/images/logo-ifc.png",
-        "backgroundColor": "#ffffff",
-        "package": "com.saguifc.android"
+        "backgroundColor": "#ffffff"
       },
       "package": "com.brunomarcon.SaguIFC"
     },
@@ -40,7 +39,15 @@
           "backgroundColor": "#ffffff"
         }
       ],
-      "expo-secure-store"
+      "expo-secure-store",
+      [
+        "expo-notifications",
+        {
+          "icon": "./src/assets/images/notification-icon.png",
+          "color": "#ffffff",
+          "sounds": ["default"]
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true

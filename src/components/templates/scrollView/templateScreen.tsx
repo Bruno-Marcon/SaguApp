@@ -1,5 +1,5 @@
-import React, { useState, useCallback } from 'react'
-import { View, ScrollView, SafeAreaView, RefreshControl } from 'react-native'
+import React from 'react'
+import { View, SafeAreaView, ScrollView } from 'react-native'
 import BottomTabBar from '../../organisms/tabBar/BottomTabBar'
 import DefaultNavBar from '../../organisms/navbar/defaultNav'
 import HelpWidget from '../../organisms/widget/helpWidgetOrganism'
@@ -9,25 +9,16 @@ type TemplateScreenProps = {
   withSafeArea?: boolean
   withHeader?: boolean
   withBottomBar?: boolean
+  scrollable?: boolean // <- Novo controle
 }
 
 export default function TemplateScreen({ 
   children,
   withSafeArea = true,
   withHeader = true,
-  withBottomBar = true
+  withBottomBar = true,
+  scrollable = true
 }: TemplateScreenProps) {
-  const [refreshing, setRefreshing] = useState(false)
-  const [refreshKey, setRefreshKey] = useState(0)
-
-  const onRefresh = useCallback(() => {
-    setRefreshing(true)
-    setTimeout(() => {
-      setRefreshKey(prev => prev + 1)
-      setRefreshing(false)
-    }, 1500)
-  }, [])
-
   return (
     <View className="flex-1 bg-gray-100">
       {withSafeArea && withHeader && (
@@ -35,31 +26,25 @@ export default function TemplateScreen({
           <DefaultNavBar />
         </SafeAreaView>
       )}
-      
-      <ScrollView
-        key={refreshKey}
-        className="flex-1"
-        contentContainerStyle={{ 
-          paddingBottom: withBottomBar ? 150 : 20,
-          flexGrow: 1 
-        }}
-        showsVerticalScrollIndicator={false}
-        refreshControl={
-          <RefreshControl 
-            refreshing={refreshing} 
-            onRefresh={onRefresh} 
-            colors={['#0E7C4A']}    // Android
-            tintColor="#0E7C4A"     // iOS
-          />
-        }
-      >
-        {children}
-      </ScrollView>
-      
+
+      {/* Área principal da tela */}
+      <View className="flex-1">
+        {scrollable ? (
+          <ScrollView
+            contentContainerStyle={{ flexGrow: 1 }}
+            showsVerticalScrollIndicator={false}
+          >
+            {children}
+          </ScrollView>
+        ) : (
+          <View className="flex-1">
+            {children}
+          </View>
+        )}
+      </View>
+
       {withBottomBar && <BottomTabBar />}
-      
-      {/* HelpWidget agora está disponível em todas as telas usando TemplateScreen */}
-      <HelpWidget />
+      {/* <HelpWidget /> */}
     </View>
   )
 }

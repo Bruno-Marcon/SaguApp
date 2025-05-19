@@ -1,12 +1,24 @@
-// src/services/notifications/registerForPushNotifications.ts
-import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
+import * as Device from 'expo-device';
 import { Platform } from 'react-native';
-import { endpoints } from '@//services/endpoints';
 import { api } from '../api/api';
+import { endpoints } from '../endpoints';
+import { getToken} from '@//storage/secureToken';
+import { getUserInfo } from '@//storage/SecureUser';
 
 export async function registerForPushNotificationsAsync() {
-  if (!Device.isDevice) return;
+  const user = await getUserInfo();
+  const token = await getToken();
+
+  if (!user || !token) {
+    console.warn('[NOTIFICATION] Usuário não autenticado, não salvando token');
+    return;
+  }
+
+  if (!Device.isDevice) {
+    console.warn('[NOTIFICATION] Deve ser executado em dispositivo físico');
+    return;
+  }
 
   const { status: existingStatus } = await Notifications.getPermissionsAsync();
   let finalStatus = existingStatus;
@@ -17,12 +29,11 @@ export async function registerForPushNotificationsAsync() {
   }
 
   if (finalStatus !== 'granted') {
-    console.warn('[NOTIFICATION] Permissão negada para notificações');
+    console.warn('[NOTIFICATION] Permissão de notificação negada');
     return;
   }
 
-  const { data: expoPushToken } = await Notifications.getExpoPushTokenAsync();
-
+  const expoPushToken = (await Notifications.getExpoPushTokenAsync()).data;
   console.log('[NOTIFICATION] Expo Token gerado:', expoPushToken);
 
   try {
@@ -30,9 +41,7 @@ export async function registerForPushNotificationsAsync() {
       expo_token: expoPushToken,
     });
     console.log('[NOTIFICATION] Token salvo com sucesso');
-  } catch (err) {
-    console.error('[NOTIFICATION] Erro ao salvar token:', err);
+  } catch (error) {
+    console.error('[NOTIFICATION] Erro ao salvar token:', error);
   }
-
-  return expoPushToken;
 }
