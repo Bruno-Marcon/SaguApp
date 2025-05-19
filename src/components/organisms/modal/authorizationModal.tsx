@@ -16,6 +16,7 @@ import { authorizationService } from '@//services/authorizations/authorizationsS
 import { studentService } from '@//services/studentes/studentsServices'
 import { IncludedUser } from '../../../../types/share'
 import AuthorizationDetailsSection from '../../molecules/section/authorization/authorizationModalSection'
+import { showToast } from '@//utils/toastUtiles'
 
 interface Props {
   visible: boolean
@@ -80,15 +81,18 @@ export default function AuthorizationModal({
     if (!authorization) return
     setUpdating(true)
     try {
-    await authorizationService.updateStatus(authorization.id, selectedStatus);
-      onSave?.()
-      onClose()
+      await authorizationService.updateStatus(authorization.id, selectedStatus);
+      showToast.success('Status atualizado com sucesso!');
+      onSave?.();
+      onClose();
     } catch (err) {
-      console.error('Erro ao salvar via POST:', err)
+      console.error('Erro ao salvar status:', err);
+      showToast.error('Erro ao atualizar o status.');
     } finally {
-      setUpdating(false)
+      setUpdating(false);
     }
   }
+
 
   const renderRadioOption = (label: string, value: StatusOption, color: string) => {
     const isSelected = selectedStatus === value

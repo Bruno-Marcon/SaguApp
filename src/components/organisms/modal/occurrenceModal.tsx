@@ -19,6 +19,7 @@ import CommentInput from '../../atoms/input/commentInput'
 import OccurrenceModalHeader from '../../molecules/header/occurrenceModalHeader'
 import TagGroup from '../../molecules/badge/tagGroup'
 import OccurrenceDetailsSectionModal from '../../molecules/section/occurence/OccurrenceDetailsSectionModal'
+import { showToast } from '@//utils/toastUtiles'
 
 interface Props {
   visible: boolean
@@ -62,27 +63,28 @@ export default function OccurrenceDetailModal({
     if (visible) loadOccurrenceDetails()
   }, [visible, loadOccurrenceDetails])
 
-  // 🧠 Envio de comentário otimizado
   const handleSendComment = async () => {
-    if (!comment.trim() || !occurrenceId) return
-    setSubmitting(true)
+    if (!comment.trim() || !occurrenceId) return;
+    setSubmitting(true);
     try {
       await eventService.create({
         eventable_id: occurrenceId,
         eventable_type: 'Occurrency',
-        description: comment.trim()
-      })
-      setComment('')
-      // 🔁 Apenas recarrega eventos
-      const allEvents = await eventService.getAll()
+        description: comment.trim(),
+      });
+      setComment('');
+      const allEvents = await eventService.getAll();
       const relatedEvents = allEvents.data.filter(
         (e) => e.attributes.eventable_id === occurrenceId
-      )
-      setEvents(relatedEvents)
+      );
+      setEvents(relatedEvents);
+
+      showToast.success('Comentário adicionado com sucesso!');
     } catch (err) {
-      console.error('Erro ao enviar comentário:', err)
+      console.error('Erro ao enviar comentário:', err);
+      showToast.error('Erro ao adicionar comentário.');
     } finally {
-      setSubmitting(false)
+      setSubmitting(false);
     }
   }
 
