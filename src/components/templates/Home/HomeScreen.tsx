@@ -18,7 +18,7 @@ import OccurrenceModal from '../../organisms/modal/occurrenceModal';
 import AuthorizationModal from '../../organisms/modal/authorizationModal';
 
 import { ApresentationSection } from '../../molecules/section/apresentation/apresentationSectionWithStatus';
-import { SectionOccurrences} from '../../organisms/carousel/SectionOccurrences';
+import { SectionOccurrences } from '../../organisms/carousel/SectionOccurrences';
 import NewsCarousel from '../../molecules/section/news/newsCarrousel';
 import { SectionAuthorization } from '../../organisms/carousel/sectionAuthorization';
 
@@ -32,6 +32,8 @@ export const HomeScreen = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
+  type AuthorizationStatus = Authorization['attributes']['status'];
+
 
   const fetchData = async () => {
     setLoading(true);
@@ -59,6 +61,23 @@ export const HomeScreen = () => {
     fetchData();
   }, []);
 
+  const handleAuthorizationUpdate = (id: string, newStatus: AuthorizationStatus) => {
+    setAuthorizationData((prev) =>
+      prev.map((item) =>
+        item.id === id
+          ? {
+              ...item,
+              attributes: {
+                ...item.attributes,
+                status: newStatus, // agora tipado corretamente
+              },
+            }
+          : item
+      )
+    );
+  };
+
+
   const modalIsOpen = !!selectedOccurrence || !!selectedAuthorization;
 
   if (loading) return <Loading />;
@@ -68,7 +87,7 @@ export const HomeScreen = () => {
   return (
     <>
       <TemplateScreen withHeader scrollable={!modalIsOpen}>
-        <View style={{ flex: 1 }} pointerEvents={modalIsOpen ? "none" : "auto"}>
+        <View style={{ flex: 1 }} pointerEvents={modalIsOpen ? 'none' : 'auto'}>
           <ApresentationSection
             name={`Olá, ${userData.name}`}
             subtitle="Seja bem-vindo ao Sagu App"
@@ -100,7 +119,7 @@ export const HomeScreen = () => {
             data={occurrences}
             onPressLink={() => router.push('/(panel)/occurences/occurences')}
             onCardPress={setSelectedOccurrence}
-            title="Ocorrências"
+            title="Ocorrências Abertas"
             linkText="Ver todos"
           />
 
@@ -113,9 +132,7 @@ export const HomeScreen = () => {
           />
         </View>
 
-        {modalIsOpen && (
-          <View style={styles.overlay} pointerEvents="auto" />
-        )}
+        {modalIsOpen && <View style={styles.overlay} pointerEvents="auto" />}
       </TemplateScreen>
 
       <OccurrenceModal
@@ -130,6 +147,7 @@ export const HomeScreen = () => {
         onClose={() => setSelectedAuthorization(null)}
         authorizationId={selectedAuthorization?.id || null}
         authorization={selectedAuthorization}
+        onUpdate={handleAuthorizationUpdate}
       />
     </>
   );

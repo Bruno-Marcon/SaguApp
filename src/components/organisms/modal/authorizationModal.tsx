@@ -19,70 +19,72 @@ import AuthorizationDetailsSection from '../../molecules/section/authorization/a
 import { showToast } from '@//utils/toastUtiles'
 
 interface Props {
-  visible: boolean
-  onClose: () => void
-  authorizationId: string | null
-  authorization?: Authorization | null
-  onSave?: () => void
+  visible: boolean;
+  onClose: () => void;
+  authorizationId: string | null;
+  authorization?: Authorization | null;
+  onSave?: () => void;
+  onUpdate?: (id: string, newStatus: StatusOption) => void; // ✅ NOVO
 }
 
-type StatusOption = 'pending' | 'approved' | 'refused'
+type StatusOption = 'pending' | 'approved' | 'refused';
 
 export default function AuthorizationModal({
   visible,
   onClose,
   authorizationId,
   authorization: initialAuthorization,
-  onSave
+  onSave,
+  onUpdate
 }: Props) {
-  const [authorization, setAuthorization] = useState<Authorization | null>(initialAuthorization ?? null)
-  const [loading, setLoading] = useState(true)
-  const [updating, setUpdating] = useState(false)
-  const [selectedStatus, setSelectedStatus] = useState<StatusOption>('pending')
-  const [studentName, setStudentName] = useState('---')
-  const [responsibleName, setResponsibleName] = useState('---')
+  const [authorization, setAuthorization] = useState<Authorization | null>(initialAuthorization ?? null);
+  const [loading, setLoading] = useState(true);
+  const [updating, setUpdating] = useState(false);
+  const [selectedStatus, setSelectedStatus] = useState<StatusOption>('pending');
+  const [studentName, setStudentName] = useState('---');
+  const [responsibleName, setResponsibleName] = useState('---');
 
   useEffect(() => {
-    if (!visible || !authorizationId) return
+    if (!visible || !authorizationId) return;
 
     const fetchDetails = async () => {
-      setLoading(true)
+      setLoading(true);
       try {
-        const authData = await authorizationService.getById(authorizationId)
-        setAuthorization(authData.data)
+        const authData = await authorizationService.getById(authorizationId);
+        setAuthorization(authData.data);
 
-        const studentId = authData.data.relationships.student?.data?.id
-
+        const studentId = authData.data.relationships.student?.data?.id;
         if (studentId) {
-          const studentData = await studentService.getById(studentId)
-          setStudentName(studentData.data.attributes.name)
+          const studentData = await studentService.getById(studentId);
+          setStudentName(studentData.data.attributes.name);
 
           const parent = studentData.included?.find(
             (item) => item.type === 'parent' || item.type === 'user'
-          ) as IncludedUser | undefined
+          ) as IncludedUser | undefined;
 
           if (parent?.attributes?.name) {
-            setResponsibleName(parent.attributes.name)
+            setResponsibleName(parent.attributes.name);
           }
         }
 
-        setSelectedStatus(authData.data.attributes.status as StatusOption)
+        setSelectedStatus(authData.data.attributes.status as StatusOption);
       } catch (err) {
-        console.error('Erro ao buscar detalhes da autorização:', err)
+        console.error('Erro ao buscar detalhes da autorização:', err);
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
+    };
 
-    fetchDetails()
-  }, [visible, authorizationId])
+    fetchDetails();
+  }, [visible, authorizationId]);
 
   const handleStatusUpdate = async () => {
-    if (!authorization) return
-    setUpdating(true)
+    if (!authorization) return;
+    setUpdating(true);
     try {
       await authorizationService.updateStatus(authorization.id, selectedStatus);
       showToast.success('Status atualizado com sucesso!');
+      onUpdate?.(authorization.id, selectedStatus); // ✅ chama o pai
       onSave?.();
       onClose();
     } catch (err) {
@@ -91,11 +93,10 @@ export default function AuthorizationModal({
     } finally {
       setUpdating(false);
     }
-  }
-
+  };
 
   const renderRadioOption = (label: string, value: StatusOption, color: string) => {
-    const isSelected = selectedStatus === value
+    const isSelected = selectedStatus === value;
 
     return (
       <TouchableOpacity
@@ -117,17 +118,14 @@ export default function AuthorizationModal({
         </View>
         <Text className="text-gray-800">{label}</Text>
       </TouchableOpacity>
-    )
-  }
+    );
+  };
 
-  if (!visible || (loading && !authorization)) return null
+  if (!visible || (loading && !authorization)) return null;
 
   return (
     <Modal visible={visible} animationType="fade" transparent onRequestClose={onClose}>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-        className="flex-1"
-      >
+      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} className="flex-1">
         <View className="flex-1 bg-black/60">
           <View className="flex-1 justify-end">
             <View className="bg-white rounded-t-3xl px-5 pt-5 pb-4 w-full max-h-[95%]">
@@ -173,5 +171,5 @@ export default function AuthorizationModal({
         </View>
       </KeyboardAvoidingView>
     </Modal>
-  )
+  );
 }

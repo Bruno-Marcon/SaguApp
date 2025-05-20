@@ -1,22 +1,21 @@
-import { FlatList, Text, TouchableOpacity, View } from 'react-native';
-import { Feather } from '@expo/vector-icons';
-import { PrimaryTitle } from '../../atoms/title/primaryTitle';
-import CardAuthorizationAtom from '../../atoms/card/cardAuthorizationAtom';
-import { Authorization } from '../../../../types/authorizations';
-import Animated, { FadeInRight } from 'react-native-reanimated';
+import { FlatList, Text, TouchableOpacity, View } from 'react-native'
+import { Feather } from '@expo/vector-icons'
+import { PrimaryTitle } from '../../atoms/title/primaryTitle'
+import CardAuthorizationAtom from '../../atoms/card/cardAuthorizationAtom'
+import { Authorization } from '../../../../types/authorizations'
 
 interface CarouselItem {
-  id?: string;
-  rawData: Authorization;
+  id?: string
+  rawData: Authorization
 }
 
 type Props = {
-  data: CarouselItem[];
-  title: string;
-  linkText: string;
-  onPressLink: () => void;
-  onCardPress?: (authorization: Authorization) => void;
-};
+  data: CarouselItem[]
+  title: string
+  linkText: string
+  onPressLink: () => void
+  onCardPress?: (authorization: Authorization) => void
+}
 
 export const SectionAuthorization = ({
   data,
@@ -31,7 +30,7 @@ export const SectionAuthorization = ({
       new Date(b.rawData.attributes.created_at).getTime() -
       new Date(a.rawData.attributes.created_at).getTime()
     )
-    .slice(0, 3);
+    .slice(0, 3)
 
   return (
     <View className="mt-6 px-4">
@@ -53,22 +52,28 @@ export const SectionAuthorization = ({
         </TouchableOpacity>
       </View>
 
-      <FlatList
-        horizontal
-        data={pendingItems}
-        keyExtractor={(item, index) => item.id ?? `carousel-item-${index}`}
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={{ gap: 16, paddingBottom: 8, paddingTop: 2 }}
-        renderItem={({ item }) => (
-          <View>
-            <CardAuthorizationAtom
-              authorization={item.rawData}
-              onPress={() => onCardPress?.(item.rawData)}
-              className="w-[260px] transition-all duration-300 active:scale-95"
-            />
-          </View>
-        )}
-      />
+      {pendingItems.length === 0 ? (
+        <Text className="text-sm text-gray-500 italic px-1">
+          Nenhuma autorização pendente no momento.
+        </Text>
+      ) : (
+        <FlatList
+          horizontal
+          data={pendingItems}
+          keyExtractor={(item, index) => item.id ?? `carousel-item-${index}`}
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={{ gap: 16, paddingBottom: 8, paddingTop: 2 }}
+          renderItem={({ item }) => (
+            <View>
+              <CardAuthorizationAtom
+                authorization={item.rawData}
+                onPress={() => onCardPress?.(item.rawData)}
+                className="w-[260px] transition-all duration-300 active:scale-95"
+              />
+            </View>
+          )}
+        />
+      )}
     </View>
-  );
-};
+  )
+}
