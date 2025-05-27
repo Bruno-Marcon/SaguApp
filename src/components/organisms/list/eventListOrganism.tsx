@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { View, Text } from 'react-native';
 import Toast from 'react-native-toast-message';
 import { EventCard } from '../../molecules/card/eventCardMolecules';
@@ -9,7 +9,7 @@ type EventListProps = {
   selectedDate: Date | null;
   events: Schedule[];
   onCardPress?: (event: Schedule) => void;
-  onStatusUpdate?: (id: string, status: string) => void; // NOVO
+  onStatusUpdate?: (id: string, status: string) => void;
 };
 
 export const EventList = ({
@@ -18,7 +18,6 @@ export const EventList = ({
   onCardPress,
   onStatusUpdate,
 }: EventListProps) => {
-
   const filteredEvents = useMemo(() => {
     if (!selectedDate) return events;
 
@@ -33,8 +32,6 @@ export const EventList = ({
   const handleConfirm = async (event: Schedule) => {
     try {
       await scheduleService.updateSchedule(event.id, { status: 'confirmed' });
-
-      // Atualiza o status no pai
       onStatusUpdate?.(event.id, 'confirmed');
 
       Toast.show({
@@ -52,7 +49,7 @@ export const EventList = ({
 
   if (!events || events.length === 0) {
     return (
-      <Text className="text-center text-gray-500 mt-4">
+      <Text className="text-center text-gray-500 dark:text-gray-400 mt-4">
         Nenhum agendamento encontrado.
       </Text>
     );
@@ -61,7 +58,7 @@ export const EventList = ({
   return (
     <View className="mt-4 p-2">
       {filteredEvents.length === 0 ? (
-        <Text className="text-center text-gray-500">
+        <Text className="text-center text-gray-500 dark:text-gray-400">
           Nenhum agendamento para esta data.
         </Text>
       ) : (

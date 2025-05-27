@@ -97,10 +97,8 @@ export default function AuthorizationTemplate({
     setFilteredAuthorizations(filtered);
   }, [allAuthorizations, status, dateRange]);
 
-  const handleCloseModal = () => setModalVisible(false);
-
   return (
-    <View className="flex-1 bg-gray-50">
+    <View className="flex-1 bg-gray-50 dark:bg-neutral-950">
       <AuthorizationHeader
         title="Autorizações"
         onCreatePress={() => setModalVisible(true)}
@@ -134,7 +132,7 @@ export default function AuthorizationTemplate({
         {loading ? (
           <ActivityIndicator size="large" color="#3B82F6" className="my-6" />
         ) : filteredAuthorizations.length === 0 ? (
-          <Text className="text-center text-gray-500 mt-4">
+          <Text className="text-center text-gray-500 dark:text-gray-400 mt-4">
             Nenhuma autorização encontrada.
           </Text>
         ) : (
@@ -152,24 +150,24 @@ export default function AuthorizationTemplate({
         visible={modalVisible}
         onClose={() => setModalVisible(false)}
         onSave={async ({ aluno, status, descricao }) => {
-        try {
-          const payload: CreateAuthorizationPayload = {
-            student_id: aluno,
-            status,
-            description: descricao,
-            date: new Date().toISOString().split('T')[0],
-          };
+          try {
+            const payload: CreateAuthorizationPayload = {
+              student_id: aluno,
+              status,
+              description: descricao,
+              date: new Date().toISOString().split('T')[0],
+            };
 
-          await authorizationService.createAuthorization(payload);
+            await authorizationService.createAuthorization(payload);
 
-          Toast.show({ type: 'success', text1: 'Autorização criada!' });
-          setModalVisible(false);
-          fetchData();
-        } catch (err) {
-          console.error(err);
-          Toast.show({ type: 'error', text1: 'Erro ao criar autorização' });
-        }
-      }}
+            Toast.show({ type: 'success', text1: 'Autorização criada!' });
+            setModalVisible(false);
+            fetchData();
+          } catch (err) {
+            console.error(err);
+            Toast.show({ type: 'error', text1: 'Erro ao criar autorização' });
+          }
+        }}
       />
     </View>
   );

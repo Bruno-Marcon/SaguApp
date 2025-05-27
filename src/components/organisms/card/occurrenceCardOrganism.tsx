@@ -34,33 +34,31 @@ export default function OccurrenceCard({ occurrence, onPress }: Props) {
 
   return (
     <TouchableOpacity
-      onPress={onPress}
-      activeOpacity={0.9}
-      accessibilityRole="button"
-      accessibilityLabel={`Ocorrência: ${occurrence.attributes.title}, status: ${occurrence.attributes.status}`}
-      className="bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden mb-4"
-    >
-      <View
-        className="w-[5px] rounded-tl-3xl rounded-bl-3xl absolute left-0 top-0 bottom-0"
-        style={{ backgroundColor: color }}
+  onPress={onPress}
+  activeOpacity={0.9}
+  className="bg-white dark:bg-neutral-900 rounded-3xl shadow-xl border border-gray-100 dark:border-neutral-700 overflow-hidden mb-4"
+>
+  <View
+    className="w-[5px] rounded-tl-3xl rounded-bl-3xl absolute left-0 top-0 bottom-0"
+    style={{ backgroundColor: color }}
+  />
+
+  <View className="p-4 pl-6 flex-row items-start">
+    <View className="mr-4 mt-1">
+      <KindIcon kind={occurrence.attributes.kind} color={color} />
+    </View>
+
+    <View className="flex-1">
+      <OccurrenceCardHeader
+        title={occurrence.attributes.title}
+        status={occurrence.attributes.status}
+        kind={occurrence.attributes.kind}
+        severity={occurrence.attributes.severity}
       />
-
-      <View className="p-4 pl-6 flex-row items-start">
-        <View className="mr-4 mt-1">
-          <KindIcon kind={occurrence.attributes.kind} color={color} />
-        </View>
-
-        <View className="flex-1">
-          <OccurrenceCardHeader
-            title={occurrence.attributes.title}
-            status={occurrence.attributes.status}
-            kind={occurrence.attributes.kind}
-            severity={occurrence.attributes.severity}
-          />
-          <OccurrenceCardBody description={occurrence.attributes.description} />
-          <OccurrenceCardMeta date={formattedTime} />
-        </View>
-      </View>
-    </TouchableOpacity>
+      <OccurrenceCardBody description={occurrence.attributes.description} />
+      <OccurrenceCardMeta date={formattedTime} />
+    </View>
+  </View>
+</TouchableOpacity>
   );
 }

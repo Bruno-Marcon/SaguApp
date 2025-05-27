@@ -77,10 +77,10 @@ export function EditAuthorizationModal({ visible, onClose, onSave }: Props) {
   return (
     <Modal visible={visible} animationType="fade" transparent>
       <View className="flex-1 justify-end bg-black/40">
-        <View className="bg-white rounded-t-3xl p-6 pb-10 shadow-lg">
+        <View className="bg-white dark:bg-neutral-900 rounded-t-3xl p-6 pb-10 shadow-lg">
 
           <View className="flex-row justify-between items-center mb-5">
-            <Text className="text-xl font-semibold text-gray-800">Nova Autorização</Text>
+            <Text className="text-xl font-semibold text-gray-800 dark:text-white">Nova Autorização</Text>
             <TouchableOpacity onPress={onClose}>
               <Feather name="x" size={24} color="#374151" />
             </TouchableOpacity>
@@ -93,7 +93,8 @@ export function EditAuthorizationModal({ visible, onClose, onSave }: Props) {
               value={search}
               onChangeText={setSearch}
               placeholder="Buscar aluno"
-              className="border border-gray-300 rounded-xl px-4 py-3 text-gray-700"
+              placeholderTextColor="#9CA3AF"
+              className="border border-gray-300 dark:border-neutral-700 rounded-xl px-4 py-3 text-gray-700 dark:text-white dark:bg-neutral-800"
             />
             {loading && <ActivityIndicator size="small" color="#3B82F6" className="mt-2" />}
             {students.length > 0 && (
@@ -108,7 +109,7 @@ export function EditAuthorizationModal({ visible, onClose, onSave }: Props) {
                     <Text className="text-gray-700">{item.name}</Text>
                   </TouchableOpacity>
                 )}
-                className="max-h-44 absolute top-20 w-full border border-gray-200 rounded-xl shadow-sm bg-white z-20"
+                className="max-h-44 absolute top-20 w-full border border-gray-200 dark:border-neutral-700 rounded-xl shadow-sm bg-white dark:bg-neutral-800 z-20"
               />
             )}
           </View>
@@ -122,12 +123,12 @@ export function EditAuthorizationModal({ visible, onClose, onSave }: Props) {
                   key={option}
                   onPress={() => setSelectedDescriptionOption(option)}
                   className={`px-4 py-2 rounded-full mr-3 ${
-                    selectedDescriptionOption === option ? 'bg-blue-500' : 'bg-gray-200'
+                    selectedDescriptionOption === option ? 'bg-blue-500' : 'bg-gray-200 dark:bg-neutral-700'
                   }`}
                 >
                   <Text
                     className={`text-sm ${
-                      selectedDescriptionOption === option ? 'text-white' : 'text-gray-600'
+                      selectedDescriptionOption === option ? 'text-white' : 'text-gray-600 dark:text-gray-200'
                     }`}
                   >
                     {option}

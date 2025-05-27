@@ -26,9 +26,9 @@ export default function CardAtom({
   const formattedTime = formatDate(created_at);
 
   const severityColorMap: Record<string, string> = {
-    low: '#10B981',
-    medium: '#F59E0B',
-    high: '#EF4444',
+    low: '#10B981',    // Verde
+    medium: '#F59E0B', // Amarelo
+    high: '#EF4444',   // Vermelho
   };
 
   const kindIconMap: Record<string, keyof typeof Feather.glyphMap> = {
@@ -45,7 +45,7 @@ export default function CardAtom({
     <TouchableOpacity
       onPress={onPress}
       activeOpacity={0.9}
-      className={`bg-white rounded-3xl border border-gray-200 overflow-hidden ${className}`}
+      className={`bg-white dark:bg-neutral-900 rounded-3xl border border-gray-200 dark:border-neutral-700 overflow-hidden ${className}`}
       style={{ width: 270 }}
     >
       {/* Faixa lateral */}
@@ -55,39 +55,38 @@ export default function CardAtom({
       />
 
       <View className="p-4 pl-6">
+        {/* Tags */}
         <View className="flex-row justify-start items-center space-x-2 mb-2">
           <TagGroup status={status} />
           <TagGroup kind={kind} />
         </View>
 
+        {/* Header */}
         <View className="flex-row items-start">
-          <View className="bg-gray-100 p-2 rounded-xl mr-4">
+          <View className="bg-gray-100 dark:bg-neutral-800 p-2 rounded-xl mr-4">
             <Feather name={iconName || finalIcon} size={20} color={iconColor || finalColor} />
           </View>
 
           <View className="flex-1">
-            {/* Título */}
             <Text
-              className="text-xl font-bold text-gray-900"
+              className="text-xl font-bold text-gray-900 dark:text-white"
               numberOfLines={1}
               ellipsizeMode="tail"
             >
               {title}
             </Text>
 
-            {/* Descrição */}
             <Text
-              className="text-sm text-gray-600 mt-2 leading-snug"
+              className="text-sm text-gray-600 dark:text-gray-300 mt-2 leading-snug"
               numberOfLines={2}
               ellipsizeMode="tail"
             >
               {description}
             </Text>
 
-            {/* Rodapé - Data */}
             <View className="flex-row items-center mt-3">
               <Feather name="calendar" size={12} color="#9CA3AF" />
-              <Text className="text-xs text-gray-400 ml-1">{formattedTime}</Text>
+              <Text className="text-xs text-gray-400 dark:text-gray-500 ml-1">{formattedTime}</Text>
             </View>
           </View>
         </View>

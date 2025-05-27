@@ -13,7 +13,8 @@ export const CommentList = ({ events, loading = false }: Props) => {
   const latestEvent = [...events].reverse()[0];
 
   if (loading) return <ActivityIndicator size="large" color="#0E7C4A" />;
-  if (!events.length) return <Text className="text-sm text-gray-500">Nenhum comentário.</Text>;
+  if (!events.length)
+    return <Text className="text-sm text-gray-500 dark:text-gray-400">Nenhum comentário.</Text>;
 
   return (
     <>
@@ -26,13 +27,17 @@ export const CommentList = ({ events, loading = false }: Props) => {
 
       {!showAll && events.length > 1 && (
         <TouchableOpacity onPress={() => setShowAll(true)}>
-          <Text className="text-sm text-green-700 font-medium mb-2">Ver todos os comentários</Text>
+          <Text className="text-sm text-green-700 dark:text-green-500 font-medium mb-2">
+            Ver todos os comentários
+          </Text>
         </TouchableOpacity>
       )}
 
       {showAll && (
         <TouchableOpacity onPress={() => setShowAll(false)}>
-          <Text className="text-sm text-gray-500 font-medium mb-2">Mostrar menos</Text>
+          <Text className="text-sm text-gray-500 dark:text-gray-400 font-medium mb-2">
+            Mostrar menos
+          </Text>
         </TouchableOpacity>
       )}
     </>

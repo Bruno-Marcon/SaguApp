@@ -36,7 +36,6 @@ export const CustomCalendar = () => {
   const fetchSchedules = useCallback(async () => {
     try {
       const result = await scheduleService.getSchedules();
-      console.log('[CALENDAR] Agendamentos recebidos:', result?.data);
       setSchedules(result?.data ?? []);
     } catch (error) {
       console.error('[CALENDAR] Erro ao buscar agendamentos:', error);
@@ -64,11 +63,10 @@ export const CustomCalendar = () => {
   const mergedMarkedDates = useMemo(() => {
     const merged = { ...staticMarkedDates };
 
-    // Seleciona só o selectedDate para evitar conflito visual
     merged[selectedDate] = {
       ...(merged[selectedDate] || {}),
       selected: true,
-      selectedColor: 'blue',
+      selectedColor: '#09a342',
       selectedTextColor: 'white',
     };
 
@@ -76,7 +74,6 @@ export const CustomCalendar = () => {
   }, [staticMarkedDates, selectedDate]);
 
   const onDayPress = (day: { dateString: string }) => {
-    console.log('[CALENDAR] Dia selecionado no calendário:', day.dateString);
     setSelectedDate(day.dateString);
   };
 
@@ -94,7 +91,6 @@ export const CustomCalendar = () => {
     }
   };
 
-  // Função para atualizar o status localmente quando confirmar evento
   const handleUpdateScheduleStatus = (id: string, status: string) => {
     setSchedules(prev =>
       prev.map(s =>
@@ -123,13 +119,13 @@ export const CustomCalendar = () => {
   };
 
   return (
-    <ScrollView className="bg-white p-4 rounded-2xl">
+    <ScrollView className="bg-white dark:bg-neutral-950 p-4 rounded-2xl">
       <View className="flex-row justify-between items-center p-2 mb-4 mt-4">
         <ArrowBack color="#09a342" size={29} onPress={handleBackPress} />
-
+        <Text className="text-xl font-semibold text-white">Calendár</Text>
         <TouchableOpacity
           onPress={() => {
-            setEditingSchedule(undefined); // indica criação
+            setEditingSchedule(undefined);
             setModalVisible(true);
           }}
           className="bg-green-600 px-3 py-1 rounded-lg"
@@ -144,33 +140,36 @@ export const CustomCalendar = () => {
         onDayPress={onDayPress}
         markedDates={mergedMarkedDates}
         markingType="dot"
-        monthFormat={'yyyy MM'}
+        monthFormat={'MMMM yyyy'}
         theme={{
-          textDayFontWeight: 'bold',
-          textMonthFontSize: 18,
-          textMonthFontWeight: 'bold',
-          todayTextColor: '#fff',
+          calendarBackground: '#FFFFFF',
+          textSectionTitleColor: '#6B7280',
+          selectedDayBackgroundColor: '#09a342',
+          selectedDayTextColor: '#FFFFFF',
+          todayTextColor: '#09a342',
+          dayTextColor: '#111827',
+          textDisabledColor: '#9CA3AF',
+          dotColor: '#09a342',
+          selectedDotColor: '#FFFFFF',
           arrowColor: '#09a342',
           monthTextColor: '#09a342',
+          textMonthFontSize: 18,
+          textMonthFontWeight: 'bold',
+          textDayFontWeight: '600',
+          textDayHeaderFontWeight: '600',
         }}
       />
 
       <View className="flex-row justify-start space-x-1 ml-[2%] mt-2">
         <View className="w-2 h-2 bg-[#09a342] rounded-full" />
-        <Text className="text-sm ml-1">Agendamentos</Text>
+        <Text className="text-sm ml-1 dark:text-gray-200">Agendamentos</Text>
       </View>
 
       <TouchableOpacity
-        onPress={() => {
-          setShowAllEvents(prev => {
-            const newValue = !prev;
-            console.log('[CALENDAR] Alternar exibição de todos os eventos:', newValue);
-            return newValue;
-          });
-        }}
+        onPress={() => setShowAllEvents(prev => !prev)}
         className="self-end mb-2 mr-1"
       >
-        <Text className="text-green-700 underline text-sm">
+        <Text className="text-green-700 dark:text-green-400 underline text-sm">
           {showAllEvents ? 'Ver apenas dia selecionado' : 'Ver todos os eventos'}
         </Text>
       </TouchableOpacity>
@@ -179,7 +178,7 @@ export const CustomCalendar = () => {
         selectedDate={showAllEvents ? null : new Date(selectedDate)}
         events={filteredSchedules}
         onCardPress={handleCardPress}
-        onStatusUpdate={handleUpdateScheduleStatus} // Passa para atualizar status ao confirmar
+        onStatusUpdate={handleUpdateScheduleStatus}
       />
 
       <ScheduleFormModal
@@ -192,4 +191,3 @@ export const CustomCalendar = () => {
     </ScrollView>
   );
 };
- 

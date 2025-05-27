@@ -113,7 +113,7 @@ export default function OccurrenceDetailModal({
       >
         <View className="flex-1 bg-black/40">
           <View className="flex-1 justify-end">
-            <View className="bg-white rounded-t-3xl px-5 pt-5 pb-4 w-full max-h-[95%]">
+            <View className="bg-white dark:bg-neutral-900 rounded-t-3xl px-5 pt-5 pb-4 w-full max-h-[95%]">
               <OccurrenceModalHeader
                 title={occurrence?.attributes?.title ?? '-'}
                 onClose={onClose}
@@ -136,7 +136,7 @@ export default function OccurrenceDetailModal({
                   />
                 )}
 
-                <Text className="text-base font-semibold text-gray-700 mb-2">
+                <Text className="text-base font-semibold text-gray-700 dark:text-gray-200 mb-2">
                   Comentários
                 </Text>
 

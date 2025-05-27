@@ -31,12 +31,7 @@ type Props = {
   };
 };
 
-export default function GenericFilters({
-  status,
-  severity,
-  student,
-  dateRange,
-}: Props) {
+export default function GenericFilters({ status, severity, student, dateRange }: Props) {
   return (
     <View className="px-4 pt-2">
       {dateRange && (

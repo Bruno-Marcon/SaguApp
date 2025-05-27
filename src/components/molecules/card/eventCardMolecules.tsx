@@ -32,11 +32,11 @@ export const EventCard = ({
     <TouchableOpacity
       onPress={onPress}
       activeOpacity={0.85}
-      className="bg-white rounded-2xl p-4 border border-gray-200 shadow-md my-2"
+      className="bg-white dark:bg-neutral-900 rounded-2xl p-4 border border-gray-200 dark:border-neutral-700 shadow-md my-2"
     >
       <View className="flex-row items-center mb-2">
         <FontAwesome name="calendar" size={20} color="#4CAF50" />
-        <TextAtom variant="title" className="text-black ml-2">
+        <TextAtom variant="title" className="text-black dark:text-white ml-2">
           {title}
         </TextAtom>
       </View>
@@ -44,7 +44,7 @@ export const EventCard = ({
       {subtitle && (
         <View className="flex-row items-center mb-1">
           <Feather name="book" size={16} color="#6B7280" />
-          <TextAtom variant="body" className="text-gray-600 ml-2">
+          <TextAtom variant="body" className="text-gray-600 dark:text-gray-300 ml-2">
             {subtitle}
           </TextAtom>
         </View>
@@ -53,7 +53,7 @@ export const EventCard = ({
       {author && (
         <View className="flex-row items-center mb-1">
           <Feather name="user" size={16} color="#6B7280" />
-          <TextAtom variant="body" className="text-gray-600 ml-2">
+          <TextAtom variant="body" className="text-gray-600 dark:text-gray-300 ml-2">
             {author === 'waiting' ? 'Aguardando' : 'Confirmado'}
           </TextAtom>
         </View>

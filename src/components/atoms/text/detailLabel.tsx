@@ -8,8 +8,8 @@ interface Props {
 export default function DetailLabel({ label, value }: Props) {
   return (
     <View className="flex-row justify-between">
-      <Text className="text-gray-500">{label}</Text>
-      <Text className="font-medium text-right">{value}</Text>
+      <Text className="text-gray-500 dark:text-gray-400">{label}</Text>
+      <Text className="font-medium text-right text-gray-800 dark:text-white">{value}</Text>
     </View>
   );
 }

@@ -24,7 +24,6 @@ import { SectionOccurrences } from '../../organisms/carousel/SectionOccurrences'
 import NewsCarousel from '../../molecules/section/news/newsCarrousel';
 import { SectionAuthorization } from '../../organisms/carousel/sectionAuthorization';
 import { SectionAcademicData } from '../../molecules/section/academic/sectionAcademicData';
-import ReportCardSection from '../../molecules/section/reportCard/reportCardSection';
 
 export const HomeScreen = () => {
   const [userData, setUserData] = useState<{ id: string; name: string } | null>(null);

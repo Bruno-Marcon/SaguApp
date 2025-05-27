@@ -68,34 +68,42 @@ export default function OccurrenceDetailsSection({ occurrence, onUpdate }: Props
   };
 
   const renderRow = (label: string, value: string | React.ReactNode) => (
-    <View className="flex-row justify-between items-center border-b border-gray-100 py-3">
-      <Text className="text-sm text-gray-500">{label}</Text>
-      <Text className="text-sm text-gray-800 font-medium max-w-[65%] text-right">{value}</Text>
+    <View className="flex-row justify-between items-center border-b border-gray-100 dark:border-neutral-700 py-3">
+      <Text className="text-sm text-gray-500 dark:text-gray-400">{label}</Text>
+      <Text className="text-sm text-gray-800 dark:text-white font-medium max-w-[65%] text-right">
+        {value}
+      </Text>
     </View>
   );
 
   return (
-    <View className="border border-gray-200 rounded-2xl p-4 mb-4 bg-white">
+    <View className="border border-gray-200 dark:border-neutral-700 rounded-2xl p-4 mb-4 bg-white dark:bg-neutral-900">
       <View className="flex-row justify-between items-center mb-2">
-        <Text className="text-lg font-semibold text-gray-800">Detalhes da Ocorrência</Text>
+        <Text className="text-lg font-semibold text-gray-800 dark:text-white">
+          Detalhes da Ocorrência
+        </Text>
         <TouchableOpacity onPress={handleEditOrSubmit}>
-          <Feather name={isEditing ? 'check' : 'edit-2'} size={18} color="#374151" />
+          <Feather
+            name={isEditing ? 'check' : 'edit-2'}
+            size={18}
+            color="#374151"
+          />
         </TouchableOpacity>
       </View>
 
       {renderRow('Estudante', occurrence.student_name ?? '-')}
 
-      <View className="flex-row justify-between items-center border-b border-gray-100 py-3">
-        <Text className="text-sm text-gray-500">Responsável</Text>
+      <View className="flex-row justify-between items-center border-b border-gray-100 dark:border-neutral-700 py-3">
+        <Text className="text-sm text-gray-500 dark:text-gray-400">Responsável</Text>
         {isEditing ? (
           <TouchableOpacity
             onPress={() => setShowResponsibleModal(true)}
-            className="border border-gray-300 rounded-xl px-3 py-2 bg-white"
+            className="border border-gray-300 dark:border-neutral-700 rounded-xl px-3 py-2 bg-white dark:bg-neutral-800"
           >
-            <Text className="text-gray-700 max-w-[65%]">{responsibleName}</Text>
+            <Text className="text-gray-700 dark:text-gray-200 max-w-[65%]">{responsibleName}</Text>
           </TouchableOpacity>
         ) : (
-          <Text className="text-sm text-gray-800 font-medium max-w-[65%] text-right">
+          <Text className="text-sm text-gray-800 dark:text-white font-medium max-w-[65%] text-right">
             {responsibleName}
           </Text>
         )}
@@ -107,8 +115,8 @@ export default function OccurrenceDetailsSection({ occurrence, onUpdate }: Props
         occurrence.attributes.created_at ? formatDate(occurrence.attributes.created_at) : '-'
       )}
 
-      <View className="flex-row justify-between items-center border-b border-gray-100 py-3">
-        <Text className="text-sm text-gray-500">Privacidade</Text>
+      <View className="flex-row justify-between items-center border-b border-gray-100 dark:border-neutral-700 py-3">
+        <Text className="text-sm text-gray-500 dark:text-gray-400">Privacidade</Text>
         {isEditing ? (
           <TouchableOpacity
             onPress={() => setIsPrivate((prev) => !prev)}
@@ -119,7 +127,7 @@ export default function OccurrenceDetailsSection({ occurrence, onUpdate }: Props
             <Text className="text-white">{isPrivate ? 'Fechada' : 'Aberta'}</Text>
           </TouchableOpacity>
         ) : (
-          <Text className="text-sm text-gray-800 font-medium max-w-[65%] text-right">
+          <Text className="text-sm text-gray-800 dark:text-white font-medium max-w-[65%] text-right">
             {isPrivate ? 'Fechada' : 'Aberta'}
           </Text>
         )}
@@ -134,9 +142,11 @@ export default function OccurrenceDetailsSection({ occurrence, onUpdate }: Props
         onShow={loadResponsibles}
       >
         <View className="flex-1 justify-end bg-black/50">
-          <View className="bg-white rounded-t-3xl p-5 max-h-[70%]">
+          <View className="bg-white dark:bg-neutral-900 rounded-t-3xl p-5 max-h-[70%]">
             <View className="flex-row justify-between items-center mb-4">
-              <Text className="text-lg font-semibold text-gray-800">Selecionar Responsável</Text>
+              <Text className="text-lg font-semibold text-gray-800 dark:text-white">
+                Selecionar Responsável
+              </Text>
               <TouchableOpacity onPress={() => setShowResponsibleModal(false)}>
                 <Feather name="x" size={24} color="#374151" />
               </TouchableOpacity>
@@ -148,12 +158,16 @@ export default function OccurrenceDetailsSection({ occurrence, onUpdate }: Props
                   key={item.id}
                   onPress={() => handleSelectResponsible(item.id, item.name)}
                   className={`px-4 py-3 rounded-xl mb-2 ${
-                    responsibleId === item.id ? 'bg-blue-600' : 'bg-gray-100'
+                    responsibleId === item.id
+                      ? 'bg-green-600'
+                      : 'bg-gray-100 dark:bg-neutral-800'
                   }`}
                 >
                   <Text
                     className={`${
-                      responsibleId === item.id ? 'text-white' : 'text-gray-700'
+                      responsibleId === item.id
+                        ? 'text-white'
+                        : 'text-gray-700 dark:text-gray-200'
                     } text-sm font-medium`}
                   >
                     {item.name}

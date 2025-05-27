@@ -20,19 +20,24 @@ const StatusCard: React.FC<StatusCardProps> = ({
 }) => {
   return (
     <View
-      className={`bg-white w-[100px] h-[100px] justify-between rounded-2xl px-3 py-2 shadow-sm shadow-black/5 border border-gray-100 ${containerClassName || ''}`}
+      className={`bg-white dark:bg-neutral-800
+        w-[100px] h-[100px] justify-between rounded-2xl px-3 py-2 
+        shadow-sm shadow-black/5 border border-gray-100 dark:border-neutral-600
+        ${containerClassName || ''}`}
     >
       <View className="items-center">{icon}</View>
 
       <Text
-        className={`text-[12px] text-center text-gray-700 font-medium mt-1 ${titleClassName || ''}`}
+        className={`text-[12px] text-center text-gray-700 dark:text-gray-300 
+          font-medium mt-1 ${titleClassName || ''}`}
         numberOfLines={1}
       >
         {title}
       </Text>
 
       <Text
-        className={`text-[20px] font-bold text-center text-gray-900 ${subtitleClassName || ''}`}
+        className={`text-[20px] font-bold text-center text-gray-900 dark:text-white 
+          ${subtitleClassName || ''}`}
         accessibilityLabel={`Total: ${subtitle}`}
       >
         {subtitle}

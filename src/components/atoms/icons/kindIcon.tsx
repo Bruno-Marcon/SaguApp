@@ -18,7 +18,7 @@ export default function KindIcon({ kind, color }: Props) {
   const iconName = kindMap[normalizedKind] || kindMap.default
 
   return (
-    <View className="bg-gray-100 p-2 rounded-xl">
+    <View className="bg-gray-100 dark:bg-neutral-800 p-2 rounded-xl">
       <Feather name={iconName} size={22} color={color} />
     </View>
   )

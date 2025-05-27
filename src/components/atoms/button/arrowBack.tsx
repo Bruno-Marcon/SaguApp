@@ -1,4 +1,3 @@
-// components/atoms/button/arrowBack.tsx
 import { TouchableOpacity } from 'react-native'
 import { Feather } from '@expo/vector-icons'
 import { router } from 'expo-router'

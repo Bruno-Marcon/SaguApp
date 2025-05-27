@@ -122,7 +122,7 @@ export default function AuthorizationModal({
 
   if (!visible || (loading && !authorization)) return null;
 
-  return (
+   return (
     <Modal visible={visible} animationType="fade" transparent onRequestClose={onClose}>
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
@@ -130,11 +130,8 @@ export default function AuthorizationModal({
       >
         <View className="flex-1 bg-black/60">
           <View className="flex-1 justify-end">
-            <View className="bg-white rounded-t-3xl px-5 pt-5 pb-4 w-full max-h-[95%]">
-              <OccurrenceModalHeader
-                title="Editar Autorização"
-                onClose={onClose}
-              />
+            <View className="bg-white dark:bg-neutral-900 rounded-t-3xl px-5 pt-5 pb-4 w-full max-h-[95%]">
+              <OccurrenceModalHeader title="Editar Autorização" onClose={onClose} />
 
               <TagGroup
                 status={authorization?.attributes.status}
@@ -151,25 +148,30 @@ export default function AuthorizationModal({
                   />
                 )}
 
-                {/* 🔥 Campo descrição */}
+                {/* 🔥 Descrição */}
                 <View className="mt-4">
-                  <Text className="text-sm text-gray-700 mb-1 font-semibold">Descrição:</Text>
+                  <Text className="text-sm text-gray-700 dark:text-gray-300 mb-1 font-semibold">
+                    Descrição:
+                  </Text>
                   <TextInput
                     value={description}
                     onChangeText={setDescription}
                     placeholder="Digite a descrição"
-                    className="border border-gray-300 rounded-xl px-4 py-3 text-gray-700"
+                    placeholderTextColor="#9CA3AF"
+                    className="border border-gray-300 dark:border-neutral-700 rounded-xl px-4 py-3 text-gray-700 dark:text-white bg-white dark:bg-neutral-800"
                   />
                 </View>
 
-                {/* 🔥 Campo data */}
+                {/* 🔥 Data */}
                 <View className="mt-4">
-                  <Text className="text-sm text-gray-700 mb-1 font-semibold">Data:</Text>
+                  <Text className="text-sm text-gray-700 dark:text-gray-300 mb-1 font-semibold">
+                    Data:
+                  </Text>
                   <TouchableOpacity
                     onPress={() => setShowDatePicker(true)}
-                    className="border border-gray-300 rounded-xl px-4 py-3"
+                    className="border border-gray-300 dark:border-neutral-700 rounded-xl px-4 py-3 bg-white dark:bg-neutral-800"
                   >
-                    <Text className="text-gray-700">{date.toLocaleDateString()}</Text>
+                    <Text className="text-gray-700 dark:text-white">{date.toLocaleDateString()}</Text>
                   </TouchableOpacity>
                   {showDatePicker && (
                     <DateTimePicker
@@ -184,21 +186,27 @@ export default function AuthorizationModal({
                   )}
                 </View>
 
-                {/* 🔥 Alterar Status com Chips */}
+                {/* 🔥 Status */}
                 <View className="mt-4">
-                  <Text className="text-sm font-semibold text-gray-700 mb-2">Alterar Status:</Text>
+                  <Text className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                    Alterar Status:
+                  </Text>
                   <View className="flex-row gap-2">
                     {statusOptions.map((option) => (
                       <TouchableOpacity
                         key={option.value}
                         onPress={() => setSelectedStatus(option.value)}
                         className={`px-4 py-2 rounded-full ${
-                          selectedStatus === option.value ? option.color : 'bg-gray-200'
+                          selectedStatus === option.value
+                            ? option.color
+                            : 'bg-gray-200 dark:bg-neutral-800'
                         }`}
                       >
                         <Text
                           className={`text-sm ${
-                            selectedStatus === option.value ? 'text-white' : 'text-gray-700'
+                            selectedStatus === option.value
+                              ? 'text-white'
+                              : 'text-gray-700 dark:text-gray-200'
                           }`}
                         >
                           {option.label}

@@ -24,7 +24,7 @@ export const ApresentationSection = ({
   subtitle,
   statusCards,
   containerClassName = 'px-5 pt-6 pb-4',
-  backgroundClassName = 'bg-[#0E7C4A]',
+  backgroundClassName = 'bg-emerald-700 dark:bg-emerald-800',
 }: ApresentationSectionProps) => {
   return (
     <View className={`${containerClassName} ${backgroundClassName} rounded-b-3xl`}>
@@ -40,7 +40,11 @@ export const ApresentationSection = ({
           <View key={`status-card-${index}`}>
             <StatusCard
               icon={
-                <Feather name={card.iconName} size={20} color={card.iconColor || '#16A34A'} />
+                <Feather
+                  name={card.iconName}
+                  size={20}
+                  color={card.iconColor || '#16A34A'}
+                />
               }
               title={card.title}
               subtitle={card.subtitle}

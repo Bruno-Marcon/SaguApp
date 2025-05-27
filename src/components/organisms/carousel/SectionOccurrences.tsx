@@ -1,7 +1,7 @@
-import { ActivityIndicator, FlatList, Text, TouchableOpacity, View } from 'react-native'
-import { Feather } from '@expo/vector-icons'
-import CardAtom from '../../atoms/card/cardAtom'
-import { Occurrence } from '../../../../types/occurrence'
+import { ActivityIndicator, FlatList, Text, TouchableOpacity, View } from 'react-native';
+import { Feather } from '@expo/vector-icons';
+import CardAtom from '../../atoms/card/cardAtom';
+import { Occurrence } from '../../../../types/occurrence';
 
 type UpdateData = {
   responsible_id?: string;
@@ -18,8 +18,8 @@ type Props = {
   onCardPress?: (occurrence: Occurrence) => void;
   loading?: boolean;
   onUpdate?: (id: string, data: UpdateData) => Promise<void>;
-  responsibleId?: string; // novo prop para passar responsible_id dinâmico
-}
+  responsibleId?: string;
+};
 
 export const SectionOccurrences = ({
   data,
@@ -33,21 +33,25 @@ export const SectionOccurrences = ({
 }: Props) => {
   const filteredOccurrences = data.filter(
     (o) => !o.attributes.status || o.attributes.status !== 'closed'
-  )
+  );
 
   const latestOccurrences = [...filteredOccurrences]
     .sort(
       (a, b) =>
-        new Date(b.attributes.created_at).getTime() - new Date(a.attributes.created_at).getTime()
+        new Date(b.attributes.created_at).getTime() -
+        new Date(a.attributes.created_at).getTime()
     )
-    .slice(0, 3)
+    .slice(0, 3);
 
   if (loading) {
     return (
-      <View className="mt-6 px-4 flex-row justify-center items-center" style={{ height: 120 }}>
+      <View
+        className="mt-6 px-4 flex-row justify-center items-center"
+        style={{ height: 120 }}
+      >
         <ActivityIndicator size="large" color="#EF4444" />
       </View>
-    )
+    );
   }
 
   return (
@@ -55,19 +59,26 @@ export const SectionOccurrences = ({
       <View className="flex-row justify-between items-center mb-4">
         <View className="flex-row items-center gap-x-2">
           <Feather name="alert-circle" size={20} color="#F87171" />
-          <Text className="text-xl font-extrabold text-gray-800 tracking-tight">{title}</Text>
+          <Text className="text-xl font-extrabold text-gray-800 dark:text-white tracking-tight">
+            {title}
+          </Text>
         </View>
+
         <TouchableOpacity
           onPress={onPressLink}
-          className="flex-row items-center bg-green-50 px-3 py-1 rounded-full"
+          className="flex-row items-center bg-green-50 dark:bg-neutral-800 px-3 py-1 rounded-full"
         >
-          <Text className="text-sm font-semibold text-green-600 mr-1">{linkText}</Text>
+          <Text className="text-sm font-semibold text-green-600 dark:text-green-400 mr-1">
+            {linkText}
+          </Text>
           <Feather name="arrow-right" size={16} color="#16A34A" />
         </TouchableOpacity>
       </View>
 
       {latestOccurrences.length === 0 ? (
-        <Text className="text-sm text-gray-500 italic px-1">Nenhuma ocorrência aberta no momento.</Text>
+        <Text className="text-sm text-gray-500 dark:text-gray-400 italic px-1">
+          Nenhuma ocorrência aberta no momento.
+        </Text>
       ) : (
         <FlatList
           data={latestOccurrences}
@@ -87,15 +98,10 @@ export const SectionOccurrences = ({
                 onPress={() => onCardPress?.(item)}
                 className="w-[260px] transition-all duration-300 active:scale-95"
               />
+
               {onUpdate && responsibleId && (
                 <TouchableOpacity
-                  style={{
-                    marginTop: 8,
-                    backgroundColor: '#EF4444',
-                    paddingVertical: 6,
-                    borderRadius: 6,
-                    alignItems: 'center',
-                  }}
+                  className="mt-2 bg-red-500 px-3 py-1 rounded-md items-center"
                   onPress={() =>
                     onUpdate(item.id, {
                       responsible_id: responsibleId,
@@ -105,7 +111,7 @@ export const SectionOccurrences = ({
                     })
                   }
                 >
-                  <Text style={{ color: 'white', fontWeight: 'bold' }}>
+                  <Text className="text-white font-bold">
                     Marcar como Resolvida
                   </Text>
                 </TouchableOpacity>
@@ -115,5 +121,5 @@ export const SectionOccurrences = ({
         />
       )}
     </View>
-  )
-}
+  );
+};

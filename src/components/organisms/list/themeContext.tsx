@@ -40,4 +40,10 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
-export const useThemeApp = () => useContext(ThemeContext);
+export const useThemeApp = () => {
+  const context = useContext(ThemeContext);
+  if (!context) {
+    throw new Error('useThemeApp deve ser usado dentro de um ThemeProvider');
+  }
+  return context;
+};

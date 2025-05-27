@@ -32,7 +32,7 @@ export default function OccurrenceCardHeader({
       </View>
 
       <Text
-        className="text-xl font-semibold text-gray-900"
+        className="text-xl font-semibold text-gray-900 dark:text-white"
         numberOfLines={1}
       >
         {title}

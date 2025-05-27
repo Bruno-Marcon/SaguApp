@@ -38,7 +38,7 @@ export default function CardAuthorizationAtom({
     <TouchableOpacity
       onPress={onPress}
       activeOpacity={0.9}
-      className={`bg-white rounded-3xl border border-gray-200 overflow-hidden ${className}`}
+      className={`bg-white dark:bg-neutral-900 rounded-3xl border border-gray-200 dark:border-neutral-700 overflow-hidden ${className}`}
       style={{ width: 270 }}
     >
       {/* Faixa lateral */}
@@ -55,14 +55,14 @@ export default function CardAuthorizationAtom({
 
         <View className="flex-row items-start">
           {/* Ícone */}
-          <View className="bg-gray-100 p-2 rounded-xl mr-4">
+          <View className="bg-gray-100 dark:bg-neutral-800 p-2 rounded-xl mr-4">
             <Feather name={validatedIconName} size={20} color={iconColor} />
           </View>
 
           {/* Conteúdo */}
           <View className="flex-1">
             <Text
-              className="text-xl font-bold text-gray-900"
+              className="text-xl font-bold text-gray-900 dark:text-white"
               numberOfLines={1}
               ellipsizeMode="tail"
             >
@@ -70,7 +70,7 @@ export default function CardAuthorizationAtom({
             </Text>
 
             <Text
-              className="text-sm text-gray-600 mt-2 leading-snug"
+              className="text-sm text-gray-600 dark:text-gray-300 mt-2 leading-snug"
               numberOfLines={2}
               ellipsizeMode="tail"
             >
@@ -79,7 +79,9 @@ export default function CardAuthorizationAtom({
 
             <View className="flex-row items-center mt-3">
               <Feather name="calendar" size={12} color="#9CA3AF" />
-              <Text className="text-xs text-gray-400 ml-1">{formattedTime ?? ''}</Text>
+              <Text className="text-xs text-gray-400 dark:text-gray-500 ml-1">
+                {formattedTime ?? ''}
+              </Text>
             </View>
           </View>
         </View>

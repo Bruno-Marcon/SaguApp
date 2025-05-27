@@ -9,7 +9,7 @@ interface Props {
 export default function OccurrenceModalHeader({ title, onClose }: Props) {
   return (
     <View className="flex-row justify-between items-center mb-4">
-      <Text className="text-xl font-bold text-gray-800">{title}</Text>
+      <Text className="text-xl font-bold text-gray-800 dark:text-white">{title}</Text>
       <TouchableOpacity onPress={onClose}>
         <Feather name="x" size={24} color="#4B5563" />
       </TouchableOpacity>
