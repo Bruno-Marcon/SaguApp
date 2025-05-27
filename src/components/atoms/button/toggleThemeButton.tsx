@@ -7,11 +7,15 @@ export default function ToggleThemeButton() {
   const isDark = theme === 'dark';
 
   return (
-    <View className="flex-row justify-between items-center mt-3">
+    <View className="flex-row justify-between items-center">
       <View className="flex-row items-center">
-        <Feather name="moon" size={20} color={isDark ? '#FCD34D' : '#3B82F6'} />
+        <Feather
+          name={isDark ? 'moon' : 'sun'}
+          size={20}
+          color={isDark ? '#FCD34D' : '#FACC15'}
+        />
         <Text className="ml-3 text-gray-800 dark:text-gray-100 font-medium text-base">
-          Tema Escuro
+          {isDark ? 'Modo Escuro' : 'Modo Claro'}
         </Text>
       </View>
 
@@ -19,7 +23,7 @@ export default function ToggleThemeButton() {
         value={isDark}
         onValueChange={toggleTheme}
         trackColor={{ false: '#d1d5db', true: '#4B5563' }}
-        thumbColor={isDark ? '#FCD34D' : '#3B82F6'}
+        thumbColor={isDark ? '#FCD34D' : '#FACC15'}
       />
     </View>
   );

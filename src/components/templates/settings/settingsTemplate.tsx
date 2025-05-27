@@ -31,12 +31,13 @@ export const SettingsTemplate = ({
           <ProfileHeader name={name} email={email} showBackButton={showBackButton} />
         </View>
 
-        {/* 🔥 Tema */}
-        <View className="self-center bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-700 rounded-2xl p-4 mb-5">
-            <ToggleThemeButton />
+        <View className="bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-700 rounded-2xl p-4 mb-5">
+          <Text className="text-gray-500 dark:text-gray-400 text-xs mb-3">
+            Aparência
+          </Text>
+          <ToggleThemeButton />
         </View>
 
-        {/* 🔐 Conta */}
         <View className="bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-700 rounded-2xl p-4 mb-5">
           <Text className="text-gray-500 dark:text-gray-400 text-xs mb-3">
             Conta
@@ -66,7 +67,6 @@ export const SettingsTemplate = ({
           </TouchableOpacity>
         </View>
 
-        {/* 🔔 Notificações */}
         <View className="bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-700 rounded-2xl p-4 mb-5">
           <Text className="text-gray-500 dark:text-gray-400 text-xs mb-3">
             Notificações
@@ -83,7 +83,6 @@ export const SettingsTemplate = ({
           </TouchableOpacity>
         </View>
 
-        {/* ℹ️ Sobre */}
         <View className="bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-700 rounded-2xl p-4">
           <Text className="text-gray-500 dark:text-gray-400 text-xs mb-3">
             Sobre
