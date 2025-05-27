@@ -1,5 +1,5 @@
 import React from 'react';
-import { View } from 'react-native';
+import { View, useWindowDimensions, Platform } from 'react-native';
 import { usePathname } from 'expo-router';
 import { Feather } from '@expo/vector-icons';
 import { TabItem } from '../../molecules/tab/tabItens';
@@ -21,15 +21,23 @@ const tabs: { label: string; icon: keyof typeof Feather.glyphMap; route: Route }
 
 export default function BottomTabBar() {
   const pathname = usePathname();
+  const { width } = useWindowDimensions();
+
+  const isTablet = width >= 768;
+  const isWeb = Platform.OS === 'web';
+
+  const containerStyle = isTablet
+    ? 'flex-col h-full w-24 justify-start py-16 px-3 border-r border-gray-100 dark:border-neutral-800'
+    : 'flex-row justify-around px-8 py-6 rounded-t-2xl mb-4 border-t border-gray-100 dark:border-neutral-800';
 
   return (
     <View
-      className="
-        flex-row justify-around items-center
+      className={`
+        ${containerStyle}
+        items-center
         bg-white dark:bg-neutral-900
-        rounded-t-2xl p-6 shadow-md shadow-black/10
-        border-t border-gray-100 dark:border-neutral-800
-      "
+        shadow-md shadow-black/10
+      `}
     >
       {tabs.map((tab) => {
         const normalizeRoute = (route: string) => route.replace(/^\/\(panel\)/, '');
@@ -38,15 +46,21 @@ export default function BottomTabBar() {
           pathname === tabRouteNormalized || pathname.startsWith(`${tabRouteNormalized}/`);
 
         return (
-          <TabItem
+          <View
             key={tab.label}
-            icon={tab.icon}
-            label={tab.label}
-            route={tab.route}
-            active={active}
-          />
+            className={`${isTablet ? 'mb-12' : 'mb-4'}`}
+          >
+            <TabItem
+              icon={tab.icon}
+              label={!isTablet ? tab.label : ''}
+              route={tab.route}
+              active={active}
+              iconSize={isTablet ? 32 : 28}
+            />
+          </View>
         );
       })}
+
     </View>
   );
 }

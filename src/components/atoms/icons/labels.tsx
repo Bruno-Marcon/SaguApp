@@ -6,9 +6,10 @@ type Props = {
   icon: keyof typeof Feather.glyphMap;
   label: string;
   active: boolean;
+  iconSize?: number;
 };
 
-export const IconLabel = ({ icon, label, active }: Props) => {
+export const IconLabel = ({ icon, label, active,iconSize = 24}: Props) => {
   const activeColor = '#16A34A'; // verde ativo
   const inactiveColor = '#64748b'; // cinza
 
@@ -17,7 +18,7 @@ export const IconLabel = ({ icon, label, active }: Props) => {
       <Feather
         name={icon}
         color={active ? activeColor : inactiveColor}
-        size={active ? 28 : 24}
+        size={iconSize}
       />
       <Text
         className={`text-xs mt-1 ${

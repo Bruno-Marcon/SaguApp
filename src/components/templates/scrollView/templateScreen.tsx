@@ -1,8 +1,7 @@
 import React from 'react';
-import { View, SafeAreaView, ScrollView } from 'react-native';
+import { View, SafeAreaView, ScrollView, useWindowDimensions } from 'react-native';
 import BottomTabBar from '../../organisms/tabBar/BottomTabBar';
 import DefaultNavBar from '../../organisms/navbar/defaultNav';
-import HelpWidget from '../../organisms/widget/helpWidgetOrganism';
 
 type TemplateScreenProps = {
   children: React.ReactNode;
@@ -19,8 +18,11 @@ export default function TemplateScreen({
   withBottomBar = true,
   scrollable = true,
 }: TemplateScreenProps) {
+  const { width } = useWindowDimensions();
+  const isTablet = width >= 768;
+
   return (
-    <View className="flex-1 bg-gray-100 dark:bg-neutral-950">
+    <View className={`flex-1 bg-gray-100 dark:bg-neutral-950 ${isTablet ? 'pl-24' : ''}`}>
       {withSafeArea && withHeader && (
         <SafeAreaView className="bg-gray-100 dark:bg-neutral-950">
           <DefaultNavBar />
@@ -41,7 +43,6 @@ export default function TemplateScreen({
       </View>
 
       {withBottomBar && <BottomTabBar />}
-      {/* <HelpWidget /> */}
     </View>
   );
 }

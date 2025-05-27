@@ -16,14 +16,21 @@ type Props = {
   label: string;
   route: Route;
   active: boolean;
+  iconSize?: number; // 👈 novo prop
 };
 
-export const TabItem = ({ icon, label, route, active }: Props) => {
+export const TabItem = ({
+  icon,
+  label,
+  route,
+  active,
+  iconSize = 24,
+}: Props) => {
   const router = useRouter();
 
   return (
     <TouchableOpacity onPress={() => router.push(route)}>
-      <IconLabel icon={icon} label={label} active={active} />
+      <IconLabel icon={icon} label={label} active={active} iconSize={iconSize} />
     </TouchableOpacity>
   );
 };
