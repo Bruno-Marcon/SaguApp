@@ -6,7 +6,6 @@ import { ProfileMenu } from '../../organisms/menu/profileMenu'
 import { Button } from '../../atoms/button/button'
 import { Logout } from '@//services/auth/authService'
 import TemplateScreen from '../scrollView/templateScreen'
-import Animated, { BounceInUp } from 'react-native-reanimated'
 
 const handleLogout = async () => {
   await Logout()

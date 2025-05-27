@@ -1,67 +1,59 @@
-import { Occurrence, OccurrenceFilters, OccurrenceResponse } from "../../../types/occurrence";
-import { api } from "../api/api";
-import { endpoints } from "../endpoints";
+import {
+  CreateOccurrencePayload,
+  OccurrenceFilters,
+  OccurrenceResponse,
+  SingleOccurrenceResponse,
+  updateOccurrencePayload,
+  Occurrence,
+  
+} from '../../../types/occurrence';
+import { IncludedEvent, IncludedStudent, IncludedUser } from '../../../types/share';
+import { api } from '../api/api';
+import { endpoints } from '../endpoints';
+
+function enrichOccurrenceWithNames(
+  occurrence: Occurrence,
+  included: Array<IncludedUser | IncludedStudent | IncludedEvent> = []
+): Occurrence & {
+  student_name?: string;
+  responsible_name?: string;
+  relator_name?: string;
+} {
+  const studentId = occurrence.relationships.student.data.id;
+  const responsibleId = occurrence.relationships.responsible.data.id;
+  const relatorId = occurrence.relationships.relator.data.id;
+
+  const findName = (id: string, type: string) => {
+    const entity = included.find(i => i.id === id && i.type === type);
+    return entity?.attributes?.name ?? '-';
+  };
+
+  return {
+    ...occurrence,
+    student_name: findName(studentId, 'student'),
+    responsible_name: findName(responsibleId, 'user'),
+    relator_name: findName(relatorId, 'user'),
+  };
+}
 
 export const occurrenceService = {
-  getAll: async (filters: OccurrenceFilters = {}): Promise<OccurrenceResponse> => {
+  getLatestOccurrences: async (): Promise<any> => {
+    const response = await api.get(endpoints.dashboard.occurrences);
+    return response;
+  },
+
+  getOccurrencies: async (filters: OccurrenceFilters = {}): Promise<OccurrenceResponse> => {
     const params = new URLSearchParams();
 
     if (filters.page) params.append('page[number]', filters.page.toString());
     if (filters.severity) params.append('filter[severity]', filters.severity);
     if (filters.status) params.append('filter[status]', filters.status);
-    if (filters.student_id) params.append('filter[student_id]', filters.student_id);
 
     const response = await api.get(`${endpoints.occurrencies.root}?${params.toString()}`);
-
-    const mapped = {
-      ...response,
-      data: response.data.map((item: any): Occurrence => ({
-        id: item.id,
-        title: item.attributes.title,
-        description: item.attributes.description,
-        created_at: item.attributes.created_at,
-        kind: item.attributes.kind,
-        status: item.attributes.status,
-        severity: item.attributes.severity,
-        student_id: item.relationships?.student?.data?.id ?? '',
-      })),
-    };
-
-    return mapped;
+    return response;
   },
 
-  getById: async (id: string): Promise<Occurrence> => {
-    const response = await api.get(`${endpoints.occurrencies.root}/${id}`);
-
-    const item = response.data;
-    const included = response.included || [];
-
-    const studentId = item.relationships?.student?.data?.id;
-    const relatorId = item.relationships?.relator?.data?.id;
-    const responsibleId = item.relationships?.responsible?.data?.id;
-
-    const student = included.find((i: any) => i.type === 'student' && i.id === studentId);
-    const relator = included.find((i: any) => i.type === 'user' && i.id === relatorId);
-    const responsible = included.find((i: any) => i.type === 'user' && i.id === responsibleId);
-
-    const mapped: Occurrence = {
-      id: item.id,
-      title: item.attributes.title,
-      description: item.attributes.description,
-      created_at: item.attributes.created_at,
-      kind: item.attributes.kind,
-      status: item.attributes.status,
-      severity: item.attributes.severity,
-      student_id: studentId ?? '',
-      student_name: student?.attributes?.name ?? '',
-      relator_name: relator?.attributes?.name ?? '',
-      responsible_name: responsible?.attributes?.name ?? '',
-    };
-
-    return mapped;
-  },
-
-  getByStudentId: async (
+  getOccurrenciesByStudentId: async (
     studentId: string,
     page = 1,
     pageSize = 5
@@ -69,21 +61,55 @@ export const occurrenceService = {
     const response = await api.get(
       `${endpoints.occurrencies.root}?filter[student_id]=${studentId}&page[number]=${page}&page[size]=${pageSize}`
     );
+    return response;
+  },
 
-    const mapped = {
-      ...response,
-      data: response.data.map((item: any): Occurrence => ({
-        id: item.id,
-        title: item.attributes.title,
-        description: item.attributes.description,
-        created_at: item.attributes.created_at,
-        kind: item.attributes.kind,
-        status: item.attributes.status,
-        severity: item.attributes.severity,
-        student_id: item.relationships?.student?.data?.id ?? '',
-      })),
+  // Aqui aplicamos o enriquecimento para ter os nomes
+  getOccurrency: async (id: string): Promise<Occurrence & {
+    student_name?: string;
+    responsible_name?: string;
+    relator_name?: string;
+  }> => {
+    const response: SingleOccurrenceResponse = await api.get(`${endpoints.occurrencies.root}/${id}`);
+    const occurrence = response.data;
+    const included = response.included || [];
+
+    return enrichOccurrenceWithNames(occurrence, included);
+  },
+
+  createOccurrence: async (payload: CreateOccurrencePayload): Promise<SingleOccurrenceResponse> => {
+    const response = await api.post(endpoints.occurrencies.root, payload);
+    return response;
+  },
+
+  updateOccurrence: async (
+    id: string,
+    data: updateOccurrencePayload
+  ): Promise<SingleOccurrenceResponse> => {
+    const payload: any = {
+      data: {
+        type: 'occurrency',
+        id,
+        attributes: {},
+        relationships: {},
+      },
     };
 
-    return mapped;
+    if (data.kind !== undefined) payload.data.attributes.kind = data.kind;
+    if (data.status !== undefined) payload.data.attributes.status = data.status;
+    if (data.severity !== undefined) payload.data.attributes.severity = data.severity;
+    if (data.private !== undefined) payload.data.attributes.private = data.private;
+
+    if (data.responsible_id) {
+      payload.data.relationships.responsible = {
+        data: {
+          type: 'user',
+          id: data.responsible_id,
+        },
+      };
+    }
+
+    const response = await api.patch(`${endpoints.occurrencies.root}/${id}`, payload);
+    return response;
   },
 };

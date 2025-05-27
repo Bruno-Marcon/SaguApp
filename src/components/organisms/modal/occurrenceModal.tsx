@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react'
+import React, { useEffect, useState, useCallback } from 'react';
 import {
   Modal,
   View,
@@ -6,62 +6,65 @@ import {
   TouchableOpacity,
   Text,
   KeyboardAvoidingView,
-  Platform
-} from 'react-native'
+  Platform,
+} from 'react-native';
 
-import { Occurrence } from '../../../../types/occurrence'
-import { Event as OccurrenceEvent } from '../../../../types/event'
-import { occurrenceService } from '@//services/occurrence/occurrenceService'
-import { eventService } from '@//services/events/eventServices'
+import { Occurrence, updateOccurrencePayload } from '../../../../types/occurrence';
+import { Event as OccurrenceEvent } from '../../../../types/event';
+import { occurrenceService } from '@//services/occurrence/occurrenceService';
+import { eventService } from '@//services/events/eventServices';
 
-import CommentList from '../../molecules/comments/commentList'
-import CommentInput from '../../atoms/input/commentInput'
-import OccurrenceModalHeader from '../../molecules/header/occurrenceModalHeader'
-import TagGroup from '../../molecules/badge/tagGroup'
-import OccurrenceDetailsSectionModal from '../../molecules/section/occurence/OccurrenceDetailsSectionModal'
-import { showToast } from '@//utils/toastUtiles'
+import CommentList from '../../molecules/comments/commentList';
+import CommentInput from '../../atoms/input/commentInput';
+import OccurrenceModalHeader from '../../molecules/header/occurrenceModalHeader';
+import TagGroup from '../../molecules/badge/tagGroup';
+import OccurrenceDetailsSectionModal from '../../molecules/section/occurence/OccurrenceDetailsSectionModal';
+import { showToast } from '@//utils/toastUtiles';
 
 interface Props {
-  visible: boolean
-  onClose: () => void
-  occurrenceId: string | null
-  occurrence?: Occurrence | null
+  visible: boolean;
+  onClose: () => void;
+  occurrenceId: string | null;
+  occurrence?: Occurrence | null;
+  onUpdate?: () => Promise<void>;
 }
 
 export default function OccurrenceDetailModal({
   visible,
   onClose,
   occurrenceId,
-  occurrence: initialOccurrence
+  occurrence: initialOccurrence,
 }: Props) {
-  const [occurrence, setOccurrence] = useState<Occurrence | null>(initialOccurrence ?? null)
-  const [events, setEvents] = useState<OccurrenceEvent[]>([])
-  const [comment, setComment] = useState('')
-  const [loading, setLoading] = useState(true)
-  const [submitting, setSubmitting] = useState(false)
+  const [occurrence, setOccurrence] = useState<Occurrence | null>(initialOccurrence ?? null);
+  const [events, setEvents] = useState<OccurrenceEvent[]>([]);
+  const [comment, setComment] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
 
-  // 🔁 Lógica de carregamento separada
   const loadOccurrenceDetails = useCallback(async () => {
-    if (!occurrenceId && !initialOccurrence) return
-    setLoading(true)
+    if (!occurrenceId && !initialOccurrence) return;
+    setLoading(true);
     try {
-      const occData = await occurrenceService.getById(occurrenceId!)
-      const allEvents = await eventService.getAll()
+      const occData = await occurrenceService.getOccurrency(occurrenceId!);
+
+      const allEvents = await eventService.getAll();
       const relatedEvents = allEvents.data.filter(
         (e) => e.attributes.eventable_id === occData.id
-      )
-      setOccurrence(occData)
-      setEvents(relatedEvents)
+      );
+
+      setOccurrence(occData);
+      setEvents(relatedEvents);
     } catch (err) {
-      console.error('Erro ao buscar detalhes da ocorrência:', err)
+      console.error('Erro ao buscar detalhes da ocorrência:', err);
+      showToast.error('Erro ao carregar dados da ocorrência');
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }, [occurrenceId, initialOccurrence])
+  }, [occurrenceId, initialOccurrence]);
 
   useEffect(() => {
-    if (visible) loadOccurrenceDetails()
-  }, [visible, loadOccurrenceDetails])
+    if (visible) loadOccurrenceDetails();
+  }, [visible, loadOccurrenceDetails]);
 
   const handleSendComment = async () => {
     if (!comment.trim() || !occurrenceId) return;
@@ -73,12 +76,7 @@ export default function OccurrenceDetailModal({
         description: comment.trim(),
       });
       setComment('');
-      const allEvents = await eventService.getAll();
-      const relatedEvents = allEvents.data.filter(
-        (e) => e.attributes.eventable_id === occurrenceId
-      );
-      setEvents(relatedEvents);
-
+      await loadOccurrenceDetails();
       showToast.success('Comentário adicionado com sucesso!');
     } catch (err) {
       console.error('Erro ao enviar comentário:', err);
@@ -86,9 +84,20 @@ export default function OccurrenceDetailModal({
     } finally {
       setSubmitting(false);
     }
-  }
+  };
 
-  if (!visible || (loading && !occurrence)) return null
+  const handleUpdate = async (id: string, updateData: updateOccurrencePayload) => {
+    try {
+      await occurrenceService.updateOccurrence(id, updateData);
+      await loadOccurrenceDetails();
+      showToast.success('Ocorrência atualizada com sucesso!');
+    } catch (err) {
+      console.error('Erro ao atualizar ocorrência:', err);
+      showToast.error('Erro ao atualizar ocorrência.');
+    }
+  };
+
+  if (!visible || (loading && !occurrence)) return null;
 
   return (
     <Modal
@@ -100,44 +109,34 @@ export default function OccurrenceDetailModal({
     >
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        style={{ flex: 1 }}
+        className="flex-1"
       >
-        <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.4)' }}>
-          <View style={{ flex: 1, justifyContent: 'flex-end' }}>
-            <View
-              style={{
-                backgroundColor: '#fff',
-                borderTopLeftRadius: 24,
-                borderTopRightRadius: 24,
-                paddingHorizontal: 20,
-                paddingTop: 20,
-                paddingBottom: 16,
-                width: '100%',
-                maxHeight: '95%',
-              }}
-            >
-              <OccurrenceModalHeader title={occurrence?.title ?? '-'} onClose={onClose} />
+        <View className="flex-1 bg-black/40">
+          <View className="flex-1 justify-end">
+            <View className="bg-white rounded-t-3xl px-5 pt-5 pb-4 w-full max-h-[95%]">
+              <OccurrenceModalHeader
+                title={occurrence?.attributes?.title ?? '-'}
+                onClose={onClose}
+              />
 
               <TagGroup
-                status={occurrence?.status}
-                kind={occurrence?.kind}
-                severity={occurrence?.severity}
+                status={occurrence?.attributes?.status}
+                kind={occurrence?.attributes?.kind}
+                severity={occurrence?.attributes?.severity}
               />
 
               <ScrollView
-                style={{ maxHeight: '65%', marginBottom: 8 }}
+                className="max-h-[65%] mb-2"
                 showsVerticalScrollIndicator={false}
               >
-                <OccurrenceDetailsSectionModal occurrence={occurrence!} />
+                {occurrence && (
+                  <OccurrenceDetailsSectionModal
+                    occurrence={occurrence}
+                    onUpdate={handleUpdate}
+                  />
+                )}
 
-                <Text
-                  style={{
-                    fontSize: 16,
-                    fontWeight: '600',
-                    color: '#374151',
-                    marginBottom: 8,
-                  }}
-                >
+                <Text className="text-base font-semibold text-gray-700 mb-2">
                   Comentários
                 </Text>
 
@@ -148,21 +147,11 @@ export default function OccurrenceDetailModal({
               <TouchableOpacity
                 onPress={handleSendComment}
                 disabled={submitting}
-                style={{
-                  backgroundColor: '#16A34A',
-                  marginTop: 12,
-                  paddingVertical: 12,
-                  borderRadius: 12,
-                  opacity: submitting ? 0.6 : 1,
-                }}
+                className={`bg-green-600 mt-2 py-3 rounded-xl ${
+                  submitting ? 'opacity-60' : ''
+                }`}
               >
-                <Text
-                  style={{
-                    color: 'white',
-                    fontWeight: '600',
-                    textAlign: 'center',
-                  }}
-                >
+                <Text className="text-white font-semibold text-center">
                   {submitting ? 'Enviando...' : 'Enviar Comentário'}
                 </Text>
               </TouchableOpacity>
@@ -171,5 +160,5 @@ export default function OccurrenceDetailModal({
         </View>
       </KeyboardAvoidingView>
     </Modal>
-  )
+  );
 }

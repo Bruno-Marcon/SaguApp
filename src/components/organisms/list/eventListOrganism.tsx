@@ -9,32 +9,33 @@ type EventListProps = {
   selectedDate: Date | null;
   events: Schedule[];
   onCardPress?: (event: Schedule) => void;
+  onStatusUpdate?: (id: string, status: string) => void; // NOVO
 };
 
-export const EventList = ({ selectedDate, events: initialEvents, onCardPress }: EventListProps) => {
-  const [localEvents, setLocalEvents] = useState(initialEvents);
+export const EventList = ({
+  selectedDate,
+  events,
+  onCardPress,
+  onStatusUpdate,
+}: EventListProps) => {
 
   const filteredEvents = useMemo(() => {
-    if (!selectedDate) return localEvents;
+    if (!selectedDate) return events;
 
     const selectedDateStr = selectedDate.toISOString().split('T')[0];
 
-    return localEvents.filter(event => {
+    return events.filter(event => {
       const eventDateStr = event.attributes.starts_at.split('T')[0];
       return eventDateStr === selectedDateStr;
     });
-  }, [localEvents, selectedDate]);
+  }, [events, selectedDate]);
 
   const handleConfirm = async (event: Schedule) => {
     try {
       await scheduleService.updateSchedule(event.id, { status: 'confirmed' });
 
-      // Atualizar localmente o status
-      setLocalEvents(prev =>
-        prev.map(e =>
-          e.id === event.id ? { ...e, attributes: { ...e.attributes, status: 'confirmed' } } : e
-        )
-      );
+      // Atualiza o status no pai
+      onStatusUpdate?.(event.id, 'confirmed');
 
       Toast.show({
         type: 'success',
@@ -49,7 +50,7 @@ export const EventList = ({ selectedDate, events: initialEvents, onCardPress }: 
     }
   };
 
-  if (!initialEvents || initialEvents.length === 0) {
+  if (!events || events.length === 0) {
     return (
       <Text className="text-center text-gray-500 mt-4">
         Nenhum agendamento encontrado.

@@ -34,7 +34,7 @@ export default function OcorrenciasPage() {
         <OccurrenceTemplate
           refreshing={refreshing}
           onRefreshEnd={handleRefreshEnd}
-          onOccurrencePress={openModal} // importante!
+          onOccurrencePress={openModal}
         />
       </TemplateScreen>
 

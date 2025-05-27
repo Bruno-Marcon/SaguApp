@@ -1,113 +1,164 @@
-import { useEffect, useState } from 'react';
-import { View, Text, ActivityIndicator } from 'react-native';
-import { Occurrence } from '../../../../types/occurrence';
-import { occurrenceService } from '@//services/occurrence/occurrenceService';
-import { studentService } from '@//services/studentes/studentsServices';
-import { StudentListItem } from '../../../../types/students';
-import OccurrenceCard from '../../organisms/card/occurrenceCardOrganism';
-import { OccurrenceHeader } from '../../organisms/header/occurrencesHeader';
-import GenericFilters from '../../organisms/filter/genericFilter';
+import { useEffect, useState } from 'react'
+import { View, Text, ActivityIndicator } from 'react-native'
+import { Occurrence, OccurrenceResponse } from '../../../../types/occurrence'
+import { occurrenceService } from '@//services/occurrence/occurrenceService'
+import OccurrenceCard from '../../organisms/card/occurrenceCardOrganism'
+import { OccurrenceHeader } from '../../organisms/header/occurrencesHeader'
+import GenericFilters from '../../organisms/filter/genericFilter'
+import { IncludedEvent, IncludedStudent, IncludedUser } from '../../../../types/share'
+import { StudentListItem } from '../../../../types/students'
+import { studentService } from '@//services/studentes/studentsServices'
 
 type Option = {
-  label: string;
-  value: string;
-};
+  label: string
+  value: string
+}
 
 type Props = {
-  refreshing: boolean;
-  onRefreshEnd: () => void;
-  onOccurrencePress: (occurrence: Occurrence) => void;
-};
+  refreshing: boolean
+  onRefreshEnd: () => void
+  onOccurrencePress: (
+    occurrence: Occurrence & {
+      student_name?: string
+      relator_name?: string
+      responsible_name?: string
+    }
+  ) => void
+}
+
+function getIncludedName(
+  included: Array<IncludedUser | IncludedStudent | IncludedEvent> | undefined,
+  type: string,
+  id: string
+): string {
+  if (!included) return ''
+  const found = included.find((item) => item.type === type && item.id === id)
+  return found?.attributes?.name ?? ''
+}
 
 export default function OccurrenceTemplate({ refreshing, onRefreshEnd, onOccurrencePress }: Props) {
-  const [allOccurrences, setAllOccurrences] = useState<Occurrence[]>([]);
-  const [filteredOccurrences, setFilteredOccurrences] = useState<Occurrence[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [allOccurrences, setAllOccurrences] = useState<
+    (Occurrence & {
+      student_name?: string
+      relator_name?: string
+      responsible_name?: string
+    })[]
+  >([])
+  const [filteredOccurrences, setFilteredOccurrences] = useState<typeof allOccurrences>([])
+  const [loading, setLoading] = useState(false)
 
-  const [studentId, setStudentId] = useState('Todos');
-  const [status, setStatus] = useState('Todos');
-  const [severity, setSeverity] = useState('Todos');
+  const [studentId, setStudentId] = useState('Todos')
+  const [status, setStatus] = useState('Todos')
+  const [severity, setSeverity] = useState('Todos')
   const [dateRange, setDateRange] = useState<{ start: Date | null; end: Date | null }>({
     start: null,
     end: null,
-  });
+  })
 
-  const [studentOptions, setStudentOptions] = useState<Option[]>([]);
-
-  const fetchData = async () => {
-    setLoading(true);
-    try {
-      const response = await occurrenceService.getAll({
-        student_id: studentId !== 'Todos' ? studentId : undefined,
-      });
-      setAllOccurrences(response.data);
-    } catch (err) {
-      console.error('Erro ao buscar ocorrências:', err);
-    }
-    setLoading(false);
-    onRefreshEnd();
-  };
+  const [studentOptions, setStudentOptions] = useState<Option[]>([])
 
   const loadStudents = async () => {
     try {
-      const res = await studentService.getAll();
+      const res = await studentService.getAll(1)
       const options = res.data.map((student: StudentListItem) => ({
         label: student.attributes.name,
         value: student.id,
-      }));
-      setStudentOptions([{ label: 'Todos', value: 'Todos' }, ...options]);
+      }))
+      setStudentOptions([{ label: 'Todos', value: 'Todos' }, ...options])
     } catch (err) {
-      console.error('Erro ao carregar estudantes:', err);
+      console.error('Erro ao carregar estudantes:', err)
     }
-  };
+  }
+
+  const fetchData = async () => {
+    setLoading(true)
+    try {
+      const response: OccurrenceResponse & {
+        included?: Array<IncludedUser | IncludedStudent | IncludedEvent>
+      } = await occurrenceService.getOccurrencies({})
+
+      const occurrencesWithNames = response.data.map((occ) => {
+        const studentId = occ.relationships.student.data.id
+        const relatorId = occ.relationships.relator.data.id
+        const responsibleId = occ.relationships.responsible.data.id
+
+        return {
+          ...occ,
+          student_name: getIncludedName(response.included, 'student', studentId),
+          relator_name: getIncludedName(response.included, 'user', relatorId),
+          responsible_name: getIncludedName(response.included, 'user', responsibleId),
+        }
+      })
+
+      setAllOccurrences(occurrencesWithNames)
+    } catch (err) {
+      console.error('Erro ao buscar ocorrências:', err)
+    }
+    setLoading(false)
+    onRefreshEnd()
+  }
 
   useEffect(() => {
-    loadStudents();
-  }, []);
+    loadStudents()
+  }, [])
 
   useEffect(() => {
-    fetchData();
-  }, [studentId]);
+    fetchData()
+  }, [])
 
   useEffect(() => {
-    if (refreshing) fetchData();
-  }, [refreshing]);
+    if (refreshing) fetchData()
+  }, [refreshing])
 
   useEffect(() => {
-    let filtered = [...allOccurrences];
+    let filtered = [...allOccurrences]
 
-    const statusMap: Record<string, string> = {
-      'Aberta': 'open',
-      'Em andamento': 'in_progress',
-      'Resolvida': 'resolved',
-    };
+    // Filtro por aluno
+    if (studentId !== 'Todos') {
+      filtered = filtered.filter((occ) => occ.relationships.student.data.id === studentId)
+    }
 
-    const severityMap: Record<string, string> = {
-      'Alta': 'high',
-      'Média': 'medium',
-      'Baixa': 'low',
-    };
-
+    // Filtro por status
     if (status !== 'Todos') {
-      filtered = filtered.filter(o => o.status === statusMap[status]);
+      const statusMapBackendToUI: Record<string, string> = {
+        open: 'Aberta',
+        in_progress: 'Em andamento',
+        resolved: 'Resolvida',
+        closed: 'Fechada',
+      }
+      filtered = filtered.filter(
+        (occ) => statusMapBackendToUI[occ.attributes.status] === status
+      )
     }
 
+    // Filtro por gravidade (severity)
     if (severity !== 'Todos') {
-      filtered = filtered.filter(o => o.severity === severityMap[severity]);
+      const severityMapBackendToUI: Record<string, string> = {
+        low: 'Baixa',
+        normal: 'Média',
+        medium: 'Média',
+        high: 'Alta',
+      }
+      filtered = filtered.filter(
+        (occ) => severityMapBackendToUI[occ.attributes.severity] === severity
+      )
     }
 
+    // Filtro por data
     if (dateRange.start && dateRange.end) {
-      const start = new Date(dateRange.start).setHours(0, 0, 0, 0);
-      const end = new Date(dateRange.end).setHours(23, 59, 59, 999);
-      filtered = filtered.filter(o => {
-        const createdAt = new Date(o.created_at).getTime();
-        return createdAt >= start && createdAt <= end;
-      });
+      const start = new Date(dateRange.start).setHours(0, 0, 0, 0)
+      const end = new Date(dateRange.end).setHours(23, 59, 59, 999)
+
+      filtered = filtered.filter((occ) => {
+        const createdAtDate = new Date(occ.attributes.created_at)
+        if (isNaN(createdAtDate.getTime())) return false
+        const createdAtTime = createdAtDate.getTime()
+        return createdAtTime >= start && createdAtTime <= end
+      })
     }
 
-    filtered.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
-    setFilteredOccurrences(filtered);
-  }, [allOccurrences, status, severity, dateRange]);
+    setFilteredOccurrences(filtered)
+  }, [allOccurrences, studentId, status, severity, dateRange])
 
   return (
     <View className="flex-1 bg-gray-50">
@@ -122,6 +173,7 @@ export default function OccurrenceTemplate({ refreshing, onRefreshEnd, onOccurre
             { label: 'Aberta', value: 'Aberta' },
             { label: 'Em andamento', value: 'Em andamento' },
             { label: 'Resolvida', value: 'Resolvida' },
+            { label: 'Fechada', value: 'Fechada' },
           ],
         }}
         severity={{
@@ -150,16 +202,12 @@ export default function OccurrenceTemplate({ refreshing, onRefreshEnd, onOccurre
       {loading ? (
         <ActivityIndicator size="large" color="#0E7C4A" className="my-4" />
       ) : filteredOccurrences.length > 0 ? (
-        filteredOccurrences.map(occ => (
-          <OccurrenceCard
-            key={occ.id}
-            occurrence={occ}
-            onPress={() => onOccurrencePress(occ)} // <- chama o modal
-          />
+        filteredOccurrences.map((occ) => (
+          <OccurrenceCard key={occ.id} occurrence={occ} onPress={() => onOccurrencePress(occ)} />
         ))
       ) : (
         <Text className="text-center text-gray-500 mt-4">Nenhuma ocorrência encontrada.</Text>
       )}
     </View>
-  );
+  )
 }

@@ -1,12 +1,14 @@
 import { useEffect, useState, useCallback } from 'react';
 import { View, Text, ScrollView, ActivityIndicator } from 'react-native';
 import { studentService } from '@//services/studentes/studentsServices';
-import { Authorization } from '../../../../types/authorizations';
+import { authorizationService } from '@//services/authorizations/authorizationsService';
+import { Authorization, CreateAuthorizationPayload } from '../../../../types/authorizations';
 import { StudentListItem } from '../../../../types/students';
 import AuthorizationCard from '../../molecules/card/authorizationCard';
 import { AuthorizationHeader } from '../../organisms/header/authorizationHeaderOrganism';
 import GenericFilters from '../../organisms/filter/genericFilter';
-import { authorizationService } from '@//services/authorizations/authorizationsService';
+import Toast from 'react-native-toast-message';
+import { EditAuthorizationModal } from '../../organisms/modal/editAuthorizationModal';
 
 type Props = {
   refreshing: boolean;
@@ -15,10 +17,7 @@ type Props = {
   refreshKey?: number;
 };
 
-type Option = {
-  label: string;
-  value: string;
-};
+type Option = { label: string; value: string };
 
 export default function AuthorizationTemplate({
   refreshing,
@@ -38,6 +37,8 @@ export default function AuthorizationTemplate({
   });
 
   const [studentOptions, setStudentOptions] = useState<Option[]>([]);
+
+  const [modalVisible, setModalVisible] = useState(false);
 
   const fetchData = useCallback(async () => {
     setLoading(true);
@@ -66,35 +67,21 @@ export default function AuthorizationTemplate({
     }
   };
 
-  useEffect(() => {
-    loadStudents();
-  }, []);
-
-  useEffect(() => {
-    fetchData();
-  }, [studentId]);
-
-  useEffect(() => {
-    if (refreshing) fetchData();
-  }, [refreshing]);
-
-  useEffect(() => {
-    fetchData(); // 🔄 Atualiza ao mudar refreshKey
-  }, [refreshKey]);
+  useEffect(() => { loadStudents(); }, []);
+  useEffect(() => { fetchData(); }, [studentId, refreshKey]);
+  useEffect(() => { if (refreshing) fetchData(); }, [refreshing]);
 
   useEffect(() => {
     let filtered = [...allAuthorizations];
-
     const statusMap: Record<string, string> = {
       'Pendente': 'pending',
       'Aprovada': 'approved',
-      'Recusada': 'refuse',
+      'Rejeitada': 'refused',
     };
 
     if (status !== 'Todos') {
       filtered = filtered.filter(a => a.attributes.status === statusMap[status]);
     }
-
     if (dateRange.start && dateRange.end) {
       const start = new Date(dateRange.start).setHours(0, 0, 0, 0);
       const end = new Date(dateRange.end).setHours(23, 59, 59, 999);
@@ -104,18 +91,22 @@ export default function AuthorizationTemplate({
       });
     }
 
-    filtered.sort((a, b) =>
-      new Date(b.attributes.created_at).getTime() - new Date(a.attributes.created_at).getTime()
+    filtered.sort(
+      (a, b) => new Date(b.attributes.created_at).getTime() - new Date(a.attributes.created_at).getTime()
     );
-
     setFilteredAuthorizations(filtered);
   }, [allAuthorizations, status, dateRange]);
 
+  const handleCloseModal = () => setModalVisible(false);
+
   return (
     <View className="flex-1 bg-gray-50">
-      <AuthorizationHeader title="Autorizações" />
+      <AuthorizationHeader
+        title="Autorizações"
+        onCreatePress={() => setModalVisible(true)}
+      />
 
-      <ScrollView className="px-4 pt-2" contentContainerStyle={{ paddingBottom: 40 }}>
+      <ScrollView className="px-4 pt-2" contentContainerStyle={{ paddingBottom: 80 }}>
         <GenericFilters
           status={{
             value: status,
@@ -124,7 +115,7 @@ export default function AuthorizationTemplate({
               { label: 'Todos', value: 'Todos' },
               { label: 'Pendente', value: 'Pendente' },
               { label: 'Aprovada', value: 'Aprovada' },
-              { label: 'Recusada', value: 'Recusada' },
+              { label: 'Rejeitada', value: 'Rejeitada' },
             ],
           }}
           student={{
@@ -135,17 +126,19 @@ export default function AuthorizationTemplate({
           dateRange={{
             start: dateRange.start,
             end: dateRange.end,
-            onStartChange: (date) => setDateRange((prev) => ({ ...prev, start: date })),
-            onEndChange: (date) => setDateRange((prev) => ({ ...prev, end: date })),
+            onStartChange: date => setDateRange(prev => ({ ...prev, start: date })),
+            onEndChange: date => setDateRange(prev => ({ ...prev, end: date })),
           }}
         />
 
         {loading ? (
           <ActivityIndicator size="large" color="#3B82F6" className="my-6" />
         ) : filteredAuthorizations.length === 0 ? (
-          <Text className="text-center text-gray-500 mt-4">Nenhuma autorização encontrada.</Text>
+          <Text className="text-center text-gray-500 mt-4">
+            Nenhuma autorização encontrada.
+          </Text>
         ) : (
-          filteredAuthorizations.map((auth) => (
+          filteredAuthorizations.map(auth => (
             <AuthorizationCard
               key={auth.id}
               authorization={auth}
@@ -154,6 +147,30 @@ export default function AuthorizationTemplate({
           ))
         )}
       </ScrollView>
+
+      <EditAuthorizationModal
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
+        onSave={async ({ aluno, status, descricao }) => {
+        try {
+          const payload: CreateAuthorizationPayload = {
+            student_id: aluno,
+            status,
+            description: descricao,
+            date: new Date().toISOString().split('T')[0],
+          };
+
+          await authorizationService.createAuthorization(payload);
+
+          Toast.show({ type: 'success', text1: 'Autorização criada!' });
+          setModalVisible(false);
+          fetchData();
+        } catch (err) {
+          console.error(err);
+          Toast.show({ type: 'error', text1: 'Erro ao criar autorização' });
+        }
+      }}
+      />
     </View>
   );
 }

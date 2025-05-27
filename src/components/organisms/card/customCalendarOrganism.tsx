@@ -64,17 +64,11 @@ export const CustomCalendar = () => {
   const mergedMarkedDates = useMemo(() => {
     const merged = { ...staticMarkedDates };
 
+    // Seleciona só o selectedDate para evitar conflito visual
     merged[selectedDate] = {
       ...(merged[selectedDate] || {}),
       selected: true,
       selectedColor: 'blue',
-      selectedTextColor: 'white',
-    };
-
-    merged[todayString] = {
-      ...(merged[todayString] || {}),
-      selected: true,
-      selectedColor: 'purple',
       selectedTextColor: 'white',
     };
 
@@ -100,16 +94,26 @@ export const CustomCalendar = () => {
     }
   };
 
+  // Função para atualizar o status localmente quando confirmar evento
+  const handleUpdateScheduleStatus = (id: string, status: string) => {
+    setSchedules(prev =>
+      prev.map(s =>
+        s.id === id ? { ...s, attributes: { ...s.attributes, status } } : s
+      )
+    );
+  };
+
   const filteredSchedules = useMemo(() => {
     const filtered = showAllEvents
       ? schedules
-      : schedules.filter(schedule =>
-          schedule.attributes?.starts_at?.startsWith(selectedDate)
-        );
+      : schedules.filter(schedule => {
+          if (!schedule.attributes.starts_at) return false;
+          const scheduleDate = schedule.attributes.starts_at.split('T')[0];
+          return scheduleDate === selectedDate;
+        });
 
     return filtered.sort((a, b) =>
-      new Date(a.attributes.starts_at).getTime() -
-      new Date(b.attributes.starts_at).getTime()
+      new Date(a.attributes.starts_at).getTime() - new Date(b.attributes.starts_at).getTime()
     );
   }, [schedules, selectedDate, showAllEvents]);
 
@@ -133,7 +137,6 @@ export const CustomCalendar = () => {
           <Text className="text-white font-semibold text-sm">+ Novo</Text>
         </TouchableOpacity>
       </View>
-
 
       <Calendar
         current={todayString}
@@ -175,7 +178,8 @@ export const CustomCalendar = () => {
       <EventList
         selectedDate={showAllEvents ? null : new Date(selectedDate)}
         events={filteredSchedules}
-        onCardPress={handleCardPress} // novo
+        onCardPress={handleCardPress}
+        onStatusUpdate={handleUpdateScheduleStatus} // Passa para atualizar status ao confirmar
       />
 
       <ScheduleFormModal
@@ -188,3 +192,4 @@ export const CustomCalendar = () => {
     </ScrollView>
   );
 };
+ 

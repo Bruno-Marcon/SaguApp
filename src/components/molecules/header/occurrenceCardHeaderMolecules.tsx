@@ -1,24 +1,42 @@
-import { View, Text } from 'react-native'
-import SeverityBadge from '../../atoms/badge/severityBadge'
-import StatusBadge from '../../atoms/badge/statusBadge'
+import { View, Text } from 'react-native';
+import TagGroup from '../badge/tagGroup';
+import { Occurrence } from '../../../../types/occurrence';
 
 type Props = {
-  title: string
-  status?: string
-  severity?: string
-}
+  title: string;
+  status?: string;
+  severity?: string;
+  kind?: string;
+  occurrence?: Occurrence | null;
+};
 
-export default function OccurrenceCardHeader({ title, status, severity }: Props) {
+export default function OccurrenceCardHeader({
+  title,
+  status,
+  severity,
+  kind,
+  occurrence,
+}: Props) {
+  const currentStatus = occurrence?.attributes?.status || status;
+  const currentKind = occurrence?.attributes?.kind || kind;
+  const currentSeverity = occurrence?.attributes?.severity || severity;
+
   return (
-    <View className="flex-row justify-between items-start mb-1">
-      <Text className="text-base font-bold text-gray-900 flex-1" numberOfLines={1}>
+    <View className="mb-3">
+      <View className="flex-row justify-end mb-1">
+        <TagGroup
+          status={currentStatus}
+          kind={currentKind}
+          severity={currentSeverity}
+        />
+      </View>
+
+      <Text
+        className="text-xl font-semibold text-gray-900"
+        numberOfLines={1}
+      >
         {title}
       </Text>
-
-      <View className="flex flex-col items-end gap-y-1 ml-2">
-        {status && <StatusBadge status={status} />}
-        {severity && <SeverityBadge severity={severity} />}
-      </View>
     </View>
-  )
+  );
 }

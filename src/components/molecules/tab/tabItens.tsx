@@ -4,10 +4,17 @@ import { useRouter } from "expo-router"
 import { IconLabel } from "../../atoms/icons/labels"
 import { Feather } from "@expo/vector-icons"
 
+type Route =
+  | "/(panel)/home/page"
+  | "/(panel)/schedules/page"
+  | "/(panel)/authorization/page"
+  | "/(panel)/occurences/occurences"
+  | "/(panel)/settings/page"
+
 type Props = {
   icon: keyof typeof Feather.glyphMap
   label: string
-  route: string
+  route: Route
   active: boolean
 }
 

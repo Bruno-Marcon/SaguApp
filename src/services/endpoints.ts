@@ -35,10 +35,14 @@ export const endpoints = {
     root: '/events',
     notifications: '/events/notifications',
   },
+  classrooms: {
+    root: '/classrooms'
+  },
   users: {
   root: '/users',
   show: (id: string) => `/users/${id}`,
-  },
+  responsible: '/users/responsible',
+},
   orientations: {
     root: '/orientations',
     show: (id: string) => `/orientations/${id}`,

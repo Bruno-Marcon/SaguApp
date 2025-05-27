@@ -1,15 +1,29 @@
-import { View, Text } from 'react-native'
-import { ArrowBack } from '../../atoms/button/arrowBack'
+import { View, Text } from 'react-native';
+import { ArrowBack } from '../../atoms/button/arrowBack';
+import { AddButton } from '../../atoms/button/addButton';
 
 type Props = {
-  title: string
-}
+  title: string;
+  onCreatePress?: () => void;
+};
 
-export const AuthorizationHeader = ({ title }: Props) => {
+export const AuthorizationHeader = ({ title, onCreatePress }: Props) => {
   return (
-    <View className="flex-row items-center p-4 bg-[#3B82F6] rounded-b-xl shadow-sm pt-16">
-      <ArrowBack className="mr-3" color="#FFFFFF" />
-      <Text className="text-xl font-semibold text-white">{title}</Text>
+    <View className="flex-row items-center justify-between p-4 bg-[#3B82F6] rounded-b-xl shadow-sm pt-16">
+      <View className="flex-row items-center">
+        <ArrowBack className="mr-3" color="#FFFFFF" />
+        <Text className="text-xl font-bold text-white">{title}</Text>
+      </View>
+
+      {onCreatePress && (
+        <AddButton
+          label="Nova"
+          onPress={onCreatePress}
+          backgroundColor="white"
+          iconColor="#3B82F6"
+          textColor="#3B82F6"
+        />
+      )}
     </View>
-  )
-}
+  );
+};

@@ -1,14 +1,14 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, Image, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, Alert } from 'react-native';
+import { Image } from 'expo-image';
 import * as LocalAuthentication from 'expo-local-authentication';
 import * as SecureStore from 'expo-secure-store';
-import { Feather } from '@expo/vector-icons';
-import { MaterialIcons } from '@expo/vector-icons';
+import { Feather, MaterialIcons } from '@expo/vector-icons';
 import LoginForm from '../../molecules/form/loginForm';
 
 type LoginScreenProps = {
   text: string;
-  subSubTitle: string;
+  subSubTitle?: string;
   viewClassName?: string;
 };
 
@@ -66,11 +66,12 @@ const LoginScreen: React.FC<LoginScreenProps> = ({
 
   return (
     <View className={viewClassName}>
-      {/* GIF animado como logo */}
+      {/* ✅ Logo com carregamento otimizado */}
       <Image
         source={require('../../../assets/images/logo-sagu-mobile-brancoBg.png')}
         style={{ width: 280, height: 280, marginBottom: 24 }}
-        resizeMode="contain"
+        contentFit="contain"
+        transition={100} // animação de fade-in rápida
       />
 
       <LoginForm text={text} />

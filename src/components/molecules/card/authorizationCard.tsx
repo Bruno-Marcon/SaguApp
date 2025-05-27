@@ -2,8 +2,8 @@ import { View, TouchableOpacity, Text } from 'react-native';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { Authorization } from '../../../../types/authorizations';
-import AuthorizationCardHeader from '../header/authorizationCardHeaderMolecules';
-import { Feather } from '@expo/vector-icons'; // ou outro pacote que você preferir
+import { Feather } from '@expo/vector-icons';
+import TagGroup from '../badge/tagGroup';
 
 type Props = {
   authorization: Authorization;
@@ -11,9 +11,11 @@ type Props = {
 };
 
 export default function AuthorizationCard({ authorization, onPress }: Props) {
-  const formattedDate = format(new Date(authorization.attributes.created_at), 'dd/MM/yyyy HH:mm', {
-    locale: ptBR,
-  });
+  const formattedDate = format(
+    new Date(authorization.attributes.created_at),
+    'dd/MM/yyyy HH:mm',
+    { locale: ptBR }
+  );
 
   return (
     <TouchableOpacity
@@ -30,22 +32,36 @@ export default function AuthorizationCard({ authorization, onPress }: Props) {
       />
 
       <View className="p-4 pl-6 flex-row items-start gap-x-3">
-        {/* Ícone de autorização */}
+        {/* Ícone */}
         <View className="mt-1">
           <Feather name="file-text" size={20} color="#3B82F6" />
         </View>
 
         {/* Conteúdo */}
         <View className="flex-1">
-          <AuthorizationCardHeader
-            title={authorization.attributes.description}
-            status={authorization.attributes.status}
-          />
-          <Text className="text-sm text-gray-600 mt-0.5 leading-snug" numberOfLines={2}>
+          {/* Tags em cima */}
+          <View className="flex-row justify-start">
+            <TagGroup status={authorization.attributes.status} />
+          </View>
+
+          {/* Título */}
+          <Text
+            className="text-xl font-bold text-gray-900 mb-2"
+            numberOfLines={1}
+            ellipsizeMode="tail"
+          >
             {authorization.attributes.description}
           </Text>
+
+          {/* Descrição */}
+          <Text className="text-sm text-gray-600 leading-snug" numberOfLines={2}>
+            {authorization.attributes.description}
+          </Text>
+
+          {/* Data */}
           <View className="flex-row items-center mt-3">
-            <Text className="text-xs text-gray-400">{formattedDate}</Text>
+            <Feather name="calendar" size={12} color="#9CA3AF" />
+            <Text className="text-xs text-gray-400 ml-1">{formattedDate}</Text>
           </View>
         </View>
       </View>

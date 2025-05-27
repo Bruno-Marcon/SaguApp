@@ -2,7 +2,7 @@ import { View, Text, TouchableOpacity } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { formatDate } from '@//utils/dateUtils';
 import { Authorization } from '../../../../types/authorizations';
-import AuthorizationStatusBadge from '../../atoms/badge/authorizationBadge'; // ✅ novo badge
+import TagGroup from '../../molecules/badge/tagGroup';
 
 export type FeatherIconName = React.ComponentProps<typeof Feather>['name'];
 
@@ -22,8 +22,8 @@ function isValidFeatherIconName(name: string): name is FeatherIconName {
 export default function CardAuthorizationAtom({
   authorization,
   iconName = 'file-text',
-  iconColor = '#3B82F6',
-  borderColor = '#3B82F6',
+  iconColor = '#2563EB',
+  borderColor = '#2563EB',
   className = '',
   onPress,
 }: CardAuthorizationAtomProps) {
@@ -38,52 +38,49 @@ export default function CardAuthorizationAtom({
     <TouchableOpacity
       onPress={onPress}
       activeOpacity={0.9}
-      accessibilityRole="button"
-      accessibilityLabel={`Autorização, status: ${status}`}
-      className={`bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden ${className}`}
-      style={{ width: 260 }}
+      className={`bg-white rounded-3xl border border-gray-200 overflow-hidden ${className}`}
+      style={{ width: 270 }}
     >
-      {/* Borda lateral colorida */}
+      {/* Faixa lateral */}
       <View
-        className="w-[5px] rounded-tl-3xl rounded-bl-3xl absolute left-0 top-0 bottom-0"
+        className="absolute top-0 bottom-0 left-0 w-[5px] rounded-l-3xl"
         style={{ backgroundColor: borderColor }}
       />
 
-      <View className="p-4 pl-6 flex-row items-start">
-        {/* Ícone */}
-        <View className="mr-4 mt-1">
-          <View className="bg-gray-100 p-2 rounded-xl">
-            <Feather name={validatedIconName} size={22} color={iconColor} />
-          </View>
+      <View className="p-4 pl-6">
+        {/* Tag no topo */}
+        <View className="flex-row justify-start items-center space-x-2 mb-2">
+          <TagGroup status={status} />
         </View>
 
-        {/* Conteúdo */}
-        <View className="flex-1">
-          {/* Título + Status */}
-          <View className="flex-row justify-between items-start mb-1">
+        <View className="flex-row items-start">
+          {/* Ícone */}
+          <View className="bg-gray-100 p-2 rounded-xl mr-4">
+            <Feather name={validatedIconName} size={20} color={iconColor} />
+          </View>
+
+          {/* Conteúdo */}
+          <View className="flex-1">
             <Text
-              className="text-base font-bold text-gray-900 flex-1"
+              className="text-xl font-bold text-gray-900"
               numberOfLines={1}
               ellipsizeMode="tail"
             >
               Autorização
             </Text>
 
-            {/* ✅ Badge do status */}
-            <AuthorizationStatusBadge status={status} />
-          </View>
-
-          {/* Descrição */}
-          <Text className="text-sm text-gray-600 mt-0.5 leading-snug" numberOfLines={2}>
-            {description}
-          </Text>
-
-          {/* Data */}
-          <View className="flex-row items-center mt-3">
-            <Feather name="calendar" size={12} color="#9CA3AF" />
-            <Text className="text-xs text-gray-400 ml-1">
-              {formattedTime ?? ''}
+            <Text
+              className="text-sm text-gray-600 mt-2 leading-snug"
+              numberOfLines={2}
+              ellipsizeMode="tail"
+            >
+              {description}
             </Text>
+
+            <View className="flex-row items-center mt-3">
+              <Feather name="calendar" size={12} color="#9CA3AF" />
+              <Text className="text-xs text-gray-400 ml-1">{formattedTime ?? ''}</Text>
+            </View>
           </View>
         </View>
       </View>

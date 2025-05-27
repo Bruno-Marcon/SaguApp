@@ -1,22 +1,24 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import {
   Modal,
   View,
   ScrollView,
   TouchableOpacity,
   Text,
+  TextInput,
   KeyboardAvoidingView,
-  Platform
-} from 'react-native'
+  Platform,
+} from 'react-native';
 
-import OccurrenceModalHeader from '../../molecules/header/occurrenceModalHeader'
-import TagGroup from '../../molecules/badge/tagGroup'
-import { Authorization } from '../../../../types/authorizations'
-import { authorizationService } from '@//services/authorizations/authorizationsService'
-import { studentService } from '@//services/studentes/studentsServices'
-import { IncludedUser } from '../../../../types/share'
-import AuthorizationDetailsSection from '../../molecules/section/authorization/authorizationModalSection'
-import { showToast } from '@//utils/toastUtiles'
+import OccurrenceModalHeader from '../../molecules/header/occurrenceModalHeader';
+import TagGroup from '../../molecules/badge/tagGroup';
+import { Authorization } from '../../../../types/authorizations';
+import { authorizationService } from '@//services/authorizations/authorizationsService';
+import { studentService } from '@//services/studentes/studentsServices';
+import { IncludedUser } from '../../../../types/share';
+import AuthorizationDetailsSection from '../../molecules/section/authorization/authorizationModalSection';
+import { showToast } from '@//utils/toastUtiles';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 interface Props {
   visible: boolean;
@@ -24,10 +26,10 @@ interface Props {
   authorizationId: string | null;
   authorization?: Authorization | null;
   onSave?: () => void;
-  onUpdate?: (id: string, newStatus: StatusOption) => void; // ✅ NOVO
+  onUpdate?: (id: string, newStatus: StatusOption) => void;
 }
 
-type StatusOption = 'pending' | 'approved' | 'refused';
+type StatusOption = 'approved' | 'refused';
 
 export default function AuthorizationModal({
   visible,
@@ -35,14 +37,24 @@ export default function AuthorizationModal({
   authorizationId,
   authorization: initialAuthorization,
   onSave,
-  onUpdate
+  onUpdate,
 }: Props) {
   const [authorization, setAuthorization] = useState<Authorization | null>(initialAuthorization ?? null);
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState(false);
-  const [selectedStatus, setSelectedStatus] = useState<StatusOption>('pending');
+
+  const [selectedStatus, setSelectedStatus] = useState<StatusOption>('approved');
   const [studentName, setStudentName] = useState('---');
   const [responsibleName, setResponsibleName] = useState('---');
+
+  const [description, setDescription] = useState('');
+  const [date, setDate] = useState<Date>(new Date());
+  const [showDatePicker, setShowDatePicker] = useState(false);
+
+  const statusOptions: { label: string; value: StatusOption; color: string }[] = [
+    { label: 'Aprovar', value: 'approved', color: 'bg-green-600' },
+    { label: 'Recusar', value: 'refused', color: 'bg-red-500' },
+  ];
 
   useEffect(() => {
     if (!visible || !authorizationId) return;
@@ -67,7 +79,15 @@ export default function AuthorizationModal({
           }
         }
 
-        setSelectedStatus(authData.data.attributes.status as StatusOption);
+        const currentStatus = authData.data.attributes.status as StatusOption;
+        if (['approved', 'refused'].includes(currentStatus)) {
+          setSelectedStatus(currentStatus);
+        } else {
+          setSelectedStatus('approved');
+        }
+
+        setDescription(authData.data.attributes.description);
+        setDate(new Date(authData.data.attributes.date));
       } catch (err) {
         console.error('Erro ao buscar detalhes da autorização:', err);
       } finally {
@@ -82,55 +102,37 @@ export default function AuthorizationModal({
     if (!authorization) return;
     setUpdating(true);
     try {
-      await authorizationService.updateStatus(authorization.id, selectedStatus);
-      showToast.success('Status atualizado com sucesso!');
-      onUpdate?.(authorization.id, selectedStatus); // ✅ chama o pai
+      await authorizationService.update(authorization.id, {
+        status: selectedStatus,
+        description,
+        date: date.toISOString().split('T')[0],
+      });
+
+      showToast.success('Autorização atualizada com sucesso!');
+      onUpdate?.(authorization.id, selectedStatus);
       onSave?.();
       onClose();
     } catch (err) {
-      console.error('Erro ao salvar status:', err);
-      showToast.error('Erro ao atualizar o status.');
+      console.error('Erro ao atualizar autorização:', err);
+      showToast.error('Erro ao atualizar.');
     } finally {
       setUpdating(false);
     }
-  };
-
-  const renderRadioOption = (label: string, value: StatusOption, color: string) => {
-    const isSelected = selectedStatus === value;
-
-    return (
-      <TouchableOpacity
-        key={value}
-        onPress={() => setSelectedStatus(value)}
-        className="flex-row items-center space-x-2 mb-2"
-      >
-        <View
-          className="w-5 h-5 rounded-full border-2"
-          style={{
-            borderColor: color,
-            justifyContent: 'center',
-            alignItems: 'center'
-          }}
-        >
-          {isSelected && (
-            <View className="w-3 h-3 rounded-full" style={{ backgroundColor: color }} />
-          )}
-        </View>
-        <Text className="text-gray-800">{label}</Text>
-      </TouchableOpacity>
-    );
   };
 
   if (!visible || (loading && !authorization)) return null;
 
   return (
     <Modal visible={visible} animationType="fade" transparent onRequestClose={onClose}>
-      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} className="flex-1">
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        className="flex-1"
+      >
         <View className="flex-1 bg-black/60">
           <View className="flex-1 justify-end">
             <View className="bg-white rounded-t-3xl px-5 pt-5 pb-4 w-full max-h-[95%]">
               <OccurrenceModalHeader
-                title={authorization?.attributes.description ?? 'Autorização'}
+                title="Editar Autorização"
                 onClose={onClose}
               />
 
@@ -149,11 +151,61 @@ export default function AuthorizationModal({
                   />
                 )}
 
-                <View className="mt-4 gap-y-2">
+                {/* 🔥 Campo descrição */}
+                <View className="mt-4">
+                  <Text className="text-sm text-gray-700 mb-1 font-semibold">Descrição:</Text>
+                  <TextInput
+                    value={description}
+                    onChangeText={setDescription}
+                    placeholder="Digite a descrição"
+                    className="border border-gray-300 rounded-xl px-4 py-3 text-gray-700"
+                  />
+                </View>
+
+                {/* 🔥 Campo data */}
+                <View className="mt-4">
+                  <Text className="text-sm text-gray-700 mb-1 font-semibold">Data:</Text>
+                  <TouchableOpacity
+                    onPress={() => setShowDatePicker(true)}
+                    className="border border-gray-300 rounded-xl px-4 py-3"
+                  >
+                    <Text className="text-gray-700">{date.toLocaleDateString()}</Text>
+                  </TouchableOpacity>
+                  {showDatePicker && (
+                    <DateTimePicker
+                      value={date}
+                      mode="date"
+                      display="default"
+                      onChange={(_, selectedDate) => {
+                        setShowDatePicker(false);
+                        if (selectedDate) setDate(selectedDate);
+                      }}
+                    />
+                  )}
+                </View>
+
+                {/* 🔥 Alterar Status com Chips */}
+                <View className="mt-4">
                   <Text className="text-sm font-semibold text-gray-700 mb-2">Alterar Status:</Text>
-                  {renderRadioOption('Pendente', 'pending', '#FBBF24')}
-                  {renderRadioOption('Aprovada', 'approved', '#16A34A')}
-                  {renderRadioOption('Recusada', 'refused', '#EF4444')}
+                  <View className="flex-row gap-2">
+                    {statusOptions.map((option) => (
+                      <TouchableOpacity
+                        key={option.value}
+                        onPress={() => setSelectedStatus(option.value)}
+                        className={`px-4 py-2 rounded-full ${
+                          selectedStatus === option.value ? option.color : 'bg-gray-200'
+                        }`}
+                      >
+                        <Text
+                          className={`text-sm ${
+                            selectedStatus === option.value ? 'text-white' : 'text-gray-700'
+                          }`}
+                        >
+                          {option.label}
+                        </Text>
+                      </TouchableOpacity>
+                    ))}
+                  </View>
                 </View>
               </ScrollView>
 

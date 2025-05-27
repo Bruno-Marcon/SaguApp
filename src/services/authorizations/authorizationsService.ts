@@ -3,10 +3,10 @@ import {
   AuthorizationResponse,
   SingleAuthorizationResponse,
   UpdateAuthorizationPayload,
+  CreateAuthorizationPayload,
 } from '../../../types/authorizations';
 import { api } from '../api/api';
 import { endpoints } from '../endpoints';
-import { Authorization } from '../../../types/authorizations';
 
 export const authorizationService = {
   getAll: async (filters: AuthorizationFilters = {}): Promise<AuthorizationResponse> => {
@@ -55,5 +55,11 @@ export const authorizationService = {
     const response = await api.patch(endpoints.authorizations.show(id), payload);
     return response;
   },
-}
 
+  createAuthorization: async (
+    payload: CreateAuthorizationPayload
+  ): Promise<SingleAuthorizationResponse> => {
+    const response = await api.post(endpoints.authorizations.root, payload);
+    return response.data;
+  },
+};

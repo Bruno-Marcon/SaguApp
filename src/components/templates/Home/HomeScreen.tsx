@@ -1,6 +1,8 @@
 import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
+import Toast from 'react-native-toast-message';
+
 import { ErrorMessage } from '../../atoms/indicators/errorMessage';
 import Loading from '../../atoms/indicators/loadingAtom';
 import TemplateScreen from '../scrollView/templateScreen';
@@ -21,19 +23,23 @@ import { ApresentationSection } from '../../molecules/section/apresentation/apre
 import { SectionOccurrences } from '../../organisms/carousel/SectionOccurrences';
 import NewsCarousel from '../../molecules/section/news/newsCarrousel';
 import { SectionAuthorization } from '../../organisms/carousel/sectionAuthorization';
+import { SectionAcademicData } from '../../molecules/section/academic/sectionAcademicData';
+import ReportCardSection from '../../molecules/section/reportCard/reportCardSection';
 
 export const HomeScreen = () => {
-  const [userData, setUserData] = useState<{ name: string } | null>(null);
+  const [userData, setUserData] = useState<{ id: string; name: string } | null>(null);
   const [authorizationData, setAuthorizationData] = useState<Authorization[]>([]);
   const [occurrences, setOccurrences] = useState<Occurrence[]>([]);
   const [selectedOccurrence, setSelectedOccurrence] = useState<Occurrence | null>(null);
   const [selectedAuthorization, setSelectedAuthorization] = useState<Authorization | null>(null);
   const [stats, setStats] = useState<StatsData | null>(null);
   const [loading, setLoading] = useState(true);
+
+  const [authorizationLoading, setAuthorizationLoading] = useState(false);
+  const [occurrenceLoading, setOccurrenceLoading] = useState(false);
+
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
-  type AuthorizationStatus = Authorization['attributes']['status'];
-
 
   const fetchData = async () => {
     setLoading(true);
@@ -41,7 +47,7 @@ export const HomeScreen = () => {
       const [user, statsResponse, occurrencesResponse, authorizationsResponse] = await Promise.all([
         getUserInfo(),
         statsService.getStats(),
-        occurrenceService.getAll(),
+        occurrenceService.getOccurrencies(),
         authorizationService.getAll(),
       ]);
 
@@ -61,22 +67,30 @@ export const HomeScreen = () => {
     fetchData();
   }, []);
 
-  const handleAuthorizationUpdate = (id: string, newStatus: AuthorizationStatus) => {
-    setAuthorizationData((prev) =>
-      prev.map((item) =>
-        item.id === id
-          ? {
-              ...item,
-              attributes: {
-                ...item.attributes,
-                status: newStatus, // agora tipado corretamente
-              },
-            }
-          : item
-      )
-    );
+  const handleAuthorizationUpdate = async (id: string, newStatus: Authorization['attributes']['status']) => {
+    setAuthorizationLoading(true);
+    try {
+      await authorizationService.updateStatus(id, newStatus);
+      await fetchData();
+      Toast.show({ type: 'success', text1: 'Status da autorização atualizado com sucesso!' });
+    } catch (err: any) {
+      Toast.show({ type: 'error', text1: 'Erro ao atualizar autorização', text2: err.message });
+    } finally {
+      setAuthorizationLoading(false);
+    }
   };
 
+  const handleOccurrenceUpdate = async () => {
+    setOccurrenceLoading(true);
+    try {
+      await fetchData();
+      Toast.show({ type: 'success', text1: 'Ocorrência atualizada com sucesso!' });
+    } catch (err: any) {
+      Toast.show({ type: 'error', text1: 'Erro ao atualizar ocorrência', text2: err.message });
+    } finally {
+      setOccurrenceLoading(false);
+    }
+  };
 
   const modalIsOpen = !!selectedOccurrence || !!selectedAuthorization;
 
@@ -112,11 +126,12 @@ export const HomeScreen = () => {
               },
             ]}
           />
-
+          <SectionAcademicData />
           <NewsCarousel />
 
           <SectionOccurrences
             data={occurrences}
+            loading={occurrenceLoading}
             onPressLink={() => router.push('/(panel)/occurences/occurences')}
             onCardPress={setSelectedOccurrence}
             title="Ocorrências Abertas"
@@ -131,7 +146,6 @@ export const HomeScreen = () => {
             linkText="Ver todos"
           />
         </View>
-
         {modalIsOpen && <View style={styles.overlay} pointerEvents="auto" />}
       </TemplateScreen>
 
@@ -140,6 +154,7 @@ export const HomeScreen = () => {
         onClose={() => setSelectedOccurrence(null)}
         occurrenceId={selectedOccurrence?.id || null}
         occurrence={selectedOccurrence}
+        onUpdate={handleOccurrenceUpdate}
       />
 
       <AuthorizationModal
@@ -149,6 +164,8 @@ export const HomeScreen = () => {
         authorization={selectedAuthorization}
         onUpdate={handleAuthorizationUpdate}
       />
+
+      <Toast />
     </>
   );
 };

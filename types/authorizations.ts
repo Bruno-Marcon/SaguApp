@@ -63,11 +63,13 @@ export interface AuthorizationFilters {
 export interface CreateAuthorizationPayload {
   description: string;
   status: string;
+  date: string;
   student_id: string;
 }
 
 export interface UpdateAuthorizationPayload {
   status?: string;
   description?: string;
+  date: string;
   student_id?: string;
 }
