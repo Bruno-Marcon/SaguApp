@@ -1,40 +1,28 @@
-import { View, TouchableOpacity } from 'react-native';
-import { TextAtom } from '../../atoms/text/textAtom';
-import { Icon } from '../../atoms/icons/iconAtom';
+import { View, Text, TouchableOpacity } from 'react-native';
+import { ArrowBack } from '../../atoms/button/arrowBack';
 
-interface CalendarHeaderProps {
+type Props = {
   title: string;
-  onNext: () => void;
-  onPrev: () => void;
-  notificationCount?: number;
-}
+  onAddPress?: () => void;
+  onBackPress?: () => void;
+};
 
-export const CalendarHeader = ({
-  title = 'Calendário',
-  onNext,
-  onPrev,
-  notificationCount = 2,
-}: CalendarHeaderProps) => (
-  <View className="flex-row items-center justify-between px-8 py-3 mb-1">
-    <View className="flex-row items-center gap-4">
-      <Icon name="calendar" color="#09a342" />
-      <TextAtom variant="title">{title}</TextAtom>
-      {notificationCount > 0 && (
-        <View className="bg-red-500 rounded-full w-5 h-5 items-center justify-center ml-2">
-          <TextAtom variant="body" className="text-white text-xs">
-            {notificationCount}
-          </TextAtom>
-        </View>
+export const CalendarHeader = ({ title, onAddPress, onBackPress }: Props) => {
+  return (
+    <View className="flex-row items-center justify-between p-4 bg-emerald-800 rounded-b-xl shadow-sm pt-16">
+      <View className="flex-row items-center">
+        <ArrowBack className="mr-3" color="#FFFFFF" onPress={onBackPress} />
+        <Text className="text-xl font-bold text-white">{title}</Text>
+      </View>
+
+      {onAddPress && (
+        <TouchableOpacity
+          onPress={onAddPress}
+          className="bg-white px-3 py-1 rounded-lg"
+        >
+          <Text className="text-[#09A342] font-semibold text-sm">+ Novo</Text>
+        </TouchableOpacity>
       )}
     </View>
-
-    <View className="flex-row gap-4">
-      <TouchableOpacity onPress={onPrev}>
-        <Icon name="chevron-left" />
-      </TouchableOpacity>
-      <TouchableOpacity onPress={onNext}>
-        <Icon name="chevron-right" />
-      </TouchableOpacity>
-    </View>
-  </View>
-);
+  );
+};
