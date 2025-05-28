@@ -14,7 +14,7 @@ export const OccurrenceHeader = ({ title,onCreatePress }: Props) => {
         <ArrowBack className="mr-3" color="#FFFFFF" />
         <Text className="text-xl font-semibold text-white">{title}</Text>
       </View>
-      {onCreatePress && (
+      {/* {onCreatePress && (
         <AddButton
           label="Nova"
           onPress={onCreatePress}
@@ -22,7 +22,7 @@ export const OccurrenceHeader = ({ title,onCreatePress }: Props) => {
           iconColor="#3B82F6"
           textColor="#3B82F6"
         />
-      )}
+      )} */}
     </View>
     
   );

@@ -25,13 +25,9 @@ type Props = {
 };
 
 const areaOptions = [
-  'Psicologia',
-  'Secretaria',
-  'Coordenação',
-  'Pedagogia',
-  'Direção',
-  'Orientação',
-  'Outro',
+  'academic',
+  'pedagogic',
+  'administrative'
 ];
 
 export const ScheduleFormModal = ({

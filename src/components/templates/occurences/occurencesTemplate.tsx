@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { View, Text, ActivityIndicator } from 'react-native';
+import { View, Text } from 'react-native';
 import { Occurrence, OccurrenceResponse } from '../../../../types/occurrence';
 import { occurrenceService } from '@//services/occurrence/occurrenceService';
 import OccurrenceCard from '../../organisms/card/occurrenceCardOrganism';
@@ -8,10 +8,10 @@ import GenericFilters from '../../organisms/filter/genericFilter';
 import { IncludedEvent, IncludedStudent, IncludedUser } from '../../../../types/share';
 import { StudentListItem } from '../../../../types/students';
 import { studentService } from '@//services/studentes/studentsServices';
-import { EditAuthorizationModal } from '../../organisms/modal/editAuthorizationModal';
-import { CreateAuthorizationPayload } from '../../../../types/authorizations';
-import { authorizationService } from '@//services/authorizations/authorizationsService';
 import Toast from 'react-native-toast-message';
+import OccurrenceCardSkeleton from '../../Skeleton/occurrenceCardSkeleton';
+import GenericFiltersSkeleton from '../../Skeleton/genericFilterSkeleton';
+import { CreateOccurrenceModal } from '../../organisms/modal/createOccurrencesModal';
 
 type Option = {
   label: string;
@@ -40,7 +40,11 @@ function getIncludedName(
   return found?.attributes?.name ?? '';
 }
 
-export default function OccurrenceTemplate({ refreshing, onRefreshEnd, onOccurrencePress }: Props) {
+export default function OccurrenceTemplate({
+  refreshing,
+  onRefreshEnd,
+  onOccurrencePress,
+}: Props) {
   const [allOccurrences, setAllOccurrences] = useState<
     (Occurrence & {
       student_name?: string;
@@ -50,7 +54,9 @@ export default function OccurrenceTemplate({ refreshing, onRefreshEnd, onOccurre
   >([]);
   const [filteredOccurrences, setFilteredOccurrences] = useState<typeof allOccurrences>([]);
   const [loading, setLoading] = useState(false);
+  const [studentsLoading, setStudentsLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
+
   const [studentId, setStudentId] = useState('Todos');
   const [status, setStatus] = useState('Todos');
   const [severity, setSeverity] = useState('Todos');
@@ -62,6 +68,8 @@ export default function OccurrenceTemplate({ refreshing, onRefreshEnd, onOccurre
   const [studentOptions, setStudentOptions] = useState<Option[]>([]);
 
   const loadStudents = async () => {
+    if (studentsLoading) return;
+    setStudentsLoading(true);
     try {
       const res = await studentService.getAll(1);
       const options = res.data.map((student: StudentListItem) => ({
@@ -69,12 +77,16 @@ export default function OccurrenceTemplate({ refreshing, onRefreshEnd, onOccurre
         value: student.id,
       }));
       setStudentOptions([{ label: 'Todos', value: 'Todos' }, ...options]);
-    } catch (err) {
+    } catch (err: any) {
       console.error('Erro ao carregar estudantes:', err);
+      Toast.show({ type: 'error', text1: 'Erro ao carregar estudantes' });
+    } finally {
+      setStudentsLoading(false);
     }
   };
 
   const fetchData = async () => {
+    if (loading) return;
     setLoading(true);
     try {
       const response: OccurrenceResponse & {
@@ -95,18 +107,17 @@ export default function OccurrenceTemplate({ refreshing, onRefreshEnd, onOccurre
       });
 
       setAllOccurrences(occurrencesWithNames);
-    } catch (err) {
+    } catch (err: any) {
       console.error('Erro ao buscar ocorrências:', err);
+      Toast.show({ type: 'error', text1: 'Erro ao buscar ocorrências' });
+    } finally {
+      setLoading(false);
+      onRefreshEnd();
     }
-    setLoading(false);
-    onRefreshEnd();
   };
 
   useEffect(() => {
     loadStudents();
-  }, []);
-
-  useEffect(() => {
     fetchData();
   }, []);
 
@@ -162,47 +173,53 @@ export default function OccurrenceTemplate({ refreshing, onRefreshEnd, onOccurre
 
   return (
     <View className="flex-1 bg-gray-50 dark:bg-neutral-950">
-      <OccurrenceHeader title="Ocorrências" 
-      onCreatePress={() => setModalVisible(true)}
-      />
+      <OccurrenceHeader title="Ocorrências" onCreatePress={() => setModalVisible(true)} />
 
-      <GenericFilters
-        status={{
-          value: status,
-          onChange: setStatus,
-          options: [
-            { label: 'Todos', value: 'Todos' },
-            { label: 'Aberta', value: 'Aberta' },
-            { label: 'Em andamento', value: 'Em andamento' },
-            { label: 'Resolvida', value: 'Resolvida' },
-            { label: 'Fechada', value: 'Fechada' },
-          ],
-        }}
-        severity={{
-          value: severity,
-          onChange: setSeverity,
-          options: [
-            { label: 'Todos', value: 'Todos' },
-            { label: 'Alta', value: 'Alta' },
-            { label: 'Média', value: 'Média' },
-            { label: 'Baixa', value: 'Baixa' },
-          ],
-        }}
-        student={{
-          value: studentId,
-          onChange: setStudentId,
-          options: studentOptions,
-        }}
-        dateRange={{
-          start: dateRange.start,
-          end: dateRange.end,
-          onStartChange: (date) => setDateRange((prev) => ({ ...prev, start: date })),
-          onEndChange: (date) => setDateRange((prev) => ({ ...prev, end: date })),
-        }}
-      />
+      {studentsLoading ? (
+        <GenericFiltersSkeleton />
+      ) : (
+        <GenericFilters
+          status={{
+            value: status,
+            onChange: setStatus,
+            options: [
+              { label: 'Todos', value: 'Todos' },
+              { label: 'Aberta', value: 'Aberta' },
+              { label: 'Em andamento', value: 'Em andamento' },
+              { label: 'Resolvida', value: 'Resolvida' },
+              { label: 'Fechada', value: 'Fechada' },
+            ],
+          }}
+          severity={{
+            value: severity,
+            onChange: setSeverity,
+            options: [
+              { label: 'Todos', value: 'Todos' },
+              { label: 'Alta', value: 'Alta' },
+              { label: 'Média', value: 'Média' },
+              { label: 'Baixa', value: 'Baixa' },
+            ],
+          }}
+          student={{
+            value: studentId,
+            onChange: setStudentId,
+            options: studentOptions,
+          }}
+          dateRange={{
+            start: dateRange.start,
+            end: dateRange.end,
+            onStartChange: (date) => setDateRange((prev) => ({ ...prev, start: date })),
+            onEndChange: (date) => setDateRange((prev) => ({ ...prev, end: date })),
+          }}
+        />
+      )}
 
       {loading ? (
-        <ActivityIndicator size="large" color="#0E7C4A" className="my-4" />
+        <>
+          <OccurrenceCardSkeleton />
+          <OccurrenceCardSkeleton />
+          <OccurrenceCardSkeleton />
+        </>
       ) : filteredOccurrences.length > 0 ? (
         filteredOccurrences.map((occ) => (
           <OccurrenceCard key={occ.id} occurrence={occ} onPress={() => onOccurrencePress(occ)} />
@@ -212,29 +229,31 @@ export default function OccurrenceTemplate({ refreshing, onRefreshEnd, onOccurre
           Nenhuma ocorrência encontrada.
         </Text>
       )}
-      <EditAuthorizationModal
+
+      {/* <CreateOccurrenceModal
         visible={modalVisible}
         onClose={() => setModalVisible(false)}
-        onSave={async ({ aluno, status, descricao }) => {
+        onSave={async ({ aluno, status, descricao, kind, severity }) => {
           try {
-            const payload: CreateAuthorizationPayload = {
+            await occurrenceService.createOccurrence({
               student_id: aluno,
-              status,
+              responsible_id: '',
+              title: descricao,
               description: descricao,
-              date: new Date().toISOString().split('T')[0],
-            };
+              kind,
+              severity,
+              status,
+            });
 
-            await authorizationService.createAuthorization(payload);
-
-            Toast.show({ type: 'success', text1: 'Autorização criada!' });
+            Toast.show({ type: 'success', text1: 'Ocorrência criada!' });
             setModalVisible(false);
             fetchData();
           } catch (err) {
             console.error(err);
-            Toast.show({ type: 'error', text1: 'Erro ao criar autorização' });
+            Toast.show({ type: 'error', text1: 'Erro ao criar ocorrência' });
           }
         }}
-      />
+      /> */}
     </View>
   );
 }

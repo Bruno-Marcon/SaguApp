@@ -9,6 +9,8 @@ import { AuthorizationHeader } from '../../organisms/header/authorizationHeaderO
 import GenericFilters from '../../organisms/filter/genericFilter';
 import Toast from 'react-native-toast-message';
 import { EditAuthorizationModal } from '../../organisms/modal/editAuthorizationModal';
+import AuthorizationCardSkeleton from '../../Skeleton/authorizationCardSkeleton';
+import GenericFiltersSkeleton from '../../Skeleton/genericFilterSkeleton';
 
 type Props = {
   refreshing: boolean;
@@ -105,45 +107,53 @@ export default function AuthorizationTemplate({
       />
 
       <ScrollView className="px-4 pt-2" contentContainerStyle={{ paddingBottom: 80 }}>
-        <GenericFilters
-          status={{
-            value: status,
-            onChange: setStatus,
-            options: [
-              { label: 'Todos', value: 'Todos' },
-              { label: 'Pendente', value: 'Pendente' },
-              { label: 'Aprovada', value: 'Aprovada' },
-              { label: 'Rejeitada', value: 'Rejeitada' },
-            ],
-          }}
-          student={{
-            value: studentId,
-            onChange: setStudentId,
-            options: studentOptions,
-          }}
-          dateRange={{
-            start: dateRange.start,
-            end: dateRange.end,
-            onStartChange: date => setDateRange(prev => ({ ...prev, start: date })),
-            onEndChange: date => setDateRange(prev => ({ ...prev, end: date })),
-          }}
-        />
+        {studentOptions.length === 0 ? (
+          <GenericFiltersSkeleton />
+        ) : (
+          <GenericFilters
+            status={{
+              value: status,
+              onChange: setStatus,
+              options: [
+                { label: 'Todos', value: 'Todos' },
+                { label: 'Pendente', value: 'Pendente' },
+                { label: 'Aprovada', value: 'Aprovada' },
+                { label: 'Rejeitada', value: 'Rejeitada' },
+              ],
+            }}
+            student={{
+              value: studentId,
+              onChange: setStudentId,
+              options: studentOptions,
+            }}
+            dateRange={{
+              start: dateRange.start,
+              end: dateRange.end,
+              onStartChange: (date) => setDateRange((prev) => ({ ...prev, start: date })),
+              onEndChange: (date) => setDateRange((prev) => ({ ...prev, end: date })),
+            }}
+          />
+        )}
 
         {loading ? (
-          <ActivityIndicator size="large" color="#3B82F6" className="my-6" />
-        ) : filteredAuthorizations.length === 0 ? (
-          <Text className="text-center text-gray-500 dark:text-gray-400 mt-4">
-            Nenhuma autorização encontrada.
-          </Text>
-        ) : (
-          filteredAuthorizations.map(auth => (
-            <AuthorizationCard
-              key={auth.id}
-              authorization={auth}
-              onPress={() => onCardPress?.(auth)}
-            />
-          ))
-        )}
+        <>
+          <AuthorizationCardSkeleton />
+          <AuthorizationCardSkeleton />
+          <AuthorizationCardSkeleton />
+        </>
+      ) : filteredAuthorizations.length === 0 ? (
+        <Text className="text-center text-gray-500 dark:text-gray-400 mt-4">
+          Nenhuma autorização encontrada.
+        </Text>
+      ) : (
+        filteredAuthorizations.map((auth) => (
+          <AuthorizationCard
+            key={auth.id}
+            authorization={auth}
+            onPress={() => onCardPress?.(auth)}
+          />
+        ))
+      )}
       </ScrollView>
 
       <EditAuthorizationModal

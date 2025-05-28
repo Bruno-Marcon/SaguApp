@@ -138,15 +138,22 @@ export function EditAuthorizationModal({ visible, onClose, onSave }: Props) {
             </ScrollView>
           </View>
 
-          {/* Complemento */}
           <View className="mb-6">
-            <Text className="text-sm text-gray-600 mb-2">Complemento (opcional)</Text>
+            <Text className="text-sm text-gray-600 dark:text-gray-300 mb-2">
+              Descrição detalhada
+            </Text>
             <TextInput
               value={descricaoComplement}
               onChangeText={setDescricaoComplement}
               placeholder="Mais detalhes, se necessário"
+              placeholderTextColor="#9CA3AF"
               multiline
-              className="border border-gray-300 rounded-xl px-4 py-3 h-24 text-gray-700"
+              className="
+                border border-gray-300 dark:border-neutral-700 
+                rounded-xl px-4 py-3 h-24 
+                text-gray-700 dark:text-white 
+                bg-white dark:bg-neutral-800
+              "
             />
           </View>
 

@@ -10,6 +10,7 @@ import {
 } from './share';
 
 export interface StudentListItem {
+  relationships: any;
   id: string;
   type: 'student';
   attributes: {
