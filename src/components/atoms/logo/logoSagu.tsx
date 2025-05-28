@@ -1,4 +1,5 @@
-import { Image, ImageProps, ImageSourcePropType } from "react-native"
+import {ImageProps, ImageSourcePropType } from "react-native"
+import { Image } from 'expo-image';
 
 type LogoIFCProps = {
   className?: string
@@ -14,8 +15,9 @@ export default function LogoSagu({
     <Image
       source={source ?? require("../../../assets/images/logo-sagu-mobile-borda-branca.png")}
       className={className}
-      resizeMode="contain"
-      {...rest}
+      style={{ width: 60, height: 60}}
+      contentFit="contain"
+      transition={100}
     />
   )
 }
