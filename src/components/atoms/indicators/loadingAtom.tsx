@@ -7,7 +7,7 @@ const Loading = () => {
       <Spinner
         visible={true}
         textContent={'Carregando...'}
-        textStyle={{ color: '#fff' }}
+        textStyle={{ color: '#F3F2F' }}
         overlayColor="rgba(0, 0, 0, 0.5)"
       />
     </View>

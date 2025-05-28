@@ -8,6 +8,10 @@ import GenericFilters from '../../organisms/filter/genericFilter';
 import { IncludedEvent, IncludedStudent, IncludedUser } from '../../../../types/share';
 import { StudentListItem } from '../../../../types/students';
 import { studentService } from '@//services/studentes/studentsServices';
+import { EditAuthorizationModal } from '../../organisms/modal/editAuthorizationModal';
+import { CreateAuthorizationPayload } from '../../../../types/authorizations';
+import { authorizationService } from '@//services/authorizations/authorizationsService';
+import Toast from 'react-native-toast-message';
 
 type Option = {
   label: string;
@@ -46,7 +50,7 @@ export default function OccurrenceTemplate({ refreshing, onRefreshEnd, onOccurre
   >([]);
   const [filteredOccurrences, setFilteredOccurrences] = useState<typeof allOccurrences>([]);
   const [loading, setLoading] = useState(false);
-
+  const [modalVisible, setModalVisible] = useState(false);
   const [studentId, setStudentId] = useState('Todos');
   const [status, setStatus] = useState('Todos');
   const [severity, setSeverity] = useState('Todos');
@@ -158,7 +162,9 @@ export default function OccurrenceTemplate({ refreshing, onRefreshEnd, onOccurre
 
   return (
     <View className="flex-1 bg-gray-50 dark:bg-neutral-950">
-      <OccurrenceHeader title="Ocorrências" />
+      <OccurrenceHeader title="Ocorrências" 
+      onCreatePress={() => setModalVisible(true)}
+      />
 
       <GenericFilters
         status={{
@@ -206,6 +212,29 @@ export default function OccurrenceTemplate({ refreshing, onRefreshEnd, onOccurre
           Nenhuma ocorrência encontrada.
         </Text>
       )}
+      <EditAuthorizationModal
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
+        onSave={async ({ aluno, status, descricao }) => {
+          try {
+            const payload: CreateAuthorizationPayload = {
+              student_id: aluno,
+              status,
+              description: descricao,
+              date: new Date().toISOString().split('T')[0],
+            };
+
+            await authorizationService.createAuthorization(payload);
+
+            Toast.show({ type: 'success', text1: 'Autorização criada!' });
+            setModalVisible(false);
+            fetchData();
+          } catch (err) {
+            console.error(err);
+            Toast.show({ type: 'error', text1: 'Erro ao criar autorização' });
+          }
+        }}
+      />
     </View>
   );
 }

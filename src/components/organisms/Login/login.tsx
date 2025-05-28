@@ -66,7 +66,6 @@ const LoginScreen: React.FC<LoginScreenProps> = ({
 
   return (
     <View className={viewClassName}>
-      {/* ✅ Logo com carregamento otimizado */}
       <Image
         source={require('../../../assets/images/logo-sagu-mobile-brancoBg.png')}
         style={{ width: 280, height: 280, marginBottom: 24 }}

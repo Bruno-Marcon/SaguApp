@@ -1,4 +1,3 @@
-import React from 'react';
 import { View, useWindowDimensions, Platform } from 'react-native';
 import { usePathname } from 'expo-router';
 import { Feather } from '@expo/vector-icons';
