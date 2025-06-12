@@ -1,6 +1,6 @@
 # SaguApp - Acompanhamento Estudantil
 
-Aplicativo mobile desenvolvido como parte do Trabalho de Conclusão de Curso, com o objetivo de facilitar o acompanhamento da vida escolar de alunos por responsáveis e professores.
+Aplicativo mobile desenvolvido, com o objetivo de facilitar o acompanhamento da vida escolar de alunos por responsáveis e professores.
 
 ## 📱 Funcionalidades
 
@@ -20,5 +20,3 @@ Aplicativo mobile desenvolvido como parte do Trabalho de Conclusão de Curso, co
 3. Inicie a aplicação:   
    ```bash
    npx expo start
-
-É necessário ter o Expo Go instalado no celular para testar.
